@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meus Favoritos • Venha Junto</title>
+
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/favoritos.css"/>
+</head>
+
+<body data-auth="required">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Topbar mobile -->
+  <header class="mobile-topbar" role="banner">
+    <button
+      id="btnMenu"
+      class="btn btn--ghost"
+      aria-controls="sidebar"
+      aria-expanded="false"
+      type="button"
+    >☰ Menu</button>
+
+    <div class="title">Venha Junto</div>
+
+    <a class="btn btn--ghost" href="./parceiro.html">Sou parceiro</a>
+  </header>
+
+  <div class="page">
+    <!-- Sidebar pública -->
+    <aside id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
+      <div class="brand" aria-label="Marca Venha Junto">
+        <div class="logo" aria-hidden="true">
+          <img src="../../assets/img/logo-acessibilidade.png" alt="" class="logo-img">
+        </div>
+
+        <div>
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível em São Paulo</span>
+        </div>
+      </div>
+
+      <p class="nav-title">Área pública</p>
+      <nav class="menu" aria-label="Menu público">
+          <a href="./explorar.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4.06L15 22l8-4.06V2L15 6.06 8 2 1 6z"/><path d="M8 2v16"/><path d="M15 6v16"/></svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html" aria-current="page">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+      <!-- ✅ Ações de Usuário (Dinâmico) -->
+      <div id="userActions" class="user-actions">
+        <a href="./usuario-login.html" class="btn-top-login">Entrar</a>
+        <a href="./usuario-criar-conta.html" class="btn-top-signup">Cadastrar</a>
+      </div>
+    </aside>
+
+    <main id="conteudo" class="main" role="main">
+      <div class="content">
+        <!-- Cabeçalho da página -->
+        <header class="page-header" aria-label="Cabeçalho de favoritos">
+          <button id="btnVoltar" class="back-btn" type="button" aria-label="Voltar">
+            ←
+          </button>
+
+          <div class="header-text">
+            <h1>Meus Favoritos</h1>
+            <p>Salve e organize seus locais favoritos para visitar depois</p>
+          </div>
+        </header>
+
+        <!-- Estado vazio -->
+        <section id="emptyState" class="empty" aria-label="Nenhum favorito salvo">
+          <div class="empty-icon" aria-hidden="true">
+            <span class="heart">♡</span>
+          </div>
+
+          <h2>Nenhum favorito salvo ainda</h2>
+          <p>Explore locais e clique no coração para salvá-los aqui</p>
+
+          <button id="btnExplorar" class="btn-primary" type="button">
+            Explorar Locais
+          </button>
+        </section>
+
+        <!-- Lista (quando tiver favoritos) -->
+        <section id="listaFavoritos" class="favorites-list" aria-label="Lista de favoritos" hidden>
+          <!-- ✅ É AQUI que os cards entram -->
+          <div class="grid" id="gridFavoritos"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- scripts -->
+  <script src="../js/api.js" defer></script>
+  <script src="../js/userbox.js" defer></script>
+  <script src="../js/favoritos.js" defer></script>
+  <script src="../js/vlibras.js" defer></script>
+</body>
+</html>

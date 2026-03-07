@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explorar Locais • Venha Junto</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/home.css" />
+    <link rel="stylesheet" href="../css/explorar.css" />
+  </head>
+
+  <body data-auth="required">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- Topbar mobile -->
+    <header class="mobile-topbar" role="banner">
+      <button
+        id="btnMenu"
+        class="btn btn--ghost"
+        aria-controls="sidebar"
+        aria-expanded="false"
+        type="button"
+      >
+        ☰ Menu
+      </button>
+      <div class="title">Venha Junto</div>
+      <a class="btn btn--ghost" href="./parceiro.html">Sou parceiro</a>
+    </header>
+
+    <div class="page">
+      <!-- Sidebar pública -->
+      <aside
+        id="sidebar"
+        class="sidebar"
+        data-open="false"
+        aria-label="Navegação principal"
+      >
+        <div class="brand" aria-label="Marca Venha Junto">
+          <div class="logo" aria-hidden="true">
+            <img
+              src="../../assets/img/logo-acessibilidade.png"
+              alt=""
+              class="logo-img"
+            />
+          </div>
+
+          <div>
+            <strong>Venha Junto</strong>
+            <span>Turismo Acessível em São Paulo</span>
+          </div>
+        </div>
+
+        <p class="nav-title">Área pública</p>
+        <nav class="menu" aria-label="Menu público">
+          <a href="./explorar.html" aria-current="page">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M1 6v16l7-4.06L15 22l8-4.06V2L15 6.06 8 2 1 6z" />
+              <path d="M8 2v16" />
+              <path d="M15 6v16" />
+            </svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              />
+            </svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+        <!-- ✅ Ações de Usuário (Dinâmico) -->
+        <div id="userActions" class="user-actions">
+          <a href="./usuario-login.html" class="btn-top-login">Entrar</a>
+          <a href="./usuario-criar-conta.html" class="btn-top-signup"
+            >Cadastrar</a
+          >
+        </div>
+      </aside>
+
+      <main id="conteudo" class="main" role="main">
+        <div class="explorar-layout">
+          <!-- =======================
+             SIDEBAR DE FILTROS 
+        ======================== -->
+          <aside class="explorar-filters" aria-label="Filtros Avançados">
+            <div class="filters-head">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  color: #0f172a;
+                "
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ea580c"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon
+                    points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+                  ></polygon>
+                </svg>
+                <h2 style="margin: 0; font-size: 16px; font-weight: 800">
+                  Filtros
+                </h2>
+              </div>
+              <button
+                id="limpar"
+                class="linkbtn"
+                type="button"
+                style="color: #ea580c; font-size: 13px; font-weight: 700"
+              >
+                Limpar
+              </button>
+            </div>
+
+            <div class="filters-body">
+              <!-- Perto de mim -->
+              <div class="filter-section">
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 13px;
+                    color: #ea580c;
+                    font-weight: 700;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+                  </svg>
+                  Perto de mim
+                </label>
+                <button class="btn-location" type="button">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                    ></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  Usar minha localização
+                </button>
+              </div>
+
+              <!-- Categoria (Sincroniza JS com select escondido) -->
+              <div class="filter-section">
+                <h3
+                  style="
+                    font-size: 13px;
+                    color: #475569;
+                    margin-bottom: 12px;
+                    font-weight: 600;
+                  "
+                >
+                  Categoria
+                </h3>
+
+                <!-- Select invisível para o JS já existente -->
+                <select id="tipo" style="display: none">
+                  <option value="Todos">Todos os tipos</option>
+                  <option value="Restaurante">Restaurantes</option>
+                  <option value="Cafeteria">Cafeterias</option>
+                  <option value="Museu">Museus</option>
+                  <option value="Centro Cultural">Centros Culturais</option>
+                  <option value="Teatro">Teatros</option>
+                  <option value="Cinema">Cinemas</option>
+                  <option value="Parque">Parques</option>
+                  <option value="Hotel">Hotéis</option>
+                  <option value="Passeio">Passeios</option>
+                </select>
+
+                <div class="category-list">
+                  <button class="cat-btn active" data-val="Todos">
+                    <span class="icon">🗺️</span> Todos
+                  </button>
+                  <button class="cat-btn" data-val="Restaurante">
+                    <span class="icon">🍽️</span> Restaurantes
+                  </button>
+                  <button class="cat-btn" data-val="Cafeteria">
+                    <span class="icon">☕</span> Cafeterias
+                  </button>
+                  <button class="cat-btn" data-val="Museu">
+                    <span class="icon">🏛️</span> Museus
+                  </button>
+                  <button class="cat-btn" data-val="Centro Cultural">
+                    <span class="icon">🎭</span> Centros Culturais
+                  </button>
+                  <button class="cat-btn" data-val="Teatro">
+                    <span class="icon">🎪</span> Teatros
+                  </button>
+                  <button class="cat-btn" data-val="Cinema">
+                    <span class="icon">🎬</span> Cinemas
+                  </button>
+                  <button class="cat-btn" data-val="Parque">
+                    <span class="icon">🌳</span> Parques
+                  </button>
+                  <button class="cat-btn" data-val="Hotel">
+                    <span class="icon">🏨</span> Hotéis
+                  </button>
+                  <button class="cat-btn" data-val="Passeio">
+                    <span class="icon">🚶‍♂️</span> Passeios
+                  </button>
+                </div>
+              </div>
+
+              <!-- Recursos -->
+              <div class="filter-section" style="border-bottom: none">
+                <h3
+                  style="
+                    font-size: 13px;
+                    color: #475569;
+                    margin-bottom: 14px;
+                    font-weight: 600;
+                  "
+                >
+                  Recursos de Acessibilidade
+                </h3>
+
+                <label class="check-container"
+                  >Rampa de acesso
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="check-container"
+                  >Banheiro adaptado
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="check-container"
+                  >Piso tátil
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="check-container"
+                  >Elevador
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="check-container"
+                  >Estacionamento PCD
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+                <label class="check-container"
+                  >Intérprete de Libras
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <!-- Escondidos mas necessários pro JS não quebrar -->
+              <select id="cidade" style="display: none">
+                <option value=""></option>
+              </select>
+              <select id="estilo" style="display: none">
+                <option value="Qualquer"></option>
+              </select>
+              <select id="orcamento" style="display: none">
+                <option value="Qualquer"></option>
+              </select>
+            </div>
+          </aside>
+
+          <!-- =======================
+             ÁREA PRINCIPAL 
+        ======================== -->
+          <div class="explorar-content">
+            <!-- Busca na própria área direita -->
+            <div class="top-search-bar">
+              <span class="sicon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#94a3b8"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </span>
+              <input
+                id="q"
+                type="search"
+                placeholder="Buscar local, bairro ou categoria..."
+              />
+              <button
+                class="btn-search"
+                type="button"
+                onclick="
+                  document.getElementById('q').dispatchEvent(new Event('input'))
+                "
+              >
+                Buscar
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Contador -->
+            <div class="count-bar" aria-live="polite">
+              <strong id="countLocais">0</strong> locais encontrados
+            </div>
+
+            <!-- Cards (grid) -->
+            <div id="listaLocais" class="locais-grid" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <script src="../js/explorar.js" type="module"></script>
+        <script>
+          // Sincroniza a nova lista visual com o <select> do backend para os botões não quebrarem a filtragem original
+          document.addEventListener("DOMContentLoaded", () => {
+            const catBtns = document.querySelectorAll(".cat-btn");
+            const selectTipo = document.getElementById("tipo");
+
+            catBtns.forEach((btn) => {
+              btn.addEventListener("click", () => {
+                // tira o active de todos
+                catBtns.forEach((b) => b.classList.remove("active"));
+                // poe ativo no clicado
+                btn.classList.add("active");
+                // atualiza o select original
+                if (selectTipo) {
+                  selectTipo.value = btn.getAttribute("data-val");
+                  // forca o evento change pra acionar o JS principal
+                  selectTipo.dispatchEvent(new Event("change"));
+                }
+              });
+            });
+          });
+        </script>
+      </main>
+    </div>
+
+    <!-- ✅ IMPORTS (ORDEM CERTA) -->
+    <script src="../js/api.js" defer></script>
+    <script src="../js/userbox.js" defer></script>
+    <script src="../js/vlibras.js" defer></script>
+  </body>
+</html>
