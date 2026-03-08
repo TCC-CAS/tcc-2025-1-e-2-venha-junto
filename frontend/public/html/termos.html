@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venha Junto • Termos de Uso</title>
+
+  <style>
+    :root{
+      --bg:#f6f8fc;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e5e7eb;
+      --primary:#2563eb;
+      --shadow: 0 18px 50px rgba(2,6,23,.08);
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    a{ color: var(--primary); text-decoration:none; font-weight: 700; }
+    a:hover{ text-decoration: underline; }
+
+    .skip-link{
+      position:absolute;
+      left:-999px; top:auto;
+      width:1px; height:1px;
+      overflow:hidden;
+    }
+    .skip-link:focus{
+      left:16px; top:16px;
+      width:auto; height:auto;
+      padding:10px 12px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:10px;
+      z-index:10;
+      box-shadow: var(--shadow);
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 280px;
+    }
+    .logo{
+      width:44px; height:44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight: 900;
+    }
+    .brand strong{
+      display:block;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .brand span{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .back{
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 22px;
+    }
+
+    h1{
+      margin: 6px 0 6px;
+      font-size: 34px;
+      letter-spacing: -0.02em;
+      font-weight: 1000;
+    }
+
+    .meta{
+      color: var(--muted);
+      font-weight: 800;
+      margin: 0 0 18px;
+    }
+
+    .lead{
+      color: var(--text);
+      font-weight: 700;
+      line-height: 1.65;
+      margin: 0 0 16px;
+    }
+
+    .notice{
+      border: 1px solid rgba(37,99,235,.25);
+      background: rgba(37,99,235,.06);
+      border-radius: 14px;
+      padding: 14px 14px;
+      margin: 18px 0 18px;
+      font-weight: 800;
+      color: #0b1b3a;
+      line-height: 1.55;
+    }
+
+    h2{
+      margin: 22px 0 10px;
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    p{
+      margin: 0 0 12px;
+      color: var(--text);
+      line-height: 1.75;
+      font-weight: 650;
+    }
+
+    ul{
+      margin: 8px 0 14px 20px;
+      padding: 0;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 650;
+    }
+    li{ margin: 6px 0; }
+
+    .small{
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 680px){
+      .topbar{ flex-direction: column; }
+      .brand{ width: 100%; }
+      .back{ width: 100%; text-align: center; }
+      h1{ font-size: 28px; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Marca Venha Junto">
+        <div class="logo" aria-hidden="true">📍</div>
+        <div>
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível em São Paulo</span>
+        </div>
+      </div>
+
+      <div class="back">
+        <a href="./index.html" aria-label="Voltar para a página inicial">Voltar ao site</a>
+      </div>
+    </div>
+
+    <main id="conteudo" class="card" role="main">
+      <header>
+        <h1>Termos de Uso</h1>
+        <p class="meta">Última atualização: 02/01/2026</p>
+
+        <p class="lead">
+          Estes Termos de Uso regulam o acesso e a utilização da plataforma <strong>Venha Junto</strong>, destinada à
+          <strong>divulgação</strong> de locais e serviços relacionados ao turismo acessível na cidade de São Paulo,
+          incluindo funcionalidades para visitantes e para parceiros (estabelecimentos).
+        </p>
+
+        <div class="notice" role="note" aria-label="Aviso importante">
+          A plataforma tem finalidade de divulgação e informação.
+          <strong>O Venha Junto não realiza reservas e não intermedia pagamentos</strong>.
+          O contato, negociação e contratação de serviços ocorrem diretamente entre visitante e estabelecimento.
+        </div>
+      </header>
+
+      <section aria-label="1. Definições">
+        <h2>1. Definições</h2>
+        <ul>
+          <li><strong>Plataforma:</strong> o site Venha Junto e suas páginas e funcionalidades.</li>
+          <li><strong>Visitante/Usuário:</strong> pessoa que navega, pesquisa, favoritou locais e consulta informações.</li>
+          <li><strong>Parceiro:</strong> estabelecimento que cria conta e cadastra seu local para divulgação.</li>
+          <li><strong>Conteúdo:</strong> textos, imagens, descrições, dados de acessibilidade, contato e demais informações publicadas.</li>
+        </ul>
+      </section>
+
+      <section aria-label="2. Aceite">
+        <h2>2. Aceite</h2>
+        <p>
+          Ao acessar a plataforma, você declara que leu, compreendeu e concorda com estes Termos.
+          Ao criar conta de parceiro ou enviar cadastros e informações, o aceite é confirmado no formulário correspondente.
+        </p>
+      </section>
+
+      <section aria-label="3. Finalidade da Plataforma">
+        <h2>3. Finalidade da Plataforma</h2>
+        <p>
+          O Venha Junto oferece uma vitrine digital para divulgar locais com informações de acessibilidade e características do serviço.
+          As informações publicadas têm caráter informativo e podem variar ao longo do tempo.
+        </p>
+      </section>
+
+      <section aria-label="4. Conta e Responsabilidades do Parceiro">
+        <h2>4. Conta e Responsabilidades do Parceiro</h2>
+        <p>
+          O parceiro é responsável por manter seus dados corretos, completos e atualizados, incluindo:
+          descrição do estabelecimento, endereço, formas de contato, fotos e informações de acessibilidade.
+        </p>
+        <ul>
+          <li>O parceiro declara ter autorização para publicar imagens e informações do local.</li>
+          <li>O parceiro compromete-se a não inserir conteúdo enganoso, discriminatório, ilegal ou que viole direitos de terceiros.</li>
+          <li>O parceiro é responsável pela veracidade das informações e pelo atendimento ao visitante.</li>
+        </ul>
+      </section>
+
+      <section aria-label="5. Uso Adequado e Condutas Proibidas">
+        <h2>5. Uso Adequado e Condutas Proibidas</h2>
+        <p>
+          É proibido utilizar a plataforma para fins ilícitos ou que prejudiquem terceiros e/ou a própria plataforma, incluindo:
+        </p>
+        <ul>
+          <li>tentar invadir, explorar vulnerabilidades, coletar dados de forma indevida ou interromper o funcionamento do site;</li>
+          <li>publicar conteúdo ofensivo, discriminatório, fraudulento, falso ou que viole leis e direitos autorais;</li>
+          <li>usar a plataforma para spam, propaganda enganosa ou práticas abusivas.</li>
+        </ul>
+      </section>
+
+      <section aria-label="6. Conteúdo e Propriedade Intelectual">
+        <h2>6. Conteúdo e Propriedade Intelectual</h2>
+        <p>
+          O layout, identidade visual, textos institucionais e elementos do Venha Junto podem ser protegidos por direitos autorais.
+          O conteúdo enviado pelo parceiro permanece de sua responsabilidade, concedendo à plataforma autorização para exibir e divulgar
+          esse conteúdo para fins de funcionamento do serviço.
+        </p>
+      </section>
+
+      <section aria-label="7. Limitação de Responsabilidade">
+        <h2>7. Limitação de Responsabilidade</h2>
+        <p>
+          O Venha Junto não se responsabiliza por negociações, reservas, pagamentos, cancelamentos, qualidade do serviço,
+          prazos ou qualquer relação comercial entre visitante e estabelecimento.
+        </p>
+        <p>
+          Embora busquemos manter informações organizadas e úteis, não garantimos ausência de erros, indisponibilidades
+          ou que o conteúdo esteja sempre atualizado, especialmente quando fornecido por terceiros.
+        </p>
+      </section>
+
+      <section aria-label="8. Suspensão, Remoção e Modificações">
+        <h2>8. Suspensão, Remoção e Modificações</h2>
+        <p>
+          Poderemos, quando necessário, suspender ou remover cadastros e conteúdos que violem estes Termos,
+          ou que apresentem indícios de fraude, inconsistência grave ou reclamações relevantes.
+        </p>
+        <p>
+          Estes Termos podem ser atualizados para refletir melhorias da plataforma. A data de atualização será informada nesta página.
+        </p>
+      </section>
+
+      <section aria-label="9. Contato">
+        <h2>9. Contato</h2>
+        <p>
+          Para dúvidas, solicitações ou reporte de conteúdo, utilize o canal oficial do projeto.
+          <strong>Recomendação para o TCC:</strong> informe um e-mail institucional do projeto (ex.: <em>contato@venhajunto.com</em>)
+          ou um e-mail acadêmico destinado ao trabalho.
+        </p>
+      </section>
+
+      <div class="small" aria-label="Nota final">
+        Este documento é parte demonstrativa do projeto acadêmico (TCC) e pode evoluir conforme a implementação do backend,
+        integrações e requisitos institucionais.
+      </div>
+    </main>
+  </div>
+   <script src="../js/vlibras.js" defer></script>
+</body>
+</html>

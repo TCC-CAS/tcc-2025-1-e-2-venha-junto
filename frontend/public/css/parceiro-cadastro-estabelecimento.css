@@ -1,0 +1,484 @@
+/* reset e fontes geridos pelo global.css */
+body.cadastro-flow {
+  margin: 0;
+  padding: 0;
+  background-color: #f8fafc; /* fundo clarinho cinza/azulado */
+  color: #334155;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+.cadastro-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #ffffff; /* topo azul escuro */
+  color: #ffffff;
+}
+.cadastro-topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cadastro-topbar .brand-text {
+  display: flex;
+  flex-direction: column;
+}
+.cadastro-topbar .brand-text strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ea580c;
+}
+.cadastro-topbar .brand-text span {
+  font-size: 12px;
+  color: #64748b;
+}
+.cadastro-topbar .back-link {
+  color: #ea580c;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Layout Padrão em Grid Lateral */
+.cadastro-layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+/* SIDEBAR ESQUERDA (Passos) */
+.cadastro-sidebar {
+  width: 280px;
+  background-color: #ea580c;
+  color: #ffedd5;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  padding-left: 8px;
+}
+.user-info .avatar {
+  background: #ff7020; /* Laranja da brand */
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+.user-info strong {
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+}
+.user-info small {
+  font-size: 12px;
+  color: #ffedd5;
+}
+
+.menu-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #ffedd5;
+  opacity: 0.9;
+  margin-bottom: 12px;
+  padding-left: 8px;
+}
+
+.steps-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: #ffedd5;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.step-link .step-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ffedd5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffedd5;
+}
+.step-link .step-text strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 2px;
+  color: #ffffff;
+}
+.step-link .step-text span {
+  font-size: 11px;
+  color: #ffedd5;
+}
+
+.step-link.active {
+  background: #ffffff;
+  color: #ea580c;
+}
+.step-link.active .step-text strong {
+  color: #ea580c !important;
+}
+.step-link.active .step-text span {
+  color: #ea580c !important;
+}
+.step-link.active .step-icon {
+  background: #ea580c;
+  border-color: #ea580c;
+  color: #ffffff;
+}
+
+.step-link.completed .step-icon {
+  background: #22c55e; /* verde de ok */
+  border-color: #22c55e;
+  color: #ffffff;
+}
+
+.step-link:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sidebar-tip {
+  margin-top: auto;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #ffedd5;
+}
+.sidebar-tip strong {
+  color: #ffffff;
+}
+
+/* ÁREA PRINCIPAL DIREITA */
+.cadastro-main {
+  flex: 1;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.step-header {
+  margin-bottom: 32px;
+}
+.step-title-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.step-number-large {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ea580c;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+.step-title-area h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #ea580c;
+  font-weight: 800;
+}
+.step-title-area p {
+  margin: 4px 0 0 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.progress-bar-wrap {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: #ea580c; /* Lilás da imagem original/botão */
+  transition: width 0.3s ease;
+}
+
+/* PAINÉIS DE FORMULÁRIO */
+.form-panel {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+.form-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  margin-bottom: 24px;
+}
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  color: #0f172a;
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+.card-title .icon {
+  color: #ea580c; /* Icone principal do card */
+}
+
+/* CAMPOS E INPUTS */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+.field-group label {
+  display: block;
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.field-group label .req {
+  color: #ef4444; /* red asterisco */
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+  opacity: 0.5;
+}
+.input-wrapper input,
+.input-wrapper select {
+  padding-left: 38px !important;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  border-color: #ea580c;
+}
+
+.help-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* CHECKBOXES ACESSIBILIDADE */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.check-box-lg {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #ffffff;
+}
+.check-box-lg:hover {
+  border-color: #64748b;
+}
+/* Fazendo o Checkbox parecer um Radio Button Redondinho da Imagem */
+.check-box-lg input {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%; /* Bolinha */
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  margin: 0;
+}
+.check-box-lg input:checked {
+  border-color: #22c55e;
+  background-color: #22c55e;
+}
+.check-box-lg input:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+.check-box-lg .cb-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+/* ÁREA DE UPLOAD */
+.alert-info {
+  background: #f1f5f9; /* cinza clarinho */
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 24px;
+}
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.upload-area:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+.upload-area .upload-icon {
+  font-size: 24px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  display: block;
+}
+.upload-area p {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+.upload-area small {
+  color: #94a3b8;
+}
+.hide-file-input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* BOTÕES DE AÇÃO INFERIORES */
+.panel-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  gap: 16px; /* espaçamento central entre os botoes */
+}
+
+.btn-prev {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 14px 24px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  flex: none; /* botão voltr menorzinho */
+}
+.btn-prev:hover {
+  background: #f8fafc;
+  border-color: #64748b;
+}
+
+.btn-next,
+.btn-submit {
+  background: #ea580c; /* Roxo Escuro Vibrante idêntico à foto */
+  color: #ffffff;
+  border: none;
+  padding: 16px 32px;
+  font-weight: 700;
+  border-radius: 12px; /* botão gordinho */
+  cursor: pointer;
+  font-size: 16px; /* texto maior */
+  transition: background 0.2s;
+  flex: 1; /* Ocupar botão Próximo todo restante da tela (largão) */
+}
+.btn-next:hover,
+.btn-submit:hover {
+  background: #c2410c;
+}

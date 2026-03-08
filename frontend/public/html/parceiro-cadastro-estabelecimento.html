@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Venha Junto • Cadastro do Estabelecimento</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link
+      rel="stylesheet"
+      href="../css/parceiro-cadastro-estabelecimento.css"
+    />
+  </head>
+
+  <body class="cadastro-flow">
+    <!-- Topbar Principal Navbar estilo nova Explorar (Laranja Top) -->
+    <header class="cadastro-topbar">
+      <div class="brand">
+        <div class="logo">
+          <img
+            src="../../assets/img/logo-acessibilidade.png"
+            alt="Venha Junto"
+            style="height: 32px"
+          />
+        </div>
+        <div class="brand-text">
+          <strong>Venha Junto</strong>
+          <span>Área do Parceiro</span>
+        </div>
+      </div>
+      <a href="./index.html" class="back-link">&lt; Voltar ao site</a>
+    </header>
+
+    <div class="cadastro-layout">
+      <!-- Sidebar de Passos -->
+      <aside class="cadastro-sidebar">
+        <div class="user-info">
+          <div class="avatar">P</div>
+          <div>
+            <strong>Parceiro</strong>
+            <small>Em cadastro</small>
+          </div>
+        </div>
+
+        <div class="menu-label">MENU</div>
+
+        <nav class="steps-nav">
+          <button class="step-link active" data-target="1" type="button">
+            <div class="step-icon">1</div>
+            <div class="step-text">
+              <strong>Responsável</strong>
+              <span>Seus dados</span>
+            </div>
+          </button>
+
+          <button class="step-link" data-target="2" type="button" disabled>
+            <div class="step-icon">2</div>
+            <div class="step-text">
+              <strong>Estabelecimento</strong>
+              <span>Dados do local</span>
+            </div>
+          </button>
+
+          <button class="step-link" data-target="3" type="button" disabled>
+            <div class="step-icon">3</div>
+            <div class="step-text">
+              <strong>Fotos & Acesso</strong>
+              <span>Recursos e evidências</span>
+            </div>
+          </button>
+
+          <button class="step-link" data-target="4" type="button" disabled>
+            <div class="step-icon">4</div>
+            <div class="step-text">
+              <strong>Plano</strong>
+              <span>Visibilidade</span>
+            </div>
+          </button>
+        </nav>
+
+        <div class="sidebar-tip">
+          <p>
+            💡 <strong>Dica:</strong> Quanto mais completo seu perfil, maior a
+            chance de ser visto por usuários.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Área Principal do Formulário -->
+      <main class="cadastro-main">
+        <div class="step-header">
+          <div class="step-title-area">
+            <div class="step-number-large" id="currentStepNum">1</div>
+            <div>
+              <h1 id="currentStepTitle">Responsável</h1>
+              <p id="currentStepDesc">
+                Conte-nos sobre o responsável pelo estabelecimento
+              </p>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div
+              class="progress-fill"
+              id="progressBar"
+              style="width: 25%"
+            ></div>
+          </div>
+        </div>
+
+        <form id="formCadastroParceiro" class="form-cadastro" novalidate>
+          <!-- =======================
+             PASSO 1: RESPONSÁVEL
+             ======================= -->
+          <section class="form-panel active" data-step="1">
+            <div class="form-card">
+              <h2 class="card-title">
+                <span class="icon">👤</span> Dados do Responsável
+              </h2>
+
+              <div class="field-group">
+                <label for="nomeResponsavel"
+                  >Nome completo <span class="req">*</span></label
+                >
+                <div class="input-wrapper">
+                  <span class="input-icon">👤</span>
+                  <input
+                    type="text"
+                    id="nomeResponsavel"
+                    required
+                    placeholder="Seu nome completo"
+                  />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="emailResponsavel"
+                  >E-mail <span class="req">*</span></label
+                >
+                <div class="input-wrapper">
+                  <span class="input-icon">✉️</span>
+                  <input
+                    type="email"
+                    id="emailResponsavel"
+                    required
+                    placeholder="seuemail@exemplo.com"
+                  />
+                </div>
+                <small class="help-text"
+                  >Usaremos este e-mail para entrar em contato sobre a
+                  análise</small
+                >
+              </div>
+
+              <div class="field-group">
+                <label for="telefoneResponsavel">Telefone / WhatsApp</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">📞</span>
+                  <input
+                    type="text"
+                    id="telefoneResponsavel"
+                    placeholder="(11) 99999-9999"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-actions">
+              <div></div>
+              <!-- Spacer -->
+              <button type="button" class="btn-next" data-next="2">
+                Próximo ➔
+              </button>
+            </div>
+          </section>
+
+          <!-- =======================
+             PASSO 2: ESTABELECIMENTO
+             ======================= -->
+          <section class="form-panel" data-step="2">
+            <div class="form-card">
+              <h2 class="card-title">
+                <span class="icon">🏢</span> Sobre o Estabelecimento
+              </h2>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="nomeEstabelecimento"
+                    >Nome do estabelecimento <span class="req">*</span></label
+                  >
+                  <div class="input-wrapper">
+                    <span class="input-icon">🏢</span>
+                    <input
+                      type="text"
+                      id="nomeEstabelecimento"
+                      required
+                      placeholder="Ex: Restaurante Acessível..."
+                    />
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label for="tipoEstabelecimento"
+                    >Tipo de Estabelecimento <span class="req">*</span></label
+                  >
+                  <select id="tipoEstabelecimento" required>
+                    <option value="">Selecione o tipo</option>
+                    <option value="Restaurante">🍽️ Restaurante</option>
+                    <option value="Cafeteria">☕ Cafeteria</option>
+                    <option value="Museu">🏛️ Museu</option>
+                    <option value="Centro Cultural">🎭 Centro Cultural</option>
+                    <option value="Teatro">🎪 Teatro</option>
+                    <option value="Cinema">🎬 Cinema</option>
+                    <option value="Parque">🌳 Parque</option>
+                    <option value="Hotel">🏨 Hotel</option>
+                    <option value="Passeio">🚶‍♂️ Passeio</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="descEstabelecimento"
+                  >Descrição detalhada <span class="req">*</span></label
+                >
+                <textarea
+                  id="descEstabelecimento"
+                  required
+                  rows="4"
+                  placeholder="Descreva diferenciais, acessibilidade, o que torna a experiência especial..."
+                ></textarea>
+                <small class="help-text"
+                  >0/100 caracteres mínimos. Seja específico sobre
+                  acessibilidade.</small
+                >
+              </div>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="endereco"
+                    >Endereço completo <span class="req">*</span></label
+                  >
+                  <div class="input-wrapper">
+                    <span class="input-icon">📍</span>
+                    <input
+                      type="text"
+                      id="endereco"
+                      required
+                      placeholder="Rua, número, complemento"
+                    />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="bairro">Bairro</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">📍</span>
+                    <input
+                      type="text"
+                      id="bairro"
+                      placeholder="Ex: Vila Madalena"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="cep">CEP</label>
+                  <input type="text" id="cep" placeholder="00000-000" />
+                </div>
+                <div class="field-group">
+                  <label for="cidade">Cidade</label>
+                  <select id="cidade">
+                    <option>São Paulo</option>
+                    <option>Santo André</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card">
+              <h2 class="card-title">
+                <span class="icon">📞</span> Contatos do Local
+              </h2>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="telLocal">Telefone</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">📞</span>
+                    <input
+                      type="text"
+                      id="telLocal"
+                      placeholder="(11) 3333-3333"
+                    />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="zapLocal">WhatsApp</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">📞</span>
+                    <input
+                      type="text"
+                      id="zapLocal"
+                      placeholder="(11) 99999-9999"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="emailLocal">E-mail do local</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input
+                      type="email"
+                      id="emailLocal"
+                      placeholder="contato@local.com"
+                    />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="siteLocal">Site (opcional)</label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">🌐</span>
+                    <input
+                      type="url"
+                      id="siteLocal"
+                      placeholder="https://www.meulocal.com.br"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-actions">
+              <button type="button" class="btn-prev" data-prev="1">
+                ⬅ Voltar
+              </button>
+              <button type="button" class="btn-next" data-next="3">
+                Próximo ➔
+              </button>
+            </div>
+          </section>
+
+          <!-- =======================
+             PASSO 3: FOTOS & ACESSO
+             ======================= -->
+          <section class="form-panel" data-step="3">
+            <div class="form-card">
+              <h2 class="card-title">
+                <span class="icon">🖼️</span> Fotos do Local
+              </h2>
+              <div class="alert-info">
+                📷 Plano <strong>Gratuito</strong>: até 3 fotos. Atualize para
+                mais fotos.
+              </div>
+
+              <div class="upload-area">
+                <span class="upload-icon">⬆️</span>
+                <p>Clique para adicionar fotos</p>
+                <small>JPG, PNG, WEBP • Até 10MB por foto</small>
+                <input
+                  type="file"
+                  id="fotoUpload"
+                  multiple
+                  accept="image/*"
+                  class="hide-file-input"
+                />
+              </div>
+            </div>
+
+            <div class="form-card">
+              <h2 class="card-title">
+                <span class="icon">✅</span> Recursos de Acessibilidade
+              </h2>
+              <p class="subtitle">
+                Selecione todos os recursos disponíveis no seu estabelecimento
+              </p>
+
+              <div class="checkbox-grid">
+                <label class="check-box-lg">
+                  <input type="checkbox" name="acessibilidade" value="rampa" />
+                  <span class="cb-text">Rampa de acesso</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="banheiro"
+                  />
+                  <span class="cb-text">Banheiro adaptado</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="piso_tatil"
+                  />
+                  <span class="cb-text">Piso tátil</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="elevador"
+                  />
+                  <span class="cb-text">Elevador</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="estacionamento"
+                  />
+                  <span class="cb-text">Estacionamento PCD</span>
+                </label>
+                <label class="check-box-lg">
+                  <input type="checkbox" name="acessibilidade" value="libras" />
+                  <span class="cb-text">Intérprete de Libras</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="cardapio_braille"
+                  />
+                  <span class="cb-text">Cardápio em Braille</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="cadeira_rodas"
+                  />
+                  <span class="cb-text">Cadeira de rodas disponível</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="entrada_acessivel"
+                  />
+                  <span class="cb-text">Entrada acessível</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="sinalizacao_braille"
+                  />
+                  <span class="cb-text">Sinalização em Braille</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="atendimento_prioritario"
+                  />
+                  <span class="cb-text">Atendimento prioritário</span>
+                </label>
+                <label class="check-box-lg">
+                  <input
+                    type="checkbox"
+                    name="acessibilidade"
+                    value="vaga_embarque"
+                  />
+                  <span class="cb-text">Vaga de embarque/desembarque</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="panel-actions">
+              <button type="button" class="btn-prev" data-prev="2">
+                &lt; Voltar
+              </button>
+              <button type="button" class="btn-next" data-next="4">
+                Próximo &rarr;
+              </button>
+            </div>
+          </section>
+
+          <!-- =======================
+             PASSO 4: PLANO
+             ======================= -->
+          <section class="form-panel" data-step="4">
+            <div class="form-card text-center" style="padding: 60px 20px">
+              <h2 class="card-title" style="justify-content: center">
+                <span class="icon">🚀</span> Tudo quase pronto!
+              </h2>
+              <p style="color: #64748b; margin-top: 16px">
+                Revise seus dados e escolha seu plano de visibilidade para
+                finalizar o cadastro.
+              </p>
+
+              <button type="submit" class="btn-submit" style="margin-top: 24px">
+                Confirmar e Enviar Cadastro
+              </button>
+            </div>
+
+            <div class="panel-actions">
+              <button type="button" class="btn-prev" data-prev="3">
+                ⬅ Voltar
+              </button>
+              <div></div>
+              <!-- spacer -->
+            </div>
+          </section>
+        </form>
+      </main>
+    </div>
+
+    <script src="../js/parceiro-cadastro-estabelecimento.js"></script>
+  </body>
+</html>

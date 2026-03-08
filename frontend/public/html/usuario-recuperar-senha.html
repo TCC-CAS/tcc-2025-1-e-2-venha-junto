@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Redefinição de senha</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/auth-split.css" />
+    <style>
+      .vj-reqs {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0 0;
+        font-size: 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .vj-req-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+      .vj-req-item.valid {
+        color: #16a34a;
+      }
+      .vj-req-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        font-size: 9px;
+        font-weight: 900;
+        background: #e2e8f0;
+        color: #64748b;
+      }
+      .vj-req-item.valid .vj-req-icon {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+      .vj-req-item.missing .vj-req-icon {
+        background: #e2e8f0;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Split Layout Container -->
+    <div class="vj-split-layout">
+      <!-- Left side: Orange Hero -->
+      <div class="vj-split-left">
+        <a
+          href="./usuario-login.html"
+          class="vj-back-btn"
+          aria-label="Voltar para login"
+          >← Voltar para login</a
+        >
+        <div class="vj-split-left-content">
+          <h1>Bem-vindo ao Venha Junto</h1>
+          <p>Turismo Acessível em São Paulo</p>
+        </div>
+      </div>
+
+      <!-- Right side: White Form -->
+      <div class="vj-split-right">
+        <div class="vj-form-container">
+          <h2 class="vj-form-title">Redefinição de senha</h2>
+          <p class="vj-form-sub">Crie uma nova senha para acessar sua conta.</p>
+
+          <form
+            id="formRecover"
+            class="vj-split-form"
+            autocomplete="off"
+            novalidate
+          >
+            <!-- NOVA SENHA -->
+            <div class="vj-form-group">
+              <label for="senha">Nova senha</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input
+                  id="senha"
+                  name="senha"
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  class="vj-eye-btn recover-eye"
+                  type="button"
+                  data-eye="senha"
+                  aria-label="Mostrar/ocultar senha"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- REQUISITOS -->
+              <ul class="vj-reqs" id="passwordReqs">
+                <li id="req-special" class="vj-req-item missing">
+                  <span class="vj-req-icon req-icon">!</span> Pelo menos 1
+                  caractere especial (como ! @ # $ %)
+                </li>
+                <li id="req-upper" class="vj-req-item missing">
+                  <span class="vj-req-icon req-icon">!</span> Pelo menos 1 letra
+                  maiúscula (A-Z)
+                </li>
+                <li id="req-length" class="vj-req-item valid">
+                  <span class="vj-req-icon req-icon">✔</span> No mínimo 8
+                  caracteres
+                </li>
+              </ul>
+            </div>
+
+            <!-- CONFIRMAR NOVA SENHA -->
+            <div class="vj-form-group">
+              <label for="confirmar">Confirmar nova senha</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input
+                  id="confirmar"
+                  name="confirmar"
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  class="vj-eye-btn recover-eye"
+                  type="button"
+                  data-eye="confirmar"
+                  aria-label="Mostrar/ocultar confirmação"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <small id="confirmarError" class="vj-error"></small>
+            </div>
+
+            <!-- BOTAO SALVAR -->
+            <button
+              class="vj-submit-btn"
+              type="submit"
+              style="margin-top: 12px"
+            >
+              Salvar <span>→</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/usuario-esqueci-senha.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Venha Junto • Admin • Validação de Estabelecimentos</title>
+
+  <link rel="stylesheet" href="../css/parceiro-status.css" />
+  <!-- você pode trocar por um css próprio depois -->
+  <style>
+    .main { padding: 24px; }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 6px 22px rgba(0,0,0,.08);
+      margin-bottom: 16px;
+    }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .meta { display:flex; gap:10px; flex-wrap:wrap; color:#444; font-size:14px; }
+    .meta span { background:#f3f4f6; padding:6px 10px; border-radius:999px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    button { cursor:pointer; padding:10px 14px; border-radius:10px; border:1px solid #ddd; background:#fff; }
+    button.primary { background:#111827; color:#fff; border-color:#111827; }
+    button.danger { background:#b91c1c; color:#fff; border-color:#b91c1c; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    .topbar2 { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+    .filters { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    select, input {
+      padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#fff;
+    }
+    .small { font-size:12px; color:#666; }
+    .empty { padding: 18px; color:#555; background:#fafafa; border:1px dashed #ddd; border-radius:14px; }
+    .toast {
+      position: fixed; right: 16px; bottom: 16px;
+      background:#111827; color:#fff; padding:12px 14px;
+      border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,.22);
+      max-width: 360px;
+      white-space: pre-line;
+    }
+    .toast[hidden] { display:none; }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Área Admin">
+      <div class="brand">
+        <div class="brandIcon">🛡️</div>
+        <div class="brandTxt">
+          <strong>Venha Junto</strong>
+          <small>Área Admin</small>
+        </div>
+      </div>
+
+      <div class="pill" id="statusPill">Validação</div>
+
+      <div class="menuTitle">Menu</div>
+      <nav class="menu" aria-label="Menu público">
+          <a href="./explorar.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4.06L15 22l8-4.06V2L15 6.06 8 2 1 6z"/><path d="M8 2v16"/><path d="M15 6v16"/></svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+      <div class="spacer"></div>
+
+      <div class="user">
+        <div class="userAvatar">👩‍💼</div>
+        <div class="userTxt">
+          <strong id="adminNome">Admin</strong>
+          <small id="adminEmail">carregando...</small>
+        </div>
+      </div>
+
+      <a class="btnGhost" href="./admin-login.html">Sair</a>
+    </aside>
+
+    <main class="main">
+      <div class="topbar2">
+        <div>
+          <strong style="font-size:18px;">Validação de Estabelecimentos</strong><br/>
+          <span class="small">Aprovar / reprovar cadastros enviados pelo parceiro.</span>
+        </div>
+
+        <div class="filters">
+          <select id="statusFilter">
+            <option value="PENDING_REVIEW">Em análise</option>
+            <option value="APPROVED">Aprovados</option>
+            <option value="REJECTED">Reprovados</option>
+            <option value="DRAFT">Rascunhos</option>
+          </select>
+
+          <input id="searchInput" type="search" placeholder="Buscar por nome, cidade, bairro..." />
+          <button id="btnReload" class="primary" type="button">Atualizar</button>
+        </div>
+      </div>
+
+      <div id="list"></div>
+
+      <div id="toast" class="toast" hidden></div>
+    </main>
+  </div>
+
+ <!-- ✅ IMPORT FUNCIONA SÓ COM type="module" -->
+  <script type="module" src="../js/admin-dashboard.js"></script>
+   <script src="../js/vlibras.js" defer></script>
+</body>
+</html>
