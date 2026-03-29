@@ -17,8 +17,6 @@
     mainText: document.getElementById("mainErrorText"),
   };
 
-  const API_BASE = "http://127.0.0.1:8000";
-
   // 👁️ Mostrar / esconder senha
   if (toggleBtn && els.senha) {
     toggleBtn.addEventListener("click", () => {
@@ -83,33 +81,44 @@
       errEls.main.style.backgroundColor = "#f0f9ff";
       errEls.main.style.color = "#0369a1";
 
-      const res = await fetch(`${API_BASE}/partner-auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, senha }),
-      });
-
-      if (!res.ok) {
-        throw new Error("E-mail ou senha incorretos.");
+      // 1. Tenta o login usando o helper global do api.js
+      if (typeof window.apiPartnerLogin !== "function") {
+         throw new Error("Erro interno: O script de conexão (api.js) não foi carregado corretamente.");
       }
 
-      // Confere se está logado
-      const meRes = await fetch(`${API_BASE}/partner-auth/me`, {
-        credentials: "include",
-      });
+      const loginRes = await window.apiPartnerLogin({ email, senha });
+      console.log("[Login] Sucesso:", loginRes);
 
-      if (meRes.status === 401) {
-        throw new Error("Falha ao autenticar sua conta de parceiro.");
-      }
+      // 2. Confere os dados do parceiro (Session check)
+      const user = await window.apiPartnerMe();
+      console.log("[Login] Parceiro identificado:", user);
 
-      errEls.mainText.textContent = "Login bem-sucedido! Redirecionando...";
+      errEls.mainText.textContent = `Bem-vindo, ${user.nome || "Parceiro"}! Verificando conta...`;
       errEls.main.style.borderColor = "#bbf7d0";
       errEls.main.style.backgroundColor = "#f0fdf4";
       errEls.main.style.color = "#15803d";
 
+      // 3. Verifica se tem locais para roteamento inteligente
+      let hasLocais = false;
+      try {
+        if (typeof window.apiPartnerListPlaces === "function") {
+          const locais = await window.apiPartnerListPlaces();
+          hasLocais = (locais && Array.isArray(locais) && locais.length > 0);
+        } else {
+          const locRes = await fetch("http://127.0.0.1:8000/api/estabelecimentos", {credentials: 'include'});
+          if (locRes.ok) {
+            const locaisData = await locRes.json();
+            hasLocais = (locaisData && Array.isArray(locaisData) && locaisData.length > 0);
+          }
+        }
+      } catch(e) { console.warn("Aviso: falha na verificação pós-login", e); }
+
       setTimeout(() => {
-        window.location.href = "./parceiro-cadastro-estabelecimento.html";
+        if (hasLocais) {
+           window.location.href = "./parceiro-dashboard.html";
+        } else {
+           window.location.href = "./parceiro-cadastro-estabelecimento.html";
+        }
       }, 1000);
     } catch (err) {
       errEls.main.style.borderColor = "#fca5a5";

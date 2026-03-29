@@ -1,13 +1,14 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-br">
-  <head>
+  <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Venha Junto • Área do Parceiro</title>
 
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/dashboard.css" />
-  </head>
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+</head>
 
   <body>
     <div class="dash-layout">
@@ -189,6 +190,100 @@
             <div class="welcome-box">
               <h3>Olá, <span class="username-display">João Silva</span>! 👋</h3>
               <p>Confira o desempenho dos seus estabelecimentos</p>
+            </div>
+
+            <!-- Banner Promocional (Sem cupom) -->
+            <div
+              class="dash-card"
+              id="promoBannerSemCupom"
+              style="
+                background: linear-gradient(135deg, #fffbeb, #fefce8);
+                border-color: #fde047;
+                margin-bottom: 24px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+              "
+            >
+              <div>
+                <h4
+                  style="
+                    color: #b45309;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span style="font-size: 20px">🎁</span> Aumente suas visitas!
+                </h4>
+                <p style="color: #78350f; margin: 0; font-size: 14px">
+                  Crie uma oferta exclusiva e aumente suas chances de receber
+                  visitantes.
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="openCupomModal()"
+                class="btn-orange-small"
+                style="
+                  background: #ea580c;
+                  border: none;
+                  padding: 10px 16px;
+                  min-width: intrinsic;
+                  cursor: pointer;
+                "
+              >
+                Adicionar cupom
+              </button>
+            </div>
+
+            <!-- Banner Promocional (Com cupom) -->
+            <div
+              class="dash-card"
+              id="promoBannerComCupom"
+              style="
+                background: #f0fdf4;
+                border-color: #bbf7d0;
+                margin-bottom: 24px;
+                display: none;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+              "
+            >
+              <div>
+                <h4
+                  style="
+                    color: #166534;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span style="font-size: 20px">✅</span> Cupom Ativo
+                </h4>
+                <p style="color: #15803d; margin: 0; font-size: 14px">
+                  Você possui um cupom ativo até
+                  <strong id="dashCupomData">31/12/2026</strong>.
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="openCupomModal()"
+                class="btn-orange-small"
+                style="
+                  background: #22c55e;
+                  border: none;
+                  padding: 10px 16px;
+                  min-width: intrinsic;
+                  cursor: pointer;
+                "
+              >
+                Gerenciar cupom
+              </button>
             </div>
 
             <!-- Cards de Metricas -->
@@ -937,6 +1032,90 @@
           </section>
         </div>
       </main>
+    </div>
+
+    <!-- MODAL CRIAR NOVO CUPOM -->
+    <div id="modalNovoCupom" class="cupom-modal-overlay">
+      <div class="cupom-modal-content">
+        <div class="cupom-modal-header">
+          <h3>Criar Novo Cupom</h3>
+          <button
+            type="button"
+            class="btn-close-modal"
+            aria-label="Fechar"
+            onclick="closeCupomModal()"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="cupom-modal-body">
+          <div class="c-form-group">
+            <label for="c_codigo">Código <span>*</span></label>
+            <input type="text" id="c_codigo" placeholder="Ex: ACESSO20" />
+          </div>
+
+          <div class="c-form-group">
+            <label for="c_titulo">Título <span>*</span></label>
+            <input
+              type="text"
+              id="c_titulo"
+              placeholder="Ex: 20% de desconto no Restaurante X"
+            />
+          </div>
+
+          <div class="c-form-group">
+            <label for="c_desc">Descrição</label>
+            <textarea
+              id="c_desc"
+              rows="3"
+              placeholder="Descreva o benefício..."
+            ></textarea>
+          </div>
+
+          <div class="c-form-row">
+            <div class="c-form-group">
+              <label for="c_tipo">Tipo</label>
+              <select id="c_tipo">
+                <option value="percentual">Percentual (%)</option>
+                <option value="fixo">Valor Fixo (R$)</option>
+              </select>
+            </div>
+            <div class="c-form-group">
+              <label for="c_valor">Valor</label>
+              <input type="number" id="c_valor" placeholder="10" />
+            </div>
+          </div>
+
+          <label class="c-checkbox">
+            <input type="checkbox" id="c_destaque" checked />
+            <span class="c-label-text">Destacar na página inicial</span>
+          </label>
+        </div>
+
+        <div class="cupom-modal-footer">
+          <button
+            type="button"
+            class="btn-cancelar"
+            onclick="closeCupomModal()"
+          >
+            Cancelar
+          </button>
+          <button type="button" class="btn-criar" onclick="salvarNovoCupom()">
+            Criar Cupom
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- SCRIPTS -->

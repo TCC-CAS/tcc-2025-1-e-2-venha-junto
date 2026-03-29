@@ -1,96 +1,182 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
-  <head>
+  <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Venha Junto • Detalhes do Local</title>
 
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/local-detalhes.css" />
-  </head>
+    <link rel="stylesheet" href="../css/carousel.css" />
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+</head>
 
   <body>
     <main class="vj-page">
-      <header class="vj-top">
-       <a class="vj-back" href="#" id="btnVoltar">← Voltar</a>
-
-        <span id="vjStatus" class="vj-status">Publicado</span>
-      </header>
-
-      <section class="vj-hero">
-        <div class="vj-hero__img" id="imgWrap">
-          <div class="vj-hero__imgEmpty">Sem imagem</div>
+      <!-- 1. HEADER (Botão Voltar, Título e Endereço) -->
+      <header class="detail-header">
+        <a href="#" id="btnVoltar" class="back-btn" aria-label="Voltar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </a>
+        <div class="header-content">
+          <h1 id="nome">Carregando...</h1>
+          <div class="loc-line" id="locLine">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span id="enderecoTopo">...</span>
+          </div>
         </div>
 
-        <aside class="vj-hero__card">
-          <h1 id="nome">Carregando...</h1>
+        <script src="../js/i18n.js"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      </header>
 
-          <div class="vj-meta" id="meta"></div>
+      <!-- 2. HERO GRID (Imagem + Card Info) -->
+      <section class="hero-grid">
+        <div class="hero-main-img" id="imgWrap">
+          <div class="vj-hero__imgEmpty">Carregando imagem...</div>
+        </div>
 
-          <div class="vj-row">
-            <span id="verifiedBadge" class="vj-pill vj-pill--ok" style="display:none;">
-              Acessível verificado
+        <aside class="info-card">
+          <div class="badges-row">
+            <span id="tipoBadge" class="badge atracao">Local</span>
+            <span id="verifiedBadge" class="badge acessivel" style="display:none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Acessível
             </span>
-            <span id="tipoBadge" class="vj-pill vj-pill--soft"></span>
           </div>
 
-          <div class="vj-rating" id="ratingLine">Sem avaliações</div>
+          <div class="rating-highlight">
+            <div class="rating-score">
+              <div class="star-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <span id="ratingAvg">4.9</span>
+            </div>
+            <div class="access-mini-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path></svg>
+            </div>
+          </div>
 
-          <div class="vj-address" id="address"></div>
-
-          <div class="vj-actions">
-            <button id="btnAvaliar" class="vj-btn vj-btn--primary" type="button">
-              ★ Avaliar
-            </button>
-            <a class="vj-btn vj-btn--ghost" href="./explorar.html">Explorar mais</a>
+          <div class="card-details">
+            <div class="detail-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span id="addressRua">...</span>
+            </div>
+            <div class="detail-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span id="telefoneLocal">...</span>
+            </div>
+            <div class="detail-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span id="horarioLocal">...</span>
+            </div>
           </div>
         </aside>
       </section>
 
-      <section class="vj-section">
-        <h2>Sobre</h2>
-        <p id="descricao" class="vj-text"></p>
-      </section>
+      <!-- 3. SEÇÕES BRANCAS -->
+      <div class="content-sections">
+        
+        <!-- Sobre -->
+        <section class="white-card">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </div>
+              <h2>Sobre o Local</h2>
+            </div>
+          </div>
+          <p id="descricao" class="vj-text">...</p>
+        </section>
 
-      <section class="vj-section">
-        <h2>Recursos de Acessibilidade</h2>
-        <div id="features" class="vj-chips"></div>
-      </section>
+        <!-- Acessibilidade -->
+        <section class="white-card">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"></circle><path d="m18 19 1-7-6 1"></path><path d="m5 8 3-3 5.5 2-2.36 3.5"></path><path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path><path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path></svg>
+              </div>
+              <h2>Recursos de Acessibilidade</h2>
+            </div>
+          </div>
+          <div id="features" class="access-grid">
+            <!-- Injetado via JS -->
+          </div>
+        </section>
 
-      <section class="vj-section">
-        <div class="vj-section__head">
-          <h2>Avaliações</h2>
-          <span id="reviewsCount" class="vj-muted"></span>
-        </div>
+        <!-- Galeria (Opcional) -->
+        <section class="white-card" id="gallerySection" style="display: none;">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              </div>
+              <h2>Galeria de Fotos</h2>
+            </div>
+          </div>
+          <div id="galleryContainer" class="vj-gallery"></div>
+        </section>
 
-        <div id="reviews" class="vj-reviews"></div>
+        <!-- CUPOM -->
+        <section class="white-card" id="cupomSection" style="display: none; background: #fffbeb; border-color: #fde047;">
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <div style="font-size: 32px;">🎁</div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                <h2 id="cupomTitulo" style="margin: 0; color: #b45309; font-size: 18px;">Título do Cupom</h2>
+                <span id="cupomDescontoBadge" style="background: #ea580c; color: #fff; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 14px;">X% OFF</span>
+              </div>
+              <p id="cupomDescricao" style="margin: 0 0 16px 0; color: #78350f; font-size: 14px; font-weight: 600;"></p>
+              <div style="background: #ffffff; border: 1px dashed #fbbf24; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 12px;">
+                <strong id="cupomCodigo" style="font-size: 24px; color: #0f172a; letter-spacing: 2px;">CÓDIGO</strong>
+              </div>
+              <div style="font-size: 12px; color: #92400e; font-weight: 600;">
+                <div><strong>Validade:</strong> <span id="cupomValidade"></span></div>
+                <div style="margin-top: 4px;"><strong>Regras:</strong> <span id="cupomRegras"></span></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <!-- FORM AVALIAR -->
-        <div id="reviewBox" class="vj-reviewBox" hidden>
-          <h3>Avaliar este Local</h3>
-
-          <div class="vj-stars" id="stars" aria-label="Selecione sua nota"></div>
-
-          <label class="vj-label" for="comment">Comentário (opcional)</label>
-          <textarea
-            id="comment"
-            class="vj-input"
-            rows="4"
-            placeholder="Conte sua experiência... Como foi a acessibilidade?"
-          ></textarea>
-
-          <div class="vj-actions vj-actions--end">
-            <button id="btnCancel" class="vj-btn vj-btn--ghost" type="button">
-              Cancelar
-            </button>
-            <button id="btnSend" class="vj-btn vj-btn--primary" type="button">
-              Publicar Avaliação
+        <!-- Avaliações -->
+        <section class="white-card">
+          <div class="card-header">
+            <div class="card-icon-title">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <h2 id="reviewsTitle">Avaliações (0)</h2>
+            </div>
+            <button id="btnAvaliar" class="btn-review-action" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              Avaliar
             </button>
           </div>
 
-          <div id="msg" class="vj-msg" role="status" aria-live="polite"></div>
-        </div>
-      </section>
+          <div id="reviewsList" class="vj-reviews">
+            <!-- Empty state default -->
+            <div class="empty-reviews" id="emptyReviews">
+              <p>Ainda não há avaliações para este local.</p>
+              <button id="btnAvaliarPrimeiro" class="btn-outline">Seja o primeiro a avaliar</button>
+            </div>
+          </div>
+
+          <!-- FORM AVALIAR (Oculto por padrão) -->
+          <div id="reviewBox" class="vj-reviewBox" hidden>
+            <h3>Avaliar este Local</h3>
+            <div class="vj-stars" id="starsBox" aria-label="Selecione sua nota"></div>
+            <label class="vj-label" for="commentInput">Comentário (opcional)</label>
+            <textarea id="commentInput" class="vj-input" rows="4" placeholder="Conte sua experiência..."></textarea>
+            <div class="vj-actions vj-actions--end" style="margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+              <button id="btnCancel" class="btn-outline" type="button" style="margin:0;">Cancelar</button>
+              <button id="btnSend" class="btn-review-action" type="button">Publicar Avaliação</button>
+            </div>
+            <div id="reviewMsg" class="vj-msg" role="status" aria-live="polite"></div>
+          </div>
+        </section>
+
+      </div>
     </main>
 
     <!-- ✅ MODAL LOGIN (sem localStorage) -->
@@ -125,16 +211,12 @@
           <p>Entre ou crie sua conta para publicar uma avaliação.</p>
 
           <div class="vj-modal_toggle">
-            <a id="vjGoLogin" class="vj-btn vj-btn--primary" href="./usuario-login.html">
+            <a id="vjGoLogin" class="auth-btn primary" href="./usuario-login.html">
               Entrar
             </a>
-            <a id="vjGoSignup" class="vj-btn vj-btn--ghost" href="./usuario-criar-conta.html">
+            <a id="vjGoSignup" class="auth-btn outline" href="./usuario-criar-conta.html">
               Criar conta
             </a>
-          </div>
-
-          <div class="vj-fineprint">
-            * O Venha Junto não realiza reservas e não intermedia pagamentos.
           </div>
         </div>
       </div>
@@ -180,5 +262,8 @@
 
     <script src="../js/local-detalhes.js" defer></script>
      <script src="../js/vlibras.js" defer></script>
+     
+    <!-- ✅ Utils Internos -->
+    <script src="../js/carousel.js" defer></script>
   </body>
 </html>

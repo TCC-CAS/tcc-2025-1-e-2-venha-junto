@@ -52,12 +52,11 @@ body.perfil-page .main {
 }
 
 .perfil-card-header {
-  background: #fff8f1;
+  background: #ea580c;
   padding: 30px;
   display: flex;
   align-items: center;
   gap: 20px;
-  border-bottom: 1px solid #f1e6da;
 }
 
 .avatar-large {
@@ -105,14 +104,14 @@ body.perfil-page .main {
 
 .user-info h2 {
   margin: 0 0 4px;
-  color: #1e293b;
+  color: #ffffff;
   font-size: 22px;
   font-weight: 800;
 }
 
 .user-info p {
   margin: 0;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   display: flex;
   align-items: center;

@@ -1,5 +1,11 @@
 (function () {
-  const API_BASE = window.VJ_API_BASE || "http://127.0.0.1:8000";
+  const API_BASE =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.protocol === "file:" ||
+    !window.location.hostname
+      ? `http://${window.location.hostname || "localhost"}:8000`
+      : "https://venha-junto-h54n.onrender.com";
 
   const pill = document.getElementById("statusPill");
   const title = document.getElementById("title");

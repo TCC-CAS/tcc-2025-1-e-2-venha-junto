@@ -71,12 +71,12 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
   border: none;
   background: transparent;
   color: #475569;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
@@ -88,13 +88,19 @@
 }
 
 .cat-btn.active {
-  background: #ea580c;
+  background: #f97316; /* Laranja da imagem */
   color: #ffffff;
-  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+  font-weight: 700;
 }
 
 .cat-btn .icon {
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  color: #64748b; /* Cor do ícone inativo */
+}
+
+.cat-btn.active .icon {
+  color: #ffffff; /* Cor do ícone ativo */
 }
 
 /* CHECKBOX CUSTOMIZADO (Recursos de Acessibilidade) */
@@ -235,39 +241,7 @@
   gap: 20px;
 }
 
-/* =========================
-   ❤️ Favoritos (coração) - igual favoritos
-========================= */
-#listaLocais .local-card {
-  position: relative;
-}
-
-#listaLocais .fav-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.92);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.12);
-  z-index: 10;
-}
-
-#listaLocais .fav-btn .fav-icon {
-  font-size: 18px;
-  line-height: 1;
-  color: #9ca3af;
-}
-
-#listaLocais .fav-btn.is-active .fav-icon {
-  color: #ef4444;
-}
+/* Nota: Estilos do .local-card e .fav-btn residem no home.css para consistência global */
 
 /* =======================================================
    RESPONSIVO 

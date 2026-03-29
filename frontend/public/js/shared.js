@@ -52,17 +52,25 @@ export function buildCard(place) {
   const imgWrap = document.createElement("div");
   imgWrap.className = "place-card__img";
 
-  const img = document.createElement("img");
-  img.alt = safeText(p.nome) || "Local";
-  img.loading = "lazy";
-
-  // se não tiver imagem, usa fallback simples
-  img.src =
-    p.cover_image && String(p.cover_image).trim()
-      ? String(p.cover_image)
-      : "./assets/img/placeholder-place.png";
-
-  imgWrap.appendChild(img);
+  let imageUrls = [];
+  if (p.cover_image && String(p.cover_image).trim()) {
+      imageUrls.push(String(p.cover_image));
+  }
+  // Se tivessemos galeria no retorno de /places, adicionariamos aqui, 
+  // mas o 'shared' parece usar um 'cover_image' customizado
+  
+  if (window.VJCarousel && window.VJCarousel.create) {
+      const carousel = window.VJCarousel.create(imageUrls, safeText(p.nome) || "Local");
+      carousel.style.width = "100%";
+      carousel.style.height = "100%";
+      imgWrap.appendChild(carousel);
+  } else {
+      const img = document.createElement("img");
+      img.alt = safeText(p.nome) || "Local";
+      img.loading = "lazy";
+      img.src = imageUrls.length > 0 ? imageUrls[0] : "./assets/img/placeholder-place.png";
+      imgWrap.appendChild(img);
+  }
 
   // conteúdo
   const body = document.createElement("div");

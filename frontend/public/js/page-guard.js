@@ -21,24 +21,9 @@
   }
 
   async function hydrateUserBox() {
-    // se a página nem tem userbox, não faz nada
-    const hasBox =
-      document.getElementById("userName") ||
-      document.getElementById("userEmail");
-    if (!hasBox) return;
-
-    // coloca estado inicial (evita “piscada” errada)
-    setUserBox({ nome: "Carregando...", email: "..." });
-
-    const me = await getMeSafe();
-    if (me && me.email) {
-      setUserBox({ nome: me.nome || "Usuário", email: me.email });
-      // cache opcional (só para UX)
-      localStorage.setItem("vj_last_user_name", me.nome || "");
-      localStorage.setItem("vj_last_user_email", me.email || "");
-    } else {
-      setUserBox(); // Visitante
-    }
+    // A renderização do userbox agora é inteiramente gerenciada por userbox.js.
+    // page-guard.js não deve tentar manipular o DOM do usuário para evitar piscadas.
+    return;
   }
 
   async function isLoggedIn() {

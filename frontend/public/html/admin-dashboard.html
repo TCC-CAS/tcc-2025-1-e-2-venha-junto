@@ -1,117 +1,250 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-br">
-<head>
+<head><style>html,body{background:#f6f8fc!important}</style>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Venha Junto • Admin • Validação de Estabelecimentos</title>
 
-  <link rel="stylesheet" href="../css/parceiro-status.css" />
-  <!-- você pode trocar por um css próprio depois -->
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
   <style>
-    .main { padding: 24px; }
-    .card {
+    /* Estilos específicos dos Cards de Aprovação */
+    .admin-card {
       background: #fff;
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 6px 22px rgba(0,0,0,.08);
-      margin-bottom: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
-    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
-    .meta { display:flex; gap:10px; flex-wrap:wrap; color:#444; font-size:14px; }
-    .meta span { background:#f3f4f6; padding:6px 10px; border-radius:999px; }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; }
-    button { cursor:pointer; padding:10px 14px; border-radius:10px; border:1px solid #ddd; background:#fff; }
-    button.primary { background:#111827; color:#fff; border-color:#111827; }
-    button.danger { background:#b91c1c; color:#fff; border-color:#b91c1c; }
-    button:disabled { opacity:.6; cursor:not-allowed; }
-    .topbar2 { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
-    .filters { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    select, input {
-      padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#fff;
+    .admin-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
     }
-    .small { font-size:12px; color:#666; }
-    .empty { padding: 18px; color:#555; background:#fafafa; border:1px dashed #ddd; border-radius:14px; }
-    .toast {
-      position: fixed; right: 16px; bottom: 16px;
-      background:#111827; color:#fff; padding:12px 14px;
-      border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,.22);
-      max-width: 360px;
-      white-space: pre-line;
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
     }
-    .toast[hidden] { display:none; }
+    .admin-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 4px 0;
+    }
+    .admin-card-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin: 0;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.pending { background: #fef08a; color: #854d0e; }
+    .badge.approved { background: #dcfce7; color: #166534; }
+    .badge.rejected { background: #fee2e2; color: #991b1b; }
+    
+    .admin-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #f1f5f9;
+    }
+    .grid-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .grid-item strong { font-size: 12px; color: #64748b; text-transform: uppercase; }
+    .grid-item span { font-size: 14px; font-weight: 600; color: #334155; }
+    
+    .admin-card-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .btn-approve {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-approve:hover { background: #059669; }
+    .btn-approve:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .btn-reject {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-reject:hover { background: #dc2626; }
+    .btn-reject:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      background: white;
+      border-radius: 16px;
+      border: 1px dashed #cbd5e1;
+      color: #64748b;
+    }
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; color: #94a3b8; }
+    .empty-state p { font-size: 16px; font-weight: 600; margin: 0; }
+    .admin-card-gallery {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .admin-gallery-img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .admin-details-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .admin-details-row p {
+      margin: 0;
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .admin-details-row strong {
+      color: #1e293b;
+    }
+    .gallery-item-wrapper {
+      position: relative;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .gallery-label {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(16, 185, 129, 0.9);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+    }
   </style>
+<script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
 </head>
-
 <body>
-  <div class="layout">
-    <aside class="sidebar" aria-label="Área Admin">
-      <div class="brand">
-        <div class="brandIcon">🛡️</div>
-        <div class="brandTxt">
-          <strong>Venha Junto</strong>
-          <small>Área Admin</small>
+  <div class="dash-layout">
+    <aside class="dash-sidebar" style="background: #0f172a;">
+      <div class="dash-brand">
+        <h1 style="color: #fff">Venha Junto</h1>
+        <span style="color: #94a3b8">Painel Admin</span>
+      </div>
+
+      <div class="dash-user">
+        <div class="dash-avatar" style="background: #3b82f6; color: #fff;">🛡️</div>
+        <div class="dash-user-info">
+          <strong id="adminNome" style="color: #fff">Carregando...</strong>
+          <span class="badge-premium" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Admin
+          </span>
         </div>
       </div>
 
-      <div class="pill" id="statusPill">Validação</div>
+      <div class="dash-menu-title" style="color: #64748b">MENU</div>
+      <nav class="dash-nav">
+        <button class="nav-item active" data-target="dashboard" style="color: #f8fafc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Aprovar Locais
+        </button>
+        <a href="./explorar.html" class="nav-item" style="text-decoration: none; display: flex; color: #94a3b8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          Visão de Usuário
+        </a>
+      </nav>
 
-      <div class="menuTitle">Menu</div>
-      <nav class="menu" aria-label="Menu público">
-          <a href="./explorar.html">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4.06L15 22l8-4.06V2L15 6.06 8 2 1 6z"/><path d="M8 2v16"/><path d="M15 6v16"/></svg>
-            Explorar
-          </a>
-          <a href="./favoritos.html">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            Favoritos
-          </a>
-          <a href="./parceiro.html">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Sou Parceiro
-          </a>
-        </nav>
-
-      <div class="spacer"></div>
-
-      <div class="user">
-        <div class="userAvatar">👩‍💼</div>
-        <div class="userTxt">
-          <strong id="adminNome">Admin</strong>
-          <small id="adminEmail">carregando...</small>
-        </div>
-      </div>
-
-      <a class="btnGhost" href="./admin-login.html">Sair</a>
+      <a href="./admin-login.html" class="dash-logout" style="text-decoration: none; margin-top: auto; display: flex; color: #f8fafc; background: #1e293b; border-color: #334155; align-items: center; gap: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Sair
+      </a>
     </aside>
 
-    <main class="main">
-      <div class="topbar2">
-        <div>
-          <strong style="font-size:18px;">Validação de Estabelecimentos</strong><br/>
-          <span class="small">Aprovar / reprovar cadastros enviados pelo parceiro.</span>
+    <main class="dash-main" style="padding: 32px 40px; background: #f8fafc; overflow-y: auto;">
+      <div class="dash-wrap" style="max-width: 1000px; margin: 0 auto;">
+        
+        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+          <div>
+            <h1 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Validação de Estabelecimentos</h1>
+            <p style="color: #64748b; font-size: 15px; margin: 0;">Analise e aprove os novos cadastros enviados pelos parceiros.</p>
+          </div>
+          
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <select id="statusFilter" style="padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; background: #fff; font-weight: 600; color: #334155; outline: none; cursor: pointer;">
+              <option value="PENDING_REVIEW">Em análise</option>
+              <option value="APPROVED">Aprovados</option>
+              <option value="REJECTED">Reprovados</option>
+            </select>
+            <input id="searchInput" type="search" placeholder="Buscar local..." style="padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; width: 220px;" />
+            <button id="btnReload" style="background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Atualizar
+            </button>
+          </div>
+        </header>
+
+        <div id="list" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Cards renderizados via JS -->
         </div>
 
-        <div class="filters">
-          <select id="statusFilter">
-            <option value="PENDING_REVIEW">Em análise</option>
-            <option value="APPROVED">Aprovados</option>
-            <option value="REJECTED">Reprovados</option>
-            <option value="DRAFT">Rascunhos</option>
-          </select>
-
-          <input id="searchInput" type="search" placeholder="Buscar por nome, cidade, bairro..." />
-          <button id="btnReload" class="primary" type="button">Atualizar</button>
-        </div>
       </div>
-
-      <div id="list"></div>
-
-      <div id="toast" class="toast" hidden></div>
     </main>
+    
+    <div id="toast" class="toast" hidden></div>
   </div>
-
- <!-- ✅ IMPORT FUNCIONA SÓ COM type="module" -->
+  
   <script type="module" src="../js/admin-dashboard.js"></script>
-   <script src="../js/vlibras.js" defer></script>
+  <script src="../js/vlibras.js" defer></script>
 </body>
 </html>

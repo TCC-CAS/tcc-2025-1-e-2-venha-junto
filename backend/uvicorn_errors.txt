@@ -1,0 +1,75 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\bruna\\OneDrive\\Desktop\\VenhaJunto\\backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [19408] using WatchFiles
+C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: SAWarning: Unrecognized server version info '17.0.1000.7'.  Some SQL Server features may not function properly.
+  return next(self.gen)
+INFO:     Started server process [27292]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'check_mssql.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27292]
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: SAWarning: Unrecognized server version info '17.0.1000.7'.  Some SQL Server features may not function properly.
+  return next(self.gen)
+INFO:     Started server process [24412]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 701, in lifespan
+    await receive()
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: SAWarning: Unrecognized server version info '17.0.1000.7'.  Some SQL Server features may not function properly.
+  return next(self.gen)
+INFO:     Started server process [12284]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12284]
+C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: SAWarning: Unrecognized server version info '17.0.1000.7'.  Some SQL Server features may not function properly.
+  return next(self.gen)
+INFO:     Started server process [12964]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'check_users.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12964]
+C:\Users\bruna\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:141: SAWarning: Unrecognized server version info '17.0.1000.7'.  Some SQL Server features may not function properly.
+  return next(self.gen)
+INFO:     Started server process [22704]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

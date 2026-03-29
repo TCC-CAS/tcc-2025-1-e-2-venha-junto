@@ -1,11 +1,18 @@
 // frontend/public/js/auth.js
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = (function() {
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
+  // Preferência para 127.0.0.1 se for local para evitar problemas de resolução de nome
+  return isLocal ? "http://127.0.0.1:8000" : "https://venha-junto-h54n.onrender.com";
+})();
+console.log("[Auth] API_BASE:", API_BASE);
 
 /**
  * Faz fetch com cookie HttpOnly (credentials: "include")
  */
 export async function apiFetch(path, opts = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const fullUrl = `${API_BASE}${path}`;
+  console.log(`[Auth] Fetching: ${fullUrl}`, opts);
+  const res = await fetch(fullUrl, {
     ...opts,
     credentials: "include",
     headers: {
