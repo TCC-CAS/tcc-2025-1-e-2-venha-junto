@@ -1,0 +1,122 @@
+/* =========================
+   Favoritos - Cabeçalho
+========================= */
+.page-header{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom: 22px;
+}
+
+.back-btn{
+  width:44px; height:44px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  box-shadow: 0 10px 24px rgba(2,6,23,.06);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.header-text h1{
+  margin:0;
+  font-size: 44px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.header-text p{
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* =========================
+   Estado vazio
+========================= */
+.empty{
+  margin-top: 34px;
+  padding: 56px 20px;
+  border-radius: 24px;
+  text-align:center;
+  background: radial-gradient(closest-side, rgba(234,88,12,.10), transparent 70%);
+}
+
+.empty-icon{
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  margin: 0 auto 18px;
+  display:grid;
+  place-items:center;
+  background: rgba(234,88,12,.12);
+  border: 1px solid rgba(234,88,12,.20);
+}
+
+.empty-icon .heart{
+  font-size: 44px;
+  color: #ef4444;
+  font-weight: 900;
+}
+
+.empty h2{
+  margin: 10px 0 8px;
+  font-size: 26px;
+}
+
+.empty p{
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.btn-primary{
+  border:0;
+  cursor:pointer;
+  background: #ea580c;
+  color:#fff;
+  padding: 12px 24px;
+  font-weight: 800;
+  font-size: 15px;
+  border-radius: 999px;
+  box-shadow: 0 10px 20px -5px rgba(234,88,12,.3);
+}
+.btn-primary:hover{ filter: brightness(1.05); }
+
+/* =========================
+   Lista / Grid
+========================= */
+.favorites-list {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .header-text h1 {
+    font-size: 34px;
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Nota: Estilos do .local-card e .fav-btn residem no home.css para consistência global */

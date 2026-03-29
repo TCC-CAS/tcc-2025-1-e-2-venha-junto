@@ -1,0 +1,550 @@
+﻿<!doctype html>
+<html lang="pt-br">
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VenhaJunto • Parceiros</title>
+    <style>
+      :root {
+        --bg-dark: #ea580c;
+        --bg-light: #fafafa;
+        --card-bg: #ffffff;
+        --text-light: #f8fafc;
+        --text-muted: #cbd5e1;
+        --text-dark: #0f172a;
+        --primary: #f97316;
+        --primary-hover: #ea580c;
+        --border-color: #e2e8f0;
+        --green-check: #22c55e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+      }
+      .dark-section {
+        background: var(--bg-dark);
+        color: #ffffff;
+        --text-light: #ffffff;
+        --text-muted: #ffffff;
+        padding-bottom: 60px;
+      }
+      .topbar {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        max-width: 1300px;
+        margin: 0 auto;
+      }
+      .brand {
+        font-weight: 900;
+        font-size: 20px;
+        color: #ffffff;
+        text-decoration: none;
+      }
+      .hero-container {
+        max-width: 1200px;
+        margin: 40px auto 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        padding: 0 40px;
+        align-items: start;
+      }
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+        margin: 0 0 20px;
+        font-weight: 900;
+      }
+      .lead {
+        font-size: 18px;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin: 0 0 30px;
+        max-width: 90%;
+      }
+      .check-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 40px;
+        display: grid;
+        gap: 16px;
+      }
+      .check-list li {
+        display: flex;
+        gap: 12px;
+        align-items: start;
+        color: var(--text-muted);
+        font-size: 15px;
+        line-height: 1.4;
+      }
+      .check-list li svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: var(--green-check);
+      }
+      .stats {
+        display: flex;
+        gap: 40px;
+      }
+      .stat-item strong {
+        display: block;
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 4px;
+        color: #ffffff;
+      }
+      .stat-item span {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .signup-card {
+        background: var(--card-bg);
+        border: 4px solid #fbbf24;
+        border-radius: 12px;
+        padding: 30px;
+        color: var(--text-dark);
+      }
+      .signup-card h3 {
+        margin: 0 0 20px;
+        font-size: 22px;
+        font-weight: 800;
+      }
+      .signup-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px;
+        display: grid;
+        gap: 14px;
+      }
+      .signup-list li {
+        display: flex;
+        gap: 10px;
+        align-items: start;
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.4;
+      }
+      .signup-list li svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        color: var(--green-check);
+      }
+      .btn-orange {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: var(--primary);
+        color: #fff;
+        text-decoration: none;
+        padding: 14px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 16px;
+        gap: 8px;
+        transition: background 0.2s;
+      }
+      .btn-orange:hover {
+        background: var(--primary-hover);
+      }
+      .login-link {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .login-link:hover {
+        text-decoration: underline;
+      }
+      .pill-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--text-dark);
+      }
+      .pill-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .pill-icon.blue {
+        background: #eff6ff;
+        color: #3b82f6;
+      }
+      .pill-icon.orange {
+        background: #fff7ed;
+        color: #f97316;
+      }
+      .pill-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+      .pill-content strong {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+      .pill-content small {
+        color: #64748b;
+        font-size: 13px;
+      }
+
+      .benefits-section {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 40px;
+        text-align: center;
+      }
+      .benefits-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 40px;
+        color: var(--text-dark);
+      }
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        text-align: left;
+      }
+      .benefit-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      .benefit-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #fff7ed;
+        color: #f97316;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+      .benefit-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      .benefit-card h4 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .benefit-card p {
+        margin: 0;
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 992px) {
+        .hero-container {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .benefits-grid {
+          grid-template-columns: 1fr;
+        }
+        .stats {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+</head>
+  <body>
+    <!-- Topbar dark section -->
+    <div class="dark-section">
+      <header class="topbar">
+        <a href="./index.html" style="background: #ffffff; color: #ea580c; padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 800; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Voltar ao Início
+        </a>
+        <script src="../js/i18n.js"></script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+      </header>
+
+      <div class="hero-container">
+        <!-- Left Side -->
+        <div class="hero-text">
+          <h1>Anuncie seu<br />estabelecimento no<br />Venha Junto</h1>
+          <p class="lead">
+            Anuncie na plataforma de turismo acessível mais baixada de São Paulo
+            para ganhar mais visibilidade e alcançar novos públicos.
+          </p>
+
+          <ul class="check-list">
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              45% dos estabelecimentos recebem mais visitantes em até 1 semana
+            </li>
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Escolha entre planos gratuitos ou pagos para mais destaque
+            </li>
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Vamos facilitar o gerenciamento do seu estabelecimento
+            </li>
+          </ul>
+
+          <div class="stats">
+            <div class="stat-item">
+              <strong>1.500+</strong><span>Locais avaliados</span>
+            </div>
+            <div class="stat-item">
+              <strong>39+</strong><span>Bairros em SP</span>
+            </div>
+            <div class="stat-item">
+              <strong>800+</strong><span>Parceiros locais</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="right-column">
+          <div class="signup-card">
+            <h3>Cadastre-se gratuitamente</h3>
+            <ul class="signup-list">
+              <li>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                45% dos estabelecimentos recebem mais visitantes em até 1 semana
+              </li>
+              <li>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Escolha entre planos gratuitos ou pagos para mais destaque
+              </li>
+              <li>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Vamos facilitar o gerenciamento dos seus anúncios
+              </li>
+            </ul>
+            <a href="./parceiro-criar-conta.html" class="btn-orange">
+              Comece agora
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <a href="./parceiro-login.html" class="login-link"
+              >Já começou um cadastro?</a
+            >
+          </div>
+
+          <div class="pill-card">
+            <div class="pill-icon blue">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="pill-content">
+              <strong>Verificação de Acessibilidade</strong>
+              <small>Certificação profissional incluída</small>
+            </div>
+          </div>
+
+          <div class="pill-card">
+            <div class="pill-icon orange">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+            </div>
+            <div class="pill-content">
+              <strong>Analytics em Tempo Real</strong>
+              <small>Monitore visualizações e cliques</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+      <h2 class="benefits-title">Por que anunciar no Venha Junto?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path
+                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              />
+            </svg>
+          </div>
+          <h4>Alcance Nacional</h4>
+          <p>
+            Milhares de turistas acessam nossa plataforma diariamente buscando
+            locais acessíveis.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+          </div>
+          <h4>Credibilidade</h4>
+          <p>
+            Selo de verificação e avaliações reais aumentam a confiança dos
+            visitantes.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <h4>Gestão Simples</h4>
+          <p>
+            Dashboard intuitivo para gerenciar anúncios, fotos e informações de
+            acessibilidade.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/vlibras.js" defer></script>
+  </body>
+</html>
