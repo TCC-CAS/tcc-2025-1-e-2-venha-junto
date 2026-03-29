@@ -527,14 +527,25 @@ document.addEventListener("DOMContentLoaded", () => {
         
         let contagem = 4;
         const btnDash = form.querySelector("#stepSuccess .btn");
-        if (btnDash) btnDash.innerText = `Acessar Área do Parceiro (${contagem}s)`;
+        
+        let destination = "./parceiro-dashboard.html";
+        if (planoEscolhido !== "basico") {
+           destination = `./pagamento.html?plan=${planoEscolhido}&estabId=${estabId}`;
+           if (btnDash) btnDash.innerText = `Ir para Pagamento (${contagem}s)`;
+        } else {
+           if (btnDash) btnDash.innerText = `Acessar Área do Parceiro (${contagem}s)`;
+        }
         
         const timer = setInterval(() => {
             contagem--;
-            if (btnDash) btnDash.innerText = `Acessar Área do Parceiro (${contagem}s)`;
+            if (planoEscolhido !== "basico") {
+                if (btnDash) btnDash.innerText = `Ir para Pagamento (${contagem}s)`;
+            } else {
+                if (btnDash) btnDash.innerText = `Acessar Área do Parceiro (${contagem}s)`;
+            }
             if(contagem <= 0) {
                clearInterval(timer);
-               window.location.href = "./parceiro-dashboard.html";
+               window.location.href = destination;
             }
         }, 1000);
       } catch (error) {
