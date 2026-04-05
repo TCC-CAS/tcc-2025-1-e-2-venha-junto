@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <style>html,body{background:#f8fafc!important}</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planos para Estabelecimentos • Venha Junto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #475569;
+      --heading: #0f172a;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      
+      --brand: #f97316; /* Laranja Pro */
+      --brand-hover: #ea580c;
+      --green: #10b981; /* Verde Pro Plus */
+      --dark: #1e293b;  /* Botão Básico */
+      
+      --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .wrap {
+      max-width: 1040px;
+      margin: 40px auto;
+      padding: 0 20px 80px;
+    }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 32px;
+    }
+    .page-header .icon-brand {
+      color: var(--brand);
+      font-size: 20px;
+      margin-right: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: #ffedd5;
+      border-radius: 6px;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--heading);
+      margin: 0 0 6px;
+      display: flex;
+      align-items: center;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--heading);
+      margin: 40px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--text);
+      margin: 0 0 32px;
+    }
+
+    /* Grid */
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .plan {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    
+    .plan.pro {
+      border: 2px solid var(--brand);
+      box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.1);
+    }
+    
+    .plan.pro-plus {
+      border: 2px solid var(--green);
+    }
+
+    .tag-popular {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-icon {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .plan h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--heading);
+    }
+
+    .plan .desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 24px;
+      min-height: 40px;
+      line-height: 1.4;
+    }
+
+    .price {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--heading);
+      margin: 0 0 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .price.gratis {
+      font-size: 32px;
+    }
+    .price .currency {
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .price .term {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      margin-bottom: 32px;
+    }
+    .btn-dark {
+      background: var(--dark);
+      color: #fff;
+    }
+    .btn-dark:hover { background: #0f172a; }
+    
+    .btn-brand {
+      background: var(--brand);
+      color: #fff;
+    }
+    .btn-brand:hover { background: var(--brand-hover); }
+
+    .btn-current {
+      background: #86efac;
+      color: #065f46;
+      cursor: default;
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+    }
+    .btn-green:hover { background: #059669; }
+
+    /* Features */
+    .features-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 16px;
+    }
+
+    .features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    
+    .features-list li.disabled {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .features-list .icon {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    
+    .features-list .icon.check svg {
+      width: 14px; height: 14px; stroke: var(--green); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+    }
+    
+    .features-list .icon.cross svg {
+      width: 12px; height: 12px; stroke: #cbd5e1; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--heading);
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 40px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-voltar:hover { background: #f1f5f9; }
+
+    @media (max-width: 900px) {
+      .pricing { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+</head>
+<body>
+  <div class="wrap">
+    
+    <div class="page-header">
+      <h1 class="page-title">
+        <span class="icon-brand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </span>
+        Plano
+      </h1>
+      <p class="page-subtitle">Visibilidade do seu estabelecimento</p>
+    </div>
+
+    <h2 class="section-title">✨ Escolha seu Plano</h2>
+    <p class="section-subtitle">Selecione o plano ideal de visibilidade para o seu negócio.</p>
+
+    <section class="pricing">
+      
+      <!-- BÁSICO -->
+      <article class="plan">
+        <div class="plan-icon">📋</div>
+        <h2>Básico</h2>
+        <p class="desc">Ideal para começar a divulgar seu estabelecimento</p>
+        <div class="price gratis">Grátis</div>
+
+        <a class="btn btn-dark" href="./parceiro-dashboard.html" data-plan="Basico">
+          Começar agora 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <div class="features-title">INCLUSO:</div>
+        <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Perfil público do estabelecimento</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Até 3 fotos do local</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Informações de contato direto</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Aparição em resultados de busca</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Selo de estabelecimento parceiro</li>
+        </ul>
+        
+        <div class="features-title" style="margin-top:24px;">NÃO INCLUSO:</div>
+        <ul class="features-list">
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Destaque nos resultados</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Localização aproximada</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Métricas de visualização</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Geolocalização com distância em km</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Dashboard completo</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Cupons Promocionais</li>
+        </ul>
+      </article>
+
+      <!-- PRO -->
+      <article class="plan pro">
+        <div class="tag-popular">MAIS POPULAR</div>
+        <div class="plan-icon">⭐</div>
+        <h2>Pro</h2>
+        <p class="desc">Mais visibilidade e métricas para seu negócio</p>
+        <div class="price"><span class="currency">R$</span> 39 <span class="term">/mês</span></div>
+
+        <a class="btn btn-brand" href="./pagamento.html?plan=pro" data-plan="Pro">
+          Começar agora 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <div class="features-title">INCLUSO:</div>
+        <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Tudo do plano Básico (até 10 fotos)</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Destaque nos resultados de busca</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Exibição de localização aproximada</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Métricas básicas de visualização</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Badge "Destaque" no perfil</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Prioridade no atendimento</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> 5 Cupons Ativos</li>
+        </ul>
+        
+        <div class="features-title" style="margin-top:24px;">NÃO INCLUSO:</div>
+        <ul class="features-list">
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Geolocalização com distância em km</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Dashboard completo com métricas avançadas</li>
+          <li class="disabled"><span class="icon cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> Maior prioridade nas buscas</li>
+        </ul>
+      </article>
+
+      <!-- PRO PLUS -->
+      <article class="plan pro-plus">
+        <div class="plan-icon">💎</div>
+        <h2>Pro Plus</h2>
+        <p class="desc">Máxima visibilidade e recursos completos</p>
+        <div class="price"><span class="currency">R$</span> 79 <span class="term">/mês</span></div>
+
+        <a class="btn btn-green" href="./pagamento.html?plan=pro_plus" data-plan="Pro_Plus">
+          Começar agora 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <div class="features-title">INCLUSO:</div>
+        <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Tudo do plano Pro</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Fotos ilimitadas</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Destaque máximo na plataforma</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Geolocalização com distância em km</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Maior prioridade nas buscas</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Dashboard com métricas detalhadas</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Badge "Destaque Máximo"</li>
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Cupons ilimitados</li>
+        </ul>
+      </article>
+      
+    </section>
+
+    <a href="./parceiro-dashboard.html" class="btn-voltar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Voltar
+    </a>
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const estabId = urlParams.get('estabId');
+
+      // Se houver um estabId na URL, o comportamento muda para "Atualização de Plano"
+      if (estabId) {
+        // --- NOVO: Buscar plano atual para detectar Downgrade ---
+        let currentPlanName = "Basico";
+        fetch(`http://127.0.0.1:8000/api/estabelecimentos`, {credentials: 'include'})
+          .then(r => r.json())
+          .then(locais => {
+             const loc = locais.find(l => l.id == estabId);
+             if (loc) currentPlanName = loc.plano_escolhido || "Basico";
+          });
+
+        document.querySelectorAll("[data-plan]").forEach(btn => {
+          // Alterar visual para indicar "Selecionar"
+          btn.innerHTML = btn.getAttribute("data-plan") === "Basico" ? "Mudar para Básico" : "Selecionar Plano";
+          
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const newPlan = btn.getAttribute("data-plan");
+            const tierMap = {"Basico": 0, "Pro": 1, "Pro Plus": 2};
+            
+            // Lógica de Alertas Dinâmicos (Upgrade vs Downgrade)
+            let confirmMsg = `Deseja realmente alterar seu plano para ${newPlan}?`;
+            if (tierMap[newPlan] < tierMap[currentPlanName]) {
+                confirmMsg = `⚠️ AO ALTERAR PARA O PLANO ${newPlan.toUpperCase()}, ALGUNS BENEFÍCIOS SERÃO LIMITADOS.\n\nSeus dados serão mantidos, mas parte dos recursos (como fotos extras) poderá ficar indisponível para o público.\n\nDeseja prosseguir com o Downgrade?`;
+            }
+
+            if (confirm(confirmMsg)) {
+              try {
+                const response = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ plano_escolhido: newPlan }),
+                  credentials: 'include'
+                });
+
+                if (response.ok) {
+                  alert("Plano atualizado com sucesso! Seu dashboard será atualizado.");
+                  window.location.href = "./parceiro-dashboard.html";
+                } else {
+                  const errData = await response.json();
+                  alert("Erro ao atualizar plano: " + (errData.detail || "Erro desconhecido"));
+                }
+              } catch (err) {
+                console.error("Erro na requisição:", err);
+                alert("Erro ao conectar com o servidor.");
+              }
+            }
+          });
+        });
+      } else {
+        // Comportamento original: Apenas armazena no LocalStorage para o fluxo de cadastro inicial
+        document.querySelectorAll("[data-plan]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const plan = btn.getAttribute("data-plan");
+            localStorage.setItem("vj_parceiro_plano", plan);
+          });
+        });
+      }
+    });
+  </script>
+  <script src="../js/i18n.js"></script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

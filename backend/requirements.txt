@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+passlib[bcrypt]
+pyjwt
+python-multipart
+python-dotenv
+pydantic[email]
+pyodbc
+httpx
+validate-docbr

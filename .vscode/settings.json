@@ -1,0 +1,5 @@
+{
+  "liveServer.settings.port": 5508,
+  "python.analysis.extraPaths": ["./backend"],
+  "python.defaultInterpreterPath": "C:\\Users\\bruna\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+}

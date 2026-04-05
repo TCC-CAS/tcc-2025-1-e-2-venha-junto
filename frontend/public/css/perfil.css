@@ -1,0 +1,228 @@
+/* =======================================================
+   PERFIL • venhajunto
+   ======================================================= */
+
+body.perfil-page .page {
+  position: relative;
+}
+
+body.perfil-page .sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  overflow: hidden;
+}
+
+body.perfil-page .main {
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Layout */
+
+.perfil-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px;
+}
+
+.perfil-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.perfil-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.perfil-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.perfil-card-header {
+  background: #ea580c;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f97316;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.avatar-large:hover .avatar-overlay {
+  opacity: 1;
+}
+
+.user-info h2 {
+  margin: 0 0 4px;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.user-info p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.perfil-card-body {
+  padding: 30px;
+}
+
+.danger-card {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.danger-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #b91c1c;
+  font-weight: 800;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #fee2e2;
+}
+
+.danger-card p {
+  color: #475569;
+  font-size: 14px;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.btn-orange {
+  background: #ea580c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-orange:hover {
+  background: #c2410c;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-danger:hover {
+  background: #991b1b;
+}
+
+.btn-ghost-logout:hover {
+  background: #f1f5f9 !important;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #334155;
+}
+
+.field input {
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  padding: 0 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.field input:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 8px;
+}
+
+@media (max-width: 980px) {
+  .perfil-card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}
