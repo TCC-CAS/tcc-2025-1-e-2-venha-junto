@@ -464,6 +464,8 @@ document.addEventListener("DOMContentLoaded", () => {
           whatsapp_local: document.getElementById("zapLocal").value,
           email_local: document.getElementById("emailLocal").value,
           site_local: document.getElementById("siteLocal").value,
+          instagram_local: document.getElementById("instaLocal") ? document.getElementById("instaLocal").value : null,
+          facebook_local: document.getElementById("faceLocal") ? document.getElementById("faceLocal").value : null,
           horario_funcionamento: document.getElementById("horarioLocal").value,
           recursos_acessibilidade: acessibilidadeArr.join(","),
           plano_escolhido: planoEscolhido,

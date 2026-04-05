@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
   <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
@@ -71,6 +71,66 @@
               <span id="horarioLocal">...</span>
             </div>
           </div>
+
+          <!-- 🎟️ CUPOM ESTRATÉGICO (dentro do card de info, visível sem rolar) -->
+          <div id="cupomSection" style="display:none; margin-top: 16px;">
+            <div style="
+              background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+              border: 2px dashed #f59e0b;
+              border-radius: 14px;
+              padding: 14px 16px;
+              position: relative;
+              overflow: hidden;
+            ">
+              <!-- Linha decorativa superior -->
+              <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ea580c,#f59e0b,#ea580c);"></div>
+
+              <!-- Cabeçalho: título + badge -->
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span style="font-size:18px;">🎁</span>
+                  <span id="cupomTitulo" style="font-weight:800; font-size:13px; color:#b45309;">Oferta</span>
+                </div>
+                <span id="cupomDescontoBadge" style="
+                  background: linear-gradient(135deg,#ea580c,#dc2626);
+                  color:#fff;
+                  padding: 3px 10px;
+                  border-radius: 20px;
+                  font-weight:900;
+                  font-size:12px;
+                  animation: pulse-badge 2s ease-in-out infinite;
+                ">X% OFF</span>
+              </div>
+
+              <p id="cupomDescricao" style="margin:0 0 10px; font-size:12px; color:#92400e; font-weight:600; line-height:1.4;"></p>
+
+              <!-- Código copiável -->
+              <button id="cupomCodigo" title="Clique para copiar" style="
+                display:block;
+                width:100%;
+                background:#fff;
+                border: 1.5px dashed #f59e0b;
+                border-radius:8px;
+                padding: 10px;
+                font-size:18px;
+                font-weight:900;
+                color:#0f172a;
+                letter-spacing:3px;
+                text-align:center;
+                cursor:pointer;
+                transition: background 0.2s;
+                font-family: monospace;
+              ">CÓDIGO</button>
+              <p style="margin:6px 0 0; font-size:11px; color:#78350f; text-align:center; font-weight:600;">👆 Toque para copiar</p>
+
+              <!-- Validade -->
+              <div id="cupomValidadeWrap" style="margin-top:10px; font-size:11px; color:#92400e; font-weight:600; display:flex; gap:12px; flex-wrap:wrap;">
+                <span>📅 Válido: <span id="cupomValidade"></span></span>
+              </div>
+            </div>
+          </div>
+          <!-- fim cupom -->
+
         </aside>
       </section>
 
@@ -118,26 +178,7 @@
           <div id="galleryContainer" class="vj-gallery"></div>
         </section>
 
-        <!-- CUPOM -->
-        <section class="white-card" id="cupomSection" style="display: none; background: #fffbeb; border-color: #fde047;">
-          <div style="display: flex; gap: 16px; align-items: flex-start;">
-            <div style="font-size: 32px;">🎁</div>
-            <div style="flex: 1;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-                <h2 id="cupomTitulo" style="margin: 0; color: #b45309; font-size: 18px;">Título do Cupom</h2>
-                <span id="cupomDescontoBadge" style="background: #ea580c; color: #fff; padding: 4px 12px; border-radius: 12px; font-weight: 900; font-size: 14px;">X% OFF</span>
-              </div>
-              <p id="cupomDescricao" style="margin: 0 0 16px 0; color: #78350f; font-size: 14px; font-weight: 600;"></p>
-              <div style="background: #ffffff; border: 1px dashed #fbbf24; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 12px;">
-                <strong id="cupomCodigo" style="font-size: 24px; color: #0f172a; letter-spacing: 2px;">CÓDIGO</strong>
-              </div>
-              <div style="font-size: 12px; color: #92400e; font-weight: 600;">
-                <div><strong>Validade:</strong> <span id="cupomValidade"></span></div>
-                <div style="margin-top: 4px;"><strong>Regras:</strong> <span id="cupomRegras"></span></div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <!-- cupom movido para o info-card (sidebar direita) -->
 
         <!-- Avaliações -->
         <section class="white-card">

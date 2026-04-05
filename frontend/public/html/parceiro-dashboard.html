@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
@@ -225,7 +225,7 @@
               </div>
               <button
                 type="button"
-                onclick="openCupomModal()"
+                onclick="openCupomModal(window._primeiroEstabId)"
                 class="btn-orange-small"
                 style="
                   background: #ea580c;
@@ -272,7 +272,7 @@
               </div>
               <button
                 type="button"
-                onclick="openCupomModal()"
+                onclick="openCupomModal(window._primeiroEstabId)"
                 class="btn-orange-small"
                 style="
                   background: #22c55e;
@@ -1026,7 +1026,31 @@
                     <span>R$99/mês</span>
                   </div>
                 </div>
-                <button class="style-button-plan">Alterar plano</button>
+                <a href="./planos.html" class="style-button-plan" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">Alterar plano</a>
+              </div>
+            </div>
+
+            <!-- GERENCIAMENTO DA CONTA (Airbnb Style) -->
+            <div class="dash-card" style="margin-top: 24px; border: 1px solid #fee2e2;">
+              <h4 style="margin-bottom: 8px; color: #991b1b;">Gerenciamento da Conta</h4>
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Gerencie o status da sua conta na plataforma.</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button type="button" class="btn-deactivate" onclick="openDeactivateModal()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; text-align: left; transition: all 0.2s;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; color: #0f172a;">Desativar conta temporariamente</strong>
+                    <span style="font-size: 13px; color: #64748b;">Seus locais ficarão ocultos até que você decida voltar.</span>
+                  </div>
+                  <span style="font-size: 20px; color: #94a3b8;">›</span>
+                </button>
+
+                <button type="button" class="btn-delete-request" onclick="checkDeletionPendencies()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: #fff; border: 1px solid #fee2e2; border-radius: 12px; cursor: pointer; text-align: left; transition: all 0.2s;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; color: #ef4444;">Solicitar exclusão da conta</strong>
+                    <span style="font-size: 13px; color: #64748b;">Encerre permanentemente sua conta e remova seus dados.</span>
+                  </div>
+                  <span style="font-size: 20px; color: #ef4444;">›</span>
+                </button>
               </div>
             </div>
           </section>
@@ -1122,5 +1146,151 @@
     <script src="../js/api.js" defer></script>
     <script src="../js/parceiro-dashboard.js" defer></script>
     <script src="../js/vlibras.js" defer></script>
+
+    <!-- ====================================================
+         MODAL GERENCIAR VISIBILIDADE (Airbnb-style) 👁️
+         ==================================================== -->
+    <div id="modalVisibilidade" class="vis-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="visModalTitle">
+      <div class="vis-modal-card">
+
+        <!-- Cabeçalho -->
+        <div class="vis-modal-head">
+          <div>
+            <h3 id="visModalTitle">Gerenciar visibilidade</h3>
+            <p id="visModalSubtitle">Escolha o que deseja fazer com este local</p>
+          </div>
+          <button class="vis-modal-close" onclick="fecharModalVisibilidade()" aria-label="Fechar">✕</button>
+        </div>
+
+        <!-- Opções -->
+        <div class="vis-modal-body">
+
+          <!-- OPÇÃO 1: Ocultar por período -->
+          <div class="vis-opcao" id="visOpcao1" onclick="selecionarOpcaoVis(1)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">🌙</span>
+              <span class="vis-opcao-titulo">Ocultar por um período</span>
+            </div>
+            <p class="vis-opcao-desc">Seu local ficará invisível durante o intervalo de datas. Voltará automaticamente quando o período terminar.</p>
+          </div>
+
+          <!-- Sub-bloco de datas (aparece só quando opção 1 ativa) -->
+          <div class="vis-date-block" id="visDateBlock">
+            <label for="visDataFim">📅 Ocultar até a data:</label>
+            <input type="date" id="visDataFim" min="" />
+          </div>
+
+          <!-- OPÇÃO 2: Desativar -->
+          <div class="vis-opcao" id="visOpcao2" onclick="selecionarOpcaoVis(2)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">⏸️</span>
+              <span class="vis-opcao-titulo">Desativar por tempo indeterminado</span>
+            </div>
+            <p class="vis-opcao-desc">Seu local será removido da plataforma pública, mas você pode reativá-lo a qualquer momento no painel.</p>
+          </div>
+
+          <!-- Separador Visual -->
+          <div style="border-top: 1px solid #fee2e2; margin: 4px 0; padding-top: 4px;">
+            <p style="font-size: 12px; color: #ef4444; font-weight: 700; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.5px;">⚠️ Zona de danger</p>
+          </div>
+
+          <!-- OPÇÃO 3: Remover permanentemente -->
+          <div class="vis-opcao danger" id="visOpcao3" onclick="selecionarOpcaoVis(3)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">🗑️</span>
+              <span class="vis-opcao-titulo">Remover permanentemente</span>
+            </div>
+            <p class="vis-opcao-desc">Essa ação não poderá ser desfeita. O local será removido da plataforma definitivamente após análise administrativa.</p>
+          </div>
+
+          <!-- Alerta de cupons ativos (visível só se houver) -->
+          <div class="vis-alerta-cupons" id="visAlertaCupons">
+            <span>⚠️</span>
+            <span id="visAlertaCuponsText">Este estabelecimento possui cupons ativos. Ao confirmar, os cupons serão desativados.</span>
+          </div>
+
+        </div>
+
+        <!-- Rodapé -->
+        <div class="vis-modal-footer">
+          <button class="btn-vis-cancelar" onclick="fecharModalVisibilidade()">Cancelar</button>
+          <button class="btn-vis-confirmar" id="btnConfirmarVisib" onclick="confirmarAcaoVisibilidade()" disabled>
+            Confirmar ação
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL EXCLUSÃO DE CONTA (Airbnb Style Refinado) 🗑️
+         ============================================== -->
+    <div id="modalExcluirConta" class="vis-modal-overlay" style="display: none; z-index: 10000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+      <div class="vis-modal-card" style="max-width: 550px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);">
+        <div class="vis-modal-head" style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="margin: 0; font-size: 22px; color: #0f172a; font-weight: 700;">Excluir sua conta</h3>
+          <button class="vis-modal-close" onclick="closeDeleteAccountModal()" style="background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s;">✕</button>
+        </div>
+
+        <div class="vis-modal-body" style="padding: 32px; max-height: 70vh; overflow-y: auto;">
+          <!-- Mensagem de Impacto -->
+          <div style="margin-bottom: 24px;">
+            <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0;">
+              Lamentamos muito ver você partir. Antes de prosseguir, saiba que esta ação encerrará permanentemente sua parceria com o <strong>Venha Junto</strong>.
+            </p>
+          </div>
+
+          <!-- Box de Alerta de Impacto -->
+          <div style="background: #fff1f2; border-radius: 16px; padding: 20px; border: 1px solid #ffe4e6; margin-bottom: 32px; display: flex; gap: 16px;">
+            <div style="font-size: 24px;">⚠️</div>
+            <div>
+              <strong style="display: block; color: #991b1b; font-size: 15px; margin-bottom: 4px;">O que acontece agora?</strong>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: #b91c1c; line-height: 1.5;">
+                <li>Seu acesso será revogado imediatamente.</li>
+                <li>Todos os seus locais serão removidos permanentemente das buscas.</li>
+                <li>Seus dados de faturamento e históricos serão arquivados.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Seção de Pendências (Visível apenas se houver) -->
+          <div id="deletionPendenciesArea" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <span style="color: #ef4444; font-size: 18px;">🚫</span>
+              <h5 style="margin: 0; font-size: 16px; color: #0f172a; font-weight: 600;">Exclusão Bloqueada</h5>
+            </div>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 16px;">Existem itens ativos que impedem o encerramento imediato da conta:</p>
+            <ul id="listPendencies" style="margin: 0; padding-left: 20px; font-size: 14px; color: #475569; line-height: 1.8; font-weight: 500;"></ul>
+            <div style="margin-top: 16px; padding-top:16px; border-top: 1px solid #e2e8f0;">
+               <p style="font-size: 13px; color: #94a3b8; font-style: italic; margin: 0;">Resolva estas pendências para habilitar o formulário de exclusão.</p>
+            </div>
+          </div>
+
+          <!-- Confirmação Final (Visível apenas sem pendências) -->
+          <div id="deletionConfirmArea" style="display: none;">
+            <div style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 16px; padding: 20px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #16a34a; font-size: 18px;">✅</span>
+              <p style="margin: 0; font-size: 14px; color: #166534;">Sua conta está pronta para ser excluída. Não identificamos pendências ativas.</p>
+            </div>
+            
+            <label for="confirmDeleteInput" style="display: block; font-size: 14px; color: #0f172a; font-weight: 600; margin-bottom: 8px;">Confirme digitando a frase abaixo:</label>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px; background: #f1f5f9; padding: 8px 12px; border-radius: 8px; display: inline-block;">EXCLUIR MINHA CONTA</p>
+            <input type="text" id="confirmDeleteInput" class="dash-input" placeholder="Digite exatamente a frase acima" oninput="validateDeleteAccountPhrase()" style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; transition: border-color 0.2s;">
+          </div>
+        </div>
+
+        <div class="vis-modal-footer" style="padding: 24px 32px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="btn-vis-cancelar" onclick="closeDeleteAccountModal()" style="padding: 12px 24px; background: #fff; border: 1px solid #e2e8f0; color: #475569; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s;">Cancelar</button>
+          
+          <button class="btn-vis-confirmar" id="btnConfirmDeleteAccount" onclick="confirmDeleteAccount()" disabled style="display: none; padding: 12px 24px; background: #ef4444; color: #fff; border: none; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s; opacity: 0.5;">
+             Excluir permanentemente
+          </button>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

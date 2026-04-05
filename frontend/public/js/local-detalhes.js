@@ -248,6 +248,74 @@ const API_BASE = "http://127.0.0.1:8000";
       setRatingLine(place);
       renderReviews(placeId);
 
+      // ─── CUPONS ──────────────────────────────────────────────
+      try {
+        const cuponsRes = await fetch(`${API_BASE}/public/places/${placeId}/cupons`);
+        if (cuponsRes.ok) {
+          const cupons = await cuponsRes.json();
+          const cupomSection = el("cupomSection");
+          
+          if (cupons && cupons.length > 0 && cupomSection) {
+            const c = cupons[0]; // Exibe o primeiro cupom ativo
+            
+            // Preenche os elementos já existentes no HTML
+            const titulo = el("cupomTitulo");
+            const badge = el("cupomDescontoBadge");
+            const descricao = el("cupomDescricao");
+            const codigo = el("cupomCodigo");
+            const validade = el("cupomValidade");
+            const regras = el("cupomRegras");
+            
+            if (titulo) titulo.textContent = c.titulo || "Oferta Exclusiva";
+            if (badge) {
+              badge.textContent = c.tipo_desconto === "percentual"
+                ? `${c.valor}% OFF`
+                : `R$${c.valor} OFF`;
+            }
+            if (descricao) descricao.textContent = c.descricao || "";
+            if (codigo) codigo.textContent = c.codigo;
+            if (validade) validade.textContent = c.validade || "Sem data de expiração";
+            if (regras) regras.textContent = c.regras || "Apresente este código no local.";
+            
+            // Funcionalidade de copiar o código
+            if (codigo) {
+              codigo.style.cursor = "pointer";
+              codigo.title = "Clique para copiar";
+              codigo.onclick = () => {
+                navigator.clipboard.writeText(c.codigo).then(() => {
+                  const original = codigo.textContent;
+                  codigo.textContent = "✅ Copiado!";
+                  setTimeout(() => { codigo.textContent = original; }, 1500);
+                }).catch(() => {
+                  // fallback para navegadores sem suporte
+                  const sel = window.getSelection();
+                  const range = document.createRange();
+                  range.selectNodeContents(codigo);
+                  sel.removeAllRanges();
+                  sel.addRange(range);
+                });
+              };
+            }
+            
+            // Exibe a seção
+            cupomSection.style.display = "block";
+            
+            // Se tiver mais de 1 cupom, adiciona botão "ver mais"
+            if (cupons.length > 1) {
+              const verMais = document.createElement("button");
+              verMais.className = "btn-outline";
+              verMais.textContent = `+ ${cupons.length - 1} oferta(s) disponível(is)`;
+              verMais.style.marginTop = "12px";
+              verMais.style.width = "100%";
+              cupomSection.appendChild(verMais);
+            }
+          }
+        }
+      } catch (cupomErr) {
+        console.warn("Não foi possível carregar cupons:", cupomErr);
+      }
+      // ─────────────────────────────────────────────────────────
+
       // EVENTOS AVALIAR
       window.handleOpenReview = async () => {
         const user = await apiMe();

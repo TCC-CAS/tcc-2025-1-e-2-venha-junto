@@ -19,18 +19,27 @@ window.apiUploadPlacePhoto = async (estabId, file, isProfile = false) => {
 
   console.log(`[API] Uploading photo (${isProfile ? 'perfil' : 'galeria'}) to: ${API_BASE}${endpoint}`);
 
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    method: "POST",
-    body: formData,
-    credentials: "include"
-  });
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}${endpoint}`, {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+      });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.detail || "Erro no upload da foto");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || "Erro no upload da foto");
+      }
+
+      return await res.json();
+    } catch (err) {
+      console.warn(`[API] Tentativa ${attempt} falhou para upload de foto: ${err.message}`);
+      if (attempt === 3) throw err;
+      // Espera antes de tentar novamente (útil no modo dev local quando o servidor reinicia)
+      await new Promise(r => setTimeout(r, 1500));
+    }
   }
-
-  return res.json();
 };
 
 /**

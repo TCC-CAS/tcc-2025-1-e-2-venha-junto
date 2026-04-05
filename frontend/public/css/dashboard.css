@@ -722,6 +722,11 @@ body {
   color: #991b1b;
   border: 1px solid #fecaca;
 }
+.status-exclusao {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
 
 .local-stats-mini {
   text-align: right;
@@ -964,4 +969,344 @@ body {
   background: #f8fafc;
   color: #0f172a;
   border-color: #cbd5e1;
+}
+
+/* =============================================
+   BADGES DE VISIBILIDADE (estilo Airbnb)
+   ============================================= */
+.status-ativo {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-inativo {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-oculto {
+  background: #fef9c3;
+  color: #854d0e;
+  border: 1px solid #fef08a;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* BOTÕES CONTEXTUAIS */
+.btn-reativar {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-reativar:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+.btn-gerenciar-vis {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-gerenciar-vis:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+/* =============================================
+   MODAL DE VISIBILIDADE (Airbnb-style)
+   ============================================= */
+.vis-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.55);
+  display: none;
+  place-items: center;
+  z-index: 9999;
+  padding: 18px;
+  backdrop-filter: blur(4px);
+  animation: fadeOverlay 0.2s ease;
+}
+.vis-modal-overlay.active {
+  display: grid;
+}
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vis-modal-card {
+  background: #fff;
+  border-radius: 20px;
+  width: min(520px, 96vw);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.22);
+  overflow: hidden;
+  animation: slideUp 0.25s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.vis-modal-head {
+  padding: 20px 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.vis-modal-head h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.vis-modal-head p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+.vis-modal-close {
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: 0.15s;
+  margin-left: 12px;
+}
+.vis-modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.vis-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Cards de opção (radio visual - estilo Airbnb) */
+.vis-opcao {
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vis-opcao:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.vis-opcao.selected {
+  border-color: #f97316;
+  background: #fff7ed;
+}
+.vis-opcao.selected .vis-opcao-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.vis-opcao-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.vis-opcao-radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vis-opcao.selected .vis-opcao-radio {
+  border-color: #f97316;
+}
+.vis-opcao-radio::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #f97316;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.18s;
+}
+.vis-opcao-icon {
+  font-size: 20px;
+}
+.vis-opcao-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.vis-opcao-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-left: 32px;
+  line-height: 1.45;
+}
+.vis-opcao.danger {
+  border-color: #fee2e2;
+}
+.vis-opcao.danger:hover,
+.vis-opcao.danger.selected {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+.vis-opcao.danger.selected .vis-opcao-radio {
+  border-color: #ef4444;
+}
+.vis-opcao.danger.selected .vis-opcao-radio::after {
+  background: #ef4444;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Bloco de datas (para OCULTAR_PERIODO) */
+.vis-date-block {
+  display: none;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: -4px;
+  animation: fadeIn 0.2s ease;
+}
+.vis-date-block.visible {
+  display: block;
+}
+.vis-date-block label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  display: block;
+  margin-bottom: 6px;
+}
+.vis-date-block input[type="date"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+}
+.vis-date-block input:focus {
+  border-color: #f97316;
+}
+
+/* Aviso de cupons ativos */
+.vis-alerta-cupons {
+  display: none;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #9a3412;
+  font-weight: 600;
+  gap: 8px;
+  align-items: flex-start;
+}
+.vis-alerta-cupons.visible {
+  display: flex;
+}
+
+.vis-modal-footer {
+  padding: 16px 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+.btn-vis-cancelar {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  color: #475569;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-vis-cancelar:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+.btn-vis-confirmar {
+  background: #f97316;
+  border: none;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-vis-confirmar:hover {
+  background: #ea580c;
+}
+.btn-vis-confirmar.danger-action {
+  background: #ef4444;
+}
+.btn-vis-confirmar.danger-action:hover {
+  background: #dc2626;
+}
+.btn-vis-confirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

@@ -212,6 +212,7 @@ select:focus-visible {
   color: #0f172a;
   border: 1px solid transparent;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .menu a:hover {

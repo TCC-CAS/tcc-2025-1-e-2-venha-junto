@@ -49,6 +49,13 @@ const VJ_LANGUAGES = [
 // Motor do Google Translate (invisível)
 // =====================================================
 function googleTranslateElementInit() {
+    if (!document.getElementById('google_translate_element_hidden')) {
+        const div = document.createElement('div');
+        div.id = 'google_translate_element_hidden';
+        div.className = 'skiptranslate';
+        div.style.cssText = 'display:none;visibility:hidden;height:0;width:0;overflow:hidden;position:absolute;';
+        document.body.appendChild(div);
+    }
     new google.translate.TranslateElement({
         pageLanguage: 'pt',
         autoDisplay: false,
@@ -60,7 +67,11 @@ function changeLanguage(langCode) {
     const select = document.querySelector('.goog-te-combo');
     if (select) {
         select.value = langCode;
-        select.dispatchEvent(new Event('change'));
+        select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        
+        // Backup: se o script do Google estiver travado, força via cookie e recarrega
+        document.cookie = `googtrans=/pt/${langCode}; path=/`;
+        document.cookie = `googtrans=/pt/${langCode}; domain=.${location.hostname}; path=/`;
     } else {
         setTimeout(() => changeLanguage(langCode), 500);
     }
@@ -72,11 +83,16 @@ function changeLanguage(langCode) {
 function vjCleanGoogleUI() {
     const selectors = [
         '.goog-te-banner-frame', '#goog-gt-tt',
-        '.goog-te-balloon-frame', '.goog-te-banner', '.goog-te-gadget'
+        '.goog-te-balloon-frame', '.goog-te-banner'
     ];
     selectors.forEach(sel => {
         document.querySelectorAll(sel).forEach(el => el.remove());
     });
+    
+    // Assegura que o widget invisível não suma a combo
+    const gadget = document.querySelector('.goog-te-gadget');
+    if (gadget) gadget.style.display = 'none';
+
     document.documentElement.style.marginTop = '0';
     document.body && (document.body.style.top = '0');
 }
@@ -132,14 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     observer.observe(document.body, { childList: true });
 
-    // Div oculta para o motor do Google
-    if (!document.getElementById('google_translate_element_hidden')) {
-        const div = document.createElement('div');
-        div.id = 'google_translate_element_hidden';
-        div.className = 'skiptranslate';
-        div.style.cssText = 'display:none;visibility:hidden;height:0;width:0;overflow:hidden;position:absolute;';
-        document.body.appendChild(div);
-    }
+    // (Div oculta do Google agora é criada na função googleTranslateElementInit para evitar race conditions)
 
     // Monta o Modal no host (somente na Home)
     const host = document.getElementById('vj-translate-host');

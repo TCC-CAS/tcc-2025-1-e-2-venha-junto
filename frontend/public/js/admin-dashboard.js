@@ -67,6 +67,12 @@ console.log("[Dashboard] VJ_API_BASE:", VJ_API_BASE);
     });
   }
 
+  async function apiConfirmDelete(placeId) {
+    return apiFetch(`/api/admin/estabelecimentos/${placeId}/confirm-delete`, {
+      method: "POST"
+    });
+  }
+
   // ---------------------------
   // UI rendering
   // ---------------------------
@@ -75,6 +81,7 @@ console.log("[Dashboard] VJ_API_BASE:", VJ_API_BASE);
       case 'PENDING_REVIEW': return '<span class="badge pending">Em Análise</span>';
       case 'APPROVED': return '<span class="badge approved">Aprovado</span>';
       case 'REJECTED': return '<span class="badge rejected">Reprovado</span>';
+      case 'PENDING_DELETE': return '<span class="badge pending-delete">🗑️ Exclusão Solicitada</span>';
       default: return `<span class="badge" style="background: #e2e8f0; color: #475569;">${status}</span>`;
     }
   }
@@ -123,6 +130,7 @@ console.log("[Dashboard] VJ_API_BASE:", VJ_API_BASE);
 
     const canApprove = p.status === "PENDING_REVIEW";
     const canReject = p.status === "PENDING_REVIEW";
+    const canDelete = p.status === "PENDING_DELETE";
 
     // Gera o HTML das imagens
     let fotosHtml = '';
@@ -220,6 +228,11 @@ console.log("[Dashboard] VJ_API_BASE:", VJ_API_BASE);
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
           Aprovar Cadastro
         </button>
+        ${canDelete ? `
+        <button class="btn-approve" type="button" data-act="confirm-delete" style="background:#7e22ce;" title="Confirma e apaga permanentemente o estabelecimento do banco de dados">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Confirmar Exclusão
+        </button>` : ''}
       </div>
     `;
 
@@ -252,6 +265,24 @@ console.log("[Dashboard] VJ_API_BASE:", VJ_API_BASE);
         } catch (e) {
           toast(`❌ ${e.message}`, "error");
           btnReject.disabled = false;
+        }
+      });
+    }
+
+    const btnConfirmDelete = div.querySelector('[data-act="confirm-delete"]');
+    if (btnConfirmDelete) {
+      btnConfirmDelete.addEventListener("click", async () => {
+        const confirmed = confirm(`⚠️ ATENÇÃO: Esta ação é IRREVERSÍVEL!\n\nVocê vai excluir permanentemente o estabelecimento "${nome}" (#${id}) do banco de dados.\n\nDeseja confirmar a exclusão?`);
+        if (!confirmed) return;
+        try {
+          btnConfirmDelete.disabled = true;
+          toast(`Excluindo #${id}...`);
+          await apiConfirmDelete(id);
+          toast(`✅ Estabelecimento #${id} excluído com sucesso`, "success");
+          await load();
+        } catch (e) {
+          toast(`❌ ${e.message}`, "error");
+          btnConfirmDelete.disabled = false;
         }
       });
     }

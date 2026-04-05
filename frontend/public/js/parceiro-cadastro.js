@@ -29,8 +29,8 @@ btnProximo.addEventListener("click", async () => {
 
       const result = await saveCadastro(); // agora salva + envia pro backend
 
-      // (Opcional) se quiser ir direto pra status
-      window.location.href = "./parceiro-status.html";
+      // Redireciona para o painel principal após o cadastro inicial do parceiro
+      window.location.href = "./parceiro-dashboard.html";
     } catch (err) {
       alert(err?.message || "Erro ao enviar cadastro.");
     } finally {

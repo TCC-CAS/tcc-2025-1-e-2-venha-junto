@@ -203,6 +203,12 @@
       cursor: default;
     }
 
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+    }
+    .btn-green:hover { background: #059669; }
+
     /* Features */
     .features-title {
       font-size: 11px;
@@ -366,7 +372,10 @@
         <p class="desc">Máxima visibilidade e recursos completos</p>
         <div class="price"><span class="currency">R$</span> 79 <span class="term">/mês</span></div>
 
-        <div class="btn btn-current">Plano Atual</div>
+        <a class="btn btn-green" href="./pagamento.html?plan=pro_plus" data-plan="Pro_Plus">
+          Começar agora 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
 
         <div class="features-title">INCLUSO:</div>
         <ul class="features-list">
@@ -377,7 +386,6 @@
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Maior prioridade nas buscas</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Dashboard com métricas detalhadas</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Badge "Destaque Máximo"</li>
-          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Suporte prioritário via WhatsApp</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Cupons ilimitados</li>
         </ul>
       </article>
@@ -391,12 +399,68 @@
   </div>
   
   <script>
-    // (front-only) Guardar plano escolhido pra aparecer no dashboard
-    document.querySelectorAll("[data-plan]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const plan = btn.getAttribute("data-plan");
-        localStorage.setItem("vj_parceiro_plano", plan);
-      });
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const estabId = urlParams.get('estabId');
+
+      // Se houver um estabId na URL, o comportamento muda para "Atualização de Plano"
+      if (estabId) {
+        // --- NOVO: Buscar plano atual para detectar Downgrade ---
+        let currentPlanName = "Basico";
+        fetch(`http://127.0.0.1:8000/api/estabelecimentos`, {credentials: 'include'})
+          .then(r => r.json())
+          .then(locais => {
+             const loc = locais.find(l => l.id == estabId);
+             if (loc) currentPlanName = loc.plano_escolhido || "Basico";
+          });
+
+        document.querySelectorAll("[data-plan]").forEach(btn => {
+          // Alterar visual para indicar "Selecionar"
+          btn.innerHTML = btn.getAttribute("data-plan") === "Basico" ? "Mudar para Básico" : "Selecionar Plano";
+          
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const newPlan = btn.getAttribute("data-plan");
+            const tierMap = {"Basico": 0, "Pro": 1, "Pro Plus": 2};
+            
+            // Lógica de Alertas Dinâmicos (Upgrade vs Downgrade)
+            let confirmMsg = `Deseja realmente alterar seu plano para ${newPlan}?`;
+            if (tierMap[newPlan] < tierMap[currentPlanName]) {
+                confirmMsg = `⚠️ AO ALTERAR PARA O PLANO ${newPlan.toUpperCase()}, ALGUNS BENEFÍCIOS SERÃO LIMITADOS.\n\nSeus dados serão mantidos, mas parte dos recursos (como fotos extras) poderá ficar indisponível para o público.\n\nDeseja prosseguir com o Downgrade?`;
+            }
+
+            if (confirm(confirmMsg)) {
+              try {
+                const response = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ plano_escolhido: newPlan }),
+                  credentials: 'include'
+                });
+
+                if (response.ok) {
+                  alert("Plano atualizado com sucesso! Seu dashboard será atualizado.");
+                  window.location.href = "./parceiro-dashboard.html";
+                } else {
+                  const errData = await response.json();
+                  alert("Erro ao atualizar plano: " + (errData.detail || "Erro desconhecido"));
+                }
+              } catch (err) {
+                console.error("Erro na requisição:", err);
+                alert("Erro ao conectar com o servidor.");
+              }
+            }
+          });
+        });
+      } else {
+        // Comportamento original: Apenas armazena no LocalStorage para o fluxo de cadastro inicial
+        document.querySelectorAll("[data-plan]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const plan = btn.getAttribute("data-plan");
+            localStorage.setItem("vj_parceiro_plano", plan);
+          });
+        });
+      }
     });
   </script>
   <script src="../js/i18n.js"></script>

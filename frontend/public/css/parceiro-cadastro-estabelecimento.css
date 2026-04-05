@@ -763,12 +763,12 @@ body.cadastro-flow {
 }
 
 .plano-card.pro {
-  border: 2px solid #ea580c;
-  box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.1);
+  border: 2px solid #10b981; /* Green border from image */
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
 }
 
 .plano-card.pro-plus {
-  border: 2px solid #10b981;
+  border: 1px solid #e2e8f0; /* Gray standard border */
 }
 
 /* Quando selecionado via Radio */
@@ -777,9 +777,13 @@ body.cadastro-flow {
   box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.15);
   transform: translateY(-2px);
 }
-.plano-card.pro-plus:has(input[type="radio"]:checked) {
+.plano-card.pro:has(input[type="radio"]:checked) {
   border-color: #10b981;
   box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+.plano-card.pro-plus:has(input[type="radio"]:checked) {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 .tag-popular {
@@ -853,23 +857,25 @@ body.cadastro-flow {
   cursor: pointer;
   transition: all 0.2s;
   margin-bottom: 32px;
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  border: none;
+  background: #1e293b; /* Defaults to Básico dark */
+  color: #ffffff;
+}
+.plano-card:hover .btn-plano-select {
+  filter: brightness(0.9);
 }
 
-.plano-card:hover .btn-plano-select {
-  background: #e2e8f0;
+.plano-card.pro .btn-plano-select {
+  background: #86efac;
+  color: #065f46;
+}
+.plano-card.pro-plus .btn-plano-select {
+  background: #8b5cf6;
+  color: #ffffff;
 }
 
 .plano-card:has(input[type="radio"]:checked) .btn-plano-select {
-  background: #ea580c;
-  color: #fff;
-  border-color: #ea580c;
-}
-.plano-card.pro-plus:has(input[type="radio"]:checked) .btn-plano-select {
-  background: #10b981;
-  border-color: #10b981;
+  filter: brightness(1.1);
 }
 .plano-card:first-child .btn-plano {
   background: #ffffff;

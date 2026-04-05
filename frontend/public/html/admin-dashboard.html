@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
 <head><style>html,body{background:#f6f8fc!important}</style>
   <meta charset="utf-8" />
@@ -55,6 +55,7 @@
     .badge.pending { background: #fef08a; color: #854d0e; }
     .badge.approved { background: #dcfce7; color: #166534; }
     .badge.rejected { background: #fee2e2; color: #991b1b; }
+    .badge.pending-delete { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
     
     .admin-card-grid {
       display: grid;
@@ -225,6 +226,7 @@
               <option value="PENDING_REVIEW">Em análise</option>
               <option value="APPROVED">Aprovados</option>
               <option value="REJECTED">Reprovados</option>
+              <option value="PENDING_DELETE">🗑️ Exclusão Solicitada</option>
             </select>
             <input id="searchInput" type="search" placeholder="Buscar local..." style="padding: 10px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; width: 220px;" />
             <button id="btnReload" style="background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
