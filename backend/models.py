@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text, DateTime, Float
-from datetime import datetime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text, DateTime, Float, Date, UniqueConstraint
+from datetime import datetime, date
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -25,8 +25,9 @@ class Parceiro(Base):
     telefone = Column(String(20), nullable=True)
     senha_hash = Column(String(255), nullable=False)
     
-    # Parceiros também possuem status ativo
+    # Parceiros também possuem status ativo e controle de ciclo de vida
     is_active = Column(Boolean, default=True)
+    status = Column(String(30), default="ATIVO") # ATIVO, INATIVO, ENCERRADO
 
     # Relacionamentos
     estabelecimentos = relationship("Estabelecimento", back_populates="parceiro")
@@ -61,6 +62,8 @@ class Estabelecimento(Base):
     whatsapp_local = Column(String(20), nullable=True)
     email_local = Column(String(100), nullable=True)
     site_local = Column(String(150), nullable=True)
+    instagram_local = Column(String(100), nullable=True)
+    facebook_local = Column(String(100), nullable=True)
     horario_funcionamento = Column(String(255), nullable=True)
     
     # Campo para Geolocalização Dinâmica
@@ -85,6 +88,10 @@ class Estabelecimento(Base):
     status = Column(String(30), default="PENDING_REVIEW") # PENDING_REVIEW, APPROVED, REJECTED
     created_at = Column(DateTime, default=datetime.utcnow)
     cnpj_cpf = Column(String(20), nullable=True)
+
+    # Controle de Visibilidade (pelo Parceiro)
+    visibilidade = Column(String(30), default="ATIVO")  # ATIVO, INATIVO, OCULTO_TEMPORARIO
+    oculto_ate = Column(Date, nullable=True)  # Data de fim do período de ocultação
 
     # Relacionamentos
     parceiro = relationship("Parceiro", back_populates="estabelecimentos")
@@ -139,3 +146,19 @@ class Review(Base):
     # Relacionamentos
     estabelecimento = relationship("Estabelecimento", back_populates="reviews")
     usuario = relationship("Usuario", backref="minhas_avaliacoes")
+
+class MetricaDiaria(Base):
+    __tablename__ = "metricas_diarias"
+
+    id = Column(Integer, primary_key=True, index=True)
+    estabelecimento_id = Column(Integer, ForeignKey("estabelecimentos.id"), nullable=False)
+    data = Column(Date, default=date.today, nullable=False)
+    views = Column(Integer, default=0)
+    clicks = Column(Integer, default=0)
+
+    # Estabelecer um índice único para (estabelecimento_id, data) para upserts eficientes
+    __table_args__ = (
+        UniqueConstraint('estabelecimento_id', 'data', name='_estab_data_uc'),
+    )
+
+    estabelecimento = relationship("Estabelecimento", backref="metricas_diarias")

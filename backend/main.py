@@ -24,7 +24,7 @@ load_dotenv()
 os.makedirs("avatars", exist_ok=True)
 os.makedirs("estabelecimentos_fotos", exist_ok=True)
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine) # Comentado para evitar travamento no startup
 
 app = FastAPI(
     title="Venha Junto API",
@@ -52,6 +52,12 @@ app.add_middleware(
         "http://127.0.0.1:5501",
         "http://localhost:5505",
         "http://127.0.0.1:5505",
+        "http://localhost:5506",
+        "http://127.0.0.1:5506",
+        "http://localhost:5507",
+        "http://127.0.0.1:5507",
+        "http://localhost:5508",
+        "http://127.0.0.1:5508",
         "http://localhost:3000",
         "https://venha-junto-h54n.onrender.com",
     ],
@@ -85,6 +91,51 @@ def create_access_token(data: dict):
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+# ---------------------------------------------
+# CONSTANTES DE PLANOS E LIMITES 📊
+# ---------------------------------------------
+PLAN_LIMITS = {
+    "Básico": {
+        "max_establishments": 1,
+        "max_photos": 3,
+        "max_active_coupons": 1,
+        "metrics_tier": "basic"
+    },
+    "Pro": {
+        "max_establishments": 3,
+        "max_photos": 10,
+        "max_active_coupons": 5,
+        "metrics_tier": "detailed"
+    },
+    "Pro Plus": {
+        "max_establishments": 100,
+        "max_photos": 100,
+        "max_active_coupons": 100,
+        "metrics_tier": "advanced"
+    }
+}
+
+def get_partner_capacity(partner_id: int, db: Session):
+    """
+    Calcula a capacidade da conta do parceiro baseada no seu melhor plano ativo.
+    """
+    estabelecimentos = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id
+    ).all()
+    
+    if not estabelecimentos:
+        return PLAN_LIMITS["Básico"] # Default se não tiver nenhum ainda
+        
+    melhor_plano = "Básico"
+    tier_map = {"Básico": 0, "Pro": 1, "Pro Plus": 2}
+    
+    for e in estabelecimentos:
+        plano_atual = e.plano_escolhido or "Básico"
+        if tier_map.get(plano_atual, 0) > tier_map.get(melhor_plano, 0):
+            melhor_plano = plano_atual
+            
+    return PLAN_LIMITS.get(melhor_plano, PLAN_LIMITS["Básico"])
 
 # ---------------------------------------------
 # ROTAS DA API - USUÁRIOS
@@ -389,9 +440,21 @@ def listar_favoritos(request: Request, db: Session = Depends(get_db)):
     
     estabs = []
     for fav in favoritos:
-        estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == fav.estabelecimento_id).first()
+        estab = db.query(models.Estabelecimento).filter(
+            models.Estabelecimento.id == fav.estabelecimento_id,
+            models.Estabelecimento.status == "APPROVED",
+            models.Estabelecimento.visibilidade == "ATIVO"
+        ).first()
         if estab:
-            estabs.append(estab)
+            # Pegando as avaliações (assim como na rota pública)
+            count = db.query(func.count(models.Review.id)).filter(models.Review.estabelecimento_id == estab.id).scalar()
+            avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == estab.id).scalar()
+            
+            item = schemas.EstabelecimentoResponse.model_validate(estab)
+            item.reviews_count = count or 0
+            item.avg_rating = round(float(avg), 1) if avg else 0.0
+            
+            estabs.append(item)
             
     return estabs
 
@@ -433,6 +496,16 @@ def remover_favorito(place_id: int, request: Request, db: Session = Depends(get_
     
     return {"message": "Favorito não encontrado"}
 
+# @app.on_event("startup")
+# async def startup_event():
+#     try:
+#         db = SessionLocal()
+#         db.execute(text("SELECT 1"))
+#         db.close()
+#         print("✅ Conexão com o banco de dados estabelecida com sucesso!")
+#     except Exception as e:
+#         print(f"❌ Erro ao conectar ao banco de dados: {e}")
+
 # =============================================
 # ROTAS DA API - PARCEIROS
 # =============================================
@@ -461,6 +534,9 @@ def login_parceiro(parceiro: schemas.ParceiroLogin, response: Response, db: Sess
     db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.email == parceiro.email.lower()).first()
     if not db_parceiro or not verify_password(parceiro.senha, db_parceiro.senha_hash):
         raise HTTPException(status_code=401, detail="E-mail ou senha inválidos.")
+    
+    if db_parceiro.status == "ENCERRADO":
+        raise HTTPException(status_code=403, detail="Esta conta foi encerrada e não pode mais ser acessada.")
     
     access_token = create_access_token(data={"sub": str(db_parceiro.id), "role": "partner"})
     response.set_cookie(
@@ -513,6 +589,101 @@ def atualizar_parceiro_atual(parceiro_update: schemas.ParceiroUpdate, request: R
     db.refresh(db_parceiro)
     return db_parceiro
 
+@app.get("/partner-auth/pendencies")
+def verificar_pendencias_parceiro(request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+         raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+    
+    # 1. Verifica planos ativos (qualquer um diferente de 'basico')
+    # Planos pagos precisam ser movidos para 'basico' antes da exclusão por questões de faturamento/cancelamento.
+    planos_ativos = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.plano_escolhido != "basico"
+    ).all()
+    
+    pendencias = []
+    if planos_ativos:
+        pendencias.append(f"Você possui {len(planos_ativos)} local(is) com plano pago ativo. Mude para o plano 'Básico' em cada local na seção 'Meus Locais' antes de solicitar a exclusão.")
+        
+    return {
+        "has_pendencies": len(pendencias) > 0,
+        "pendencies": pendencias
+    }
+
+@app.post("/partner-auth/deactivate")
+def desativar_conta_parceiro(request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+         raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+        
+    db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == partner_id).first()
+    if not db_parceiro:
+        raise HTTPException(status_code=404, detail="Parceiro não encontrado")
+        
+    # 1. Altera status do parceiro
+    db_parceiro.status = "INATIVO"
+    
+    # 2. Oculta todos os locais
+    db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id
+    ).update({"visibilidade": "INATIVO"})
+    
+    db.commit()
+    return {"message": "Sua conta foi desativada temporariamente. Seus locais não estão mais visíveis publicamente."}
+
+@app.post("/partner-auth/delete-request")
+def solicitar_exclusao_parceiro(response: Response, request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+         raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+
+    db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == partner_id).first()
+    
+    # Re-validar pendências (segurança extra no server-side)
+    locais_pendentes = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.status == "PENDING_REVIEW"
+    ).first()
+    planos_ativos = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.plano_escolhido != "basico"
+    ).first()
+    
+    if locais_pendentes or planos_ativos:
+         raise HTTPException(status_code=400, detail="Não é possível excluir a conta enquanto houver pendências ativas.")
+         
+    # 1. Altera status do parceiro para ENCERRADO
+    db_parceiro.status = "ENCERRADO"
+    db_parceiro.is_active = False
+    
+    # 2. Oculta todos os locais permanentemente
+    db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id
+    ).update({"visibilidade": "INATIVO"})
+    
+    db.commit()
+    
+    # 3. Faz logout
+    response.delete_cookie("vj_partner_token")
+    
+    return {"message": "Sua conta foi encerrada com sucesso. Lamentamos te ver partir!"}
+
 @app.post("/partner-auth/logout")
 def logout_parceiro(response: Response):
     response.delete_cookie("vj_partner_token")
@@ -537,7 +708,16 @@ async def criar_estabelecimento(estab_data: schemas.EstabelecimentoCreate, reque
     if not db_parceiro:
          raise HTTPException(status_code=401, detail="Parceiro não encontrado")
          
-    # Criar Estabelecimento
+    # --- NOVO: Lógica de Capacidade da Conta ---
+    capacidade = get_partner_capacity(partner_id, db)
+    contagem_atual = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == partner_id).count()
+    
+    if contagem_atual >= capacidade["max_establishments"]:
+        raise HTTPException(
+            status_code=403, 
+            detail=f"Você atingiu o limite de locais para o seu plano atual ({capacidade['max_establishments']}). Faça upgrade para cadastrar mais."
+        )
+    # -------------------------------------------
     novo_estab = models.Estabelecimento(
         parceiro_id=db_parceiro.id,
         nome_responsavel=estab_data.nome_responsavel,
@@ -606,10 +786,14 @@ def listar_estabelecimentos(request: Request, db: Session = Depends(get_db)):
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Sessão inválida ou expirada")
     
-    results = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == partner_id).all()
+    results = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.status != "ARCHIVED"
+    ).all()
     
     res = []
     for estab in results:
+        # Nota: otimização simplificada para o TCC
         count = db.query(func.count(models.Review.id)).filter(models.Review.estabelecimento_id == estab.id).scalar()
         avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == estab.id).scalar()
         fav_count = db.query(func.count(models.Favorito.id)).filter(models.Favorito.estabelecimento_id == estab.id).scalar()
@@ -644,7 +828,7 @@ def obter_estabelecimento(id: int, request: Request, db: Session = Depends(get_d
     
     return estab
 
-@app.patch("/api/estabelecimentos/{id}", response_model=schemas.EstabelecimentoResponse)
+@app.patch("/api/estabelecimentos/{id}")
 def atualizar_estabelecimento(id: int, estab_update: schemas.EstabelecimentoUpdate, request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("vj_partner_token")
     if not token:
@@ -664,15 +848,26 @@ def atualizar_estabelecimento(id: int, estab_update: schemas.EstabelecimentoUpda
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
     
     update_data = estab_update.model_dump(exclude_unset=True)
+    
     for key, value in update_data.items():
         setattr(db_estab, key, value)
     
     db.commit()
     db.refresh(db_estab)
-    return db_estab
+    
+    return {
+        "message": "Alterações salvas e publicadas com sucesso.",
+        "critico": False,
+        "data": schemas.EstabelecimentoResponse.model_validate(db_estab).model_dump()
+    }
 
-@app.delete("/api/estabelecimentos/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def deletar_estabelecimento(id: int, request: Request, db: Session = Depends(get_db)):
+@app.delete("/api/estabelecimentos/{id}")
+def solicitar_exclusao_estabelecimento(
+    id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    force: bool = False  # ?force=true pula validação de cupons
+):
     token = request.cookies.get("vj_partner_token")
     if not token:
          raise HTTPException(status_code=401, detail="Parceiro não autenticado")
@@ -689,10 +884,83 @@ def deletar_estabelecimento(id: int, request: Request, db: Session = Depends(get
     
     if not db_estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    # Verificar cupons ativos antes de remover
+    if not force:
+        cupons_ativos = db.query(models.Cupom).filter(
+            models.Cupom.estabelecimento_id == id,
+            models.Cupom.ativo == True
+        ).count()
+        if cupons_ativos > 0:
+            raise HTTPException(
+                status_code=409,
+                detail=f"CUPONS_ATIVOS:{cupons_ativos}"
+            )
     
-    db.delete(db_estab)
+    # Mudar status para ARCHIVED (Esconde do parceiro e do público imediatamente)
+    db_estab.status = "ARCHIVED"
+    db_estab.visibilidade = "INATIVO" 
     db.commit()
-    return None
+    
+    return {"message": "O estabelecimento foi removido com sucesso de sua lista e da plataforma pública."}
+
+
+# =============================================
+# ROTA DE VISIBILIDADE (PARCEIRO) 👁️
+# =============================================
+
+@app.patch("/api/estabelecimentos/{id}/visibilidade")
+def gerenciar_visibilidade(
+    id: int,
+    dados: schemas.VisibilidadeUpdate,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida ou expirada")
+
+    db_estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == id,
+        models.Estabelecimento.parceiro_id == partner_id
+    ).first()
+    if not db_estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    acao = dados.acao
+
+    if acao == "REATIVAR":
+        db_estab.visibilidade = "ATIVO"
+        db_estab.oculto_ate = None
+        msg = "Estabelecimento reativado com sucesso. Já está visível na plataforma."
+
+    elif acao == "DESATIVAR":
+        db_estab.visibilidade = "INATIVO"
+        db_estab.oculto_ate = None
+        msg = "Estabelecimento desativado. Não aparecerá na plataforma até ser reativado."
+
+    elif acao == "OCULTAR_PERIODO":
+        if not dados.oculto_ate:
+            raise HTTPException(status_code=400, detail="Informe a data de fim do período de ocultação.")
+        from datetime import date as date_type
+        db_estab.visibilidade = "OCULTO_TEMPORARIO"
+        db_estab.oculto_ate = dados.oculto_ate
+        msg = f"Estabelecimento ocultado até {dados.oculto_ate.strftime('%d/%m/%Y')}."
+    else:
+        raise HTTPException(status_code=400, detail="Ação inválida. Use: REATIVAR, DESATIVAR ou OCULTAR_PERIODO")
+
+    db.commit()
+    db.refresh(db_estab)
+    return {
+        "message": msg,
+        "visibilidade": db_estab.visibilidade,
+        "oculto_ate": db_estab.oculto_ate.isoformat() if db_estab.oculto_ate else None
+    }
 
 # ---------------------------------------------
 # ROTAS DE FOTOS - ESTABELECIMENTOS
@@ -798,7 +1066,12 @@ def listar_locais_publicos(
     db: Session = Depends(get_db)
 ):
     from sqlalchemy.sql.expression import case
-    query = db.query(models.Estabelecimento).filter(models.Estabelecimento.status == "APPROVED")
+
+    query = db.query(models.Estabelecimento).join(models.Parceiro).filter(
+        models.Estabelecimento.status == "APPROVED",
+        models.Estabelecimento.visibilidade == "ATIVO",
+        models.Parceiro.status == "ATIVO"
+    )
     
     if cidade:
         query = query.filter(models.Estabelecimento.cidade.ilike(f"%{cidade}%"))
@@ -815,46 +1088,88 @@ def listar_locais_publicos(
     query = query.order_by(ordem_planos)
     
     if verified_first:
-        query = query.order_by(models.Estabelecimento.status.desc())
+        # Simplificando: prioriza os APPROVED por ordem de criação ou similar se necessário
+        query = query.order_by(models.Estabelecimento.created_at.desc())
         
     results = query.all()
     
-    # Preencher dados de rating
     res = []
     for estab in results:
-        count = db.query(func.count(models.Review.id)).filter(models.Review.estabelecimento_id == estab.id).scalar()
-        avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == estab.id).scalar()
-        
-        item = schemas.EstabelecimentoResponse.model_validate(estab)
-        item.reviews_count = count or 0
-        item.avg_rating = round(float(avg), 1) if avg else 0.0
-        res.append(item)
-        
+        try:
+            # Nota: estas queries podem ser otimizadas com joins em sistemas maiores
+            count = db.query(func.count(models.Review.id)).filter(models.Review.estabelecimento_id == estab.id).scalar()
+            avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == estab.id).scalar()
+            
+            # Inicializar item com os dados do banco antes de processar lógica extra
+            item = schemas.EstabelecimentoResponse.model_validate(estab)
+
+            # ---------------------------------------------------------
+            # Regra de Ocultação Dinâmica de Fotos (Downgrade Seguro)
+            # ---------------------------------------------------------
+            plano = estab.plano_escolhido or "Básico"
+            if plano in PLAN_LIMITS:
+                limite_fotos = PLAN_LIMITS[plano]["max_photos"]
+                if item.fotos_galeria:
+                    lista_fotos = item.fotos_galeria.split(",")
+                    if len(lista_fotos) > limite_fotos:
+                        # Trunca a lista para exibição pública, mas mantém no banco
+                        item.fotos_galeria = ",".join(lista_fotos[:limite_fotos])
+            # ---------------------------------------------------------
+
+            item.reviews_count = count or 0
+            item.avg_rating = round(float(avg), 1) if avg else 0.0
+            res.append(item)
+        except Exception as e:
+            # Ignora registros que não passam na validação do schema (ex: campos obrigatórios nulos)
+            print(f"[RECOVERY] Ignorando local ID {estab.id} por erro: {str(e)}")
+            continue
+            
     return res
 
 @app.get("/public/places/{id}", response_model=schemas.EstabelecimentoResponse)
 def obter_local_publico(id: int, db: Session = Depends(get_db)):
-    # Apenas estabelecimentos APROVADOS aparecem publicamente
-    estab = db.query(models.Estabelecimento).filter(
+    from datetime import date as date_type
+    hoje = date_type.today()
+
+    estab = db.query(models.Estabelecimento).join(models.Parceiro).filter(
         models.Estabelecimento.id == id,
-        models.Estabelecimento.status == "APPROVED"
+        models.Estabelecimento.status == "APPROVED",
+        models.Estabelecimento.visibilidade == "ATIVO",
+        models.Parceiro.status == "ATIVO"
     ).first()
     
     if not estab:
-        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado ou aguardando aprovação.")
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado ou temporariamente indisponível.")
     
     # Preencher rating real
     count = db.query(func.count(models.Review.id)).filter(models.Review.estabelecimento_id == id).scalar()
     avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == id).scalar()
     
-    # Incrementar View Count
+    # Incrementar View Count (Total)
     estab.views_count = (estab.views_count or 0) + 1
+    
+    # Incrementar Métrica Diária (Histórico)
+    _incrementar_metrica_diaria(db, id, "view")
+    
     db.commit()
     db.refresh(estab)
 
     res = schemas.EstabelecimentoResponse.model_validate(estab)
     res.reviews_count = count or 0
     res.avg_rating = round(float(avg), 1) if avg else 0.0
+
+    # ---------------------------------------------------------
+    # Regra de Ocultação Dinâmica de Fotos (Downgrade Seguro)
+    # ---------------------------------------------------------
+    plano = estab.plano_escolhido or "Básico"
+    if plano in PLAN_LIMITS:
+        limite_fotos = PLAN_LIMITS[plano]["max_photos"]
+        if res.fotos_galeria:
+            lista_fotos = res.fotos_galeria.split(",")
+            if len(lista_fotos) > limite_fotos:
+                # Trunca a lista para exibição pública, mas mantém no banco
+                res.fotos_galeria = ",".join(lista_fotos[:limite_fotos])
+    # ---------------------------------------------------------
     
     return res
 
@@ -864,9 +1179,68 @@ def registrar_clique_publico(id: int, db: Session = Depends(get_db)):
     if not estab:
         raise HTTPException(status_code=404, detail="Local não encontrado")
     
+    # Incrementar Clicks (Total)
     estab.clicks_count = (estab.clicks_count or 0) + 1
+    
+    # Incrementar Métrica Diária (Histórico)
+    _incrementar_metrica_diaria(db, id, "click")
+    
     db.commit()
     return {"message": "Clique registrado"}
+
+def _incrementar_metrica_diaria(db: Session, estab_id: int, tipo: str):
+    """Auxiliar para incrementar visualização ou clique do dia atual."""
+    from datetime import date
+    hoje = date.today()
+    
+    metrica = db.query(models.MetricaDiaria).filter(
+        models.MetricaDiaria.estabelecimento_id == estab_id,
+        models.MetricaDiaria.data == hoje
+    ).first()
+    
+    if not metrica:
+        metrica = models.MetricaDiaria(estabelecimento_id=estab_id, data=hoje, views=0, clicks=0)
+        db.add(metrica)
+        # Flush para ter o objeto persistido antes de incrementar
+        db.flush()
+    
+    if tipo == "view":
+        metrica.views += 1
+    elif tipo == "click":
+        metrica.clicks += 1
+
+@app.get("/api/estabelecimentos/{id}/metricas-7dias", response_model=List[schemas.MetricaDiariaResponse])
+def obter_metricas_7dias(id: int, request: Request, db: Session = Depends(get_db)):
+    """Retorna o histórico dos últimos 7 dias para o dashboard do parceiro."""
+    # Autenticação Básica do Parceiro
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+         raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida ou expirada")
+
+    # Verifica se o local pertence ao parceiro
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == id,
+        models.Estabelecimento.parceiro_id == partner_id
+    ).first()
+    
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    from datetime import date, timedelta
+    hoje = date.today()
+    há_7_dias = hoje - timedelta(days=6) # 7 dias incluindo hoje
+    
+    result = db.query(models.MetricaDiaria).filter(
+        models.MetricaDiaria.estabelecimento_id == id,
+        models.MetricaDiaria.data >= há_7_dias
+    ).order_by(models.MetricaDiaria.data.asc()).all()
+    
+    return result
 
 @app.get("/api/estabelecimentos/fotos/{filename}")
 def get_estabelecimento_foto(filename: str):
@@ -983,6 +1357,52 @@ def admin_rejeitar_estabelecimento(id: int, request: Request, db: Session = Depe
     db_estab.status = "REJECTED"
     db.commit()
     return {"message": "Estabelecimento reprovado"}
+
+# =============================================
+# ROTA ADMIN: CONFIRMAR EXCLUSÃO PERMANENTE 🗑️
+# =============================================
+
+@app.post("/api/admin/estabelecimentos/{id}/confirm-delete")
+def admin_confirmar_exclusao(id: int, request: Request, db: Session = Depends(get_db)):
+    """Admin confirma e executa a exclusão permanente de um estabelecimento com PENDING_DELETE."""
+    token = request.cookies.get("vj_access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+
+    db_user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not db_user or db_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado: apenas administradores.")
+
+    db_estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == id).first()
+    if not db_estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    if db_estab.status != "PENDING_DELETE":
+        raise HTTPException(
+            status_code=400,
+            detail="Este estabelecimento não está na fila de exclusão. Apenas estabelecimentos com status PENDING_DELETE podem ser excluídos por esta rota."
+        )
+
+    # Remove fotos do disco antes de deletar do banco
+    if db_estab.foto_perfil:
+        fp = os.path.join("estabelecimentos_fotos", db_estab.foto_perfil)
+        if os.path.exists(fp):
+            os.remove(fp)
+    if db_estab.fotos_galeria:
+        for filename in db_estab.fotos_galeria.split(","):
+            fp = os.path.join("estabelecimentos_fotos", filename.strip())
+            if fp and os.path.exists(fp):
+                os.remove(fp)
+
+    nome_estab = db_estab.nome
+    db.delete(db_estab)
+    db.commit()
+    return {"message": f"Estabelecimento '{nome_estab}' (#{id}) foi excluído permanentemente do sistema."}
 # =============================================
 # ROTAS DE AVALIAÇÕES (PUBLIC)
 # =============================================
@@ -1035,3 +1455,119 @@ def criar_review(id: int, review: schemas.ReviewCreate, request: Request, db: Se
     res = schemas.ReviewResponse.model_validate(novo_review)
     res.usuario_nome = user.nome
     return res
+
+# =============================================
+# ROTAS DE CUPONS (PARCEIRO) 🎟️
+# =============================================
+
+def _get_partner_from_token(request: Request, db: Session):
+    """Helper: decodifica o token do parceiro e retorna o objeto do DB."""
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida ou expirada")
+    db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == partner_id).first()
+    if not db_parceiro:
+        raise HTTPException(status_code=401, detail="Parceiro não encontrado")
+    return db_parceiro
+
+@app.post("/api/estabelecimentos/{estab_id}/cupons", response_model=schemas.CupomResponse, status_code=201)
+def criar_cupom(estab_id: int, cupom: schemas.CupomCreate, request: Request, db: Session = Depends(get_db)):
+    parceiro = _get_partner_from_token(request, db)
+
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == estab_id,
+        models.Estabelecimento.parceiro_id == parceiro.id
+    ).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    # Paywall: apenas planos pagos
+    plano = (estab.plano_escolhido or "").lower()
+    if not (plano.startswith("pro") or "premium" in plano or "plus" in plano):
+        raise HTTPException(
+            status_code=403,
+            detail="Criação de cupons é exclusiva para planos Pro ou Premium."
+        )
+
+    novo_cupom = models.Cupom(
+        estabelecimento_id=estab_id,
+        titulo=cupom.titulo,
+        codigo=cupom.codigo.upper(),
+        descricao=cupom.descricao,
+        tipo_desconto=cupom.tipo_desconto,
+        valor=cupom.valor,
+        validade=cupom.validade,
+        regras=cupom.regras,
+    )
+    db.add(novo_cupom)
+    db.commit()
+    db.refresh(novo_cupom)
+    return novo_cupom
+
+@app.get("/api/estabelecimentos/{estab_id}/cupons", response_model=List[schemas.CupomResponse])
+def listar_cupons(estab_id: int, request: Request, db: Session = Depends(get_db)):
+    parceiro = _get_partner_from_token(request, db)
+
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == estab_id,
+        models.Estabelecimento.parceiro_id == parceiro.id
+    ).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    return db.query(models.Cupom).filter(models.Cupom.estabelecimento_id == estab_id).all()
+
+@app.patch("/api/cupons/{cupom_id}", response_model=schemas.CupomResponse)
+def atualizar_cupom(cupom_id: int, dados: schemas.CupomUpdate, request: Request, db: Session = Depends(get_db)):
+    parceiro = _get_partner_from_token(request, db)
+
+    cupom = db.query(models.Cupom).filter(models.Cupom.id == cupom_id).first()
+    if not cupom:
+        raise HTTPException(status_code=404, detail="Cupom não encontrado")
+
+    # Garante que o cupom pertence ao parceiro
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == cupom.estabelecimento_id,
+        models.Estabelecimento.parceiro_id == parceiro.id
+    ).first()
+    if not estab:
+        raise HTTPException(status_code=403, detail="Sem permissão para editar este cupom")
+
+    for key, value in dados.model_dump(exclude_unset=True).items():
+        setattr(cupom, key, value)
+
+    db.commit()
+    db.refresh(cupom)
+    return cupom
+
+@app.delete("/api/cupons/{cupom_id}", status_code=204)
+def deletar_cupom(cupom_id: int, request: Request, db: Session = Depends(get_db)):
+    parceiro = _get_partner_from_token(request, db)
+
+    cupom = db.query(models.Cupom).filter(models.Cupom.id == cupom_id).first()
+    if not cupom:
+        raise HTTPException(status_code=404, detail="Cupom não encontrado")
+
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == cupom.estabelecimento_id,
+        models.Estabelecimento.parceiro_id == parceiro.id
+    ).first()
+    if not estab:
+        raise HTTPException(status_code=403, detail="Sem permissão para deletar este cupom")
+
+    db.delete(cupom)
+    db.commit()
+    return None
+
+@app.get("/public/places/{id}/cupons", response_model=List[schemas.CupomResponse])
+def listar_cupons_publico(id: int, db: Session = Depends(get_db)):
+    """Retorna cupons ativos de um local para visitantes."""
+    return db.query(models.Cupom).filter(
+        models.Cupom.estabelecimento_id == id,
+        models.Cupom.ativo == True
+    ).all()

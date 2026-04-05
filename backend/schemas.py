@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, date
 
 # ---------------------------------------------
 # DADOS RECEBIDOS DO FRONTEND ("CRIAR CONTA")
@@ -67,6 +67,7 @@ class ParceiroResponse(BaseModel):
     email: EmailStr
     telefone: Optional[str] = None
     is_active: bool
+    status: str = "ATIVO"
 
     class Config:
         from_attributes = True
@@ -135,6 +136,8 @@ class EstabelecimentoBase(BaseModel):
     whatsapp_local: Optional[str] = None
     email_local: Optional[str] = None
     site_local: Optional[str] = None
+    instagram_local: Optional[str] = None
+    facebook_local: Optional[str] = None
     horario_funcionamento: Optional[str] = None
     
     # Passo 3
@@ -176,6 +179,8 @@ class EstabelecimentoUpdate(BaseModel):
     whatsapp_local: Optional[str] = None
     email_local: Optional[str] = None
     site_local: Optional[str] = None
+    instagram_local: Optional[str] = None
+    facebook_local: Optional[str] = None
     horario_funcionamento: Optional[str] = None
     
     # Passo 3
@@ -201,9 +206,20 @@ class EstabelecimentoResponse(EstabelecimentoBase):
     avg_rating: Optional[float] = 0.0
     reviews_count: Optional[int] = 0
     favorites_count: Optional[int] = 0
+    # Visibilidade
+    visibilidade: Optional[str] = "ATIVO"
+    oculto_ate: Optional[date] = None
 
     class Config:
         from_attributes = True
+
+
+# =============================================
+# SCHEMA DE CONTROLE DE VISIBILIDADE
+# =============================================
+class VisibilidadeUpdate(BaseModel):
+    acao: str  # REATIVAR | DESATIVAR | OCULTAR_PERIODO
+    oculto_ate: Optional[date] = None  # obrigatório para OCULTAR_PERIODO
 
 class FavoritoResponse(BaseModel):
     id: int
@@ -233,6 +249,20 @@ class ReviewResponse(ReviewBase):
     created_at: datetime
     # Incluir nome do usuário para exibir no front
     usuario_nome: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+# =============================================
+# SCHEMAS PARA MÉTRICAS HISTÓRICAS 📊
+# =============================================
+
+class MetricaDiariaResponse(BaseModel):
+    id: int
+    estabelecimento_id: int
+    data: date
+    views: int
+    clicks: int
 
     class Config:
         from_attributes = True
