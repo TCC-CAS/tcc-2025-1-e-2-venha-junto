@@ -116,8 +116,8 @@ class CupomUpdate(BaseModel):
 
 class EstabelecimentoBase(BaseModel):
     # Passo 1
-    nome_responsavel: str
-    email_responsavel: str
+    nome_responsavel: Optional[str] = "Não informado"
+    email_responsavel: Optional[str] = "Não informado"
     telefone_responsavel: Optional[str] = None
     
     # Passo 2
@@ -144,7 +144,7 @@ class EstabelecimentoBase(BaseModel):
     recursos_acessibilidade: Optional[str] = None
     
     # Passo 4
-    plano_escolhido: str
+    plano_escolhido: Optional[str] = "Básico"
     
     # Fotos
     foto_perfil: Optional[str] = None
@@ -152,6 +152,9 @@ class EstabelecimentoBase(BaseModel):
     
     # Novos campos
     cnpj_cpf: Optional[str] = None
+    ai_status: str = "PENDING"
+    ai_score: float = 0.0
+    ai_justification: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     views_count: Optional[int] = 0
@@ -266,3 +269,15 @@ class MetricaDiariaResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# =============================================
+# SCHEMAS PARA ADMIN 🛡️
+# =============================================
+
+class AdminStatsResponse(BaseModel):
+    total_usuarios: int
+    total_parceiros: int
+    total_estabelecimentos: int
+    pendentes_aprovacao: int
+    pendentes_exclusao: int
+    faturamento_estimado: float

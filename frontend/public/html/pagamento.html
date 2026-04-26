@@ -452,9 +452,11 @@
     // Populate data based on query param
     const urlParams = new URLSearchParams(window.location.search);
     const plan = urlParams.get('plan') || 'pro';
+    const estabId = urlParams.get('estab_id');
     
     // Save to localstorage for the success page
     localStorage.setItem("vj_checkout_plan", plan);
+    if(estabId) localStorage.setItem("vj_checkout_estab_id", estabId);
 
     if (plan === 'pro-plus') {
       document.getElementById('targetPlanIcon').innerText = "💎";

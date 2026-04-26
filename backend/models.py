@@ -88,6 +88,11 @@ class Estabelecimento(Base):
     status = Column(String(30), default="PENDING_REVIEW") # PENDING_REVIEW, APPROVED, REJECTED
     created_at = Column(DateTime, default=datetime.utcnow)
     cnpj_cpf = Column(String(20), nullable=True)
+    
+    # AI Vetting / Verificação Automática
+    ai_status = Column(String(30), default="PENDING") # PENDING, VERIFIED, REJECTED
+    ai_score = Column(Float, default=0.0) # 0.0 to 1.0 (Confiança da IA)
+    ai_justification = Column(Text, nullable=True) # Explicação da IA
 
     # Controle de Visibilidade (pelo Parceiro)
     visibilidade = Column(String(30), default="ATIVO")  # ATIVO, INATIVO, OCULTO_TEMPORARIO

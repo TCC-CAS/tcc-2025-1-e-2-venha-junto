@@ -199,7 +199,9 @@
 
   <script>
     // Recuperar plano do localstorage pra preencher dinâmico (simulação)
-    const storedPlan = localStorage.getItem("vj_checkout_plan");
+    const storedPlan = localStorage.getItem("vj_checkout_plan") || "pro";
+    const estabId = localStorage.getItem("vj_checkout_estab_id");
+
     if (storedPlan === 'pro') {
       document.getElementById('valPlan').innerText = "Pro";
       document.getElementById('valPrice').innerText = "R$ 39.00/mês";
@@ -213,6 +215,22 @@
         code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     document.getElementById('valCode').innerText = code;
+
+    // Automação: Aplica o Upgrade no Backend via PATCH
+    if (estabId) {
+        fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}/upgrade`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ plano: storedPlan })
+        })
+        .then(res => res.json())
+        .then(data => console.log("Resultado do Upgrade:", data))
+        .catch(err => console.error("Erro na request de upgrade:", err));
+        
+        // Limpa o localstorage
+        localStorage.removeItem("vj_checkout_estab_id");
+    }
   </script>
 </body>
 </html>

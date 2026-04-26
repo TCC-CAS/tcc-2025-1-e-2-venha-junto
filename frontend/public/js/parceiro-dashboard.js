@@ -566,11 +566,15 @@ function logout() {
 
 // === MÉTODOS DO MODAL DE CUPOM ===
 function openCupomModal(estabId) {
+  const alvoId = estabId || window._primeiroEstabId || "";
+  
   if (window.partnerCanCreateCoupon === false) {
-      alert("❌ Recurso Exclusivo! \n\nA criação de Cupons de Desconto e Ofertas é um recurso disponível apenas nos Planos Pro ou Premium. \n\nFaça o upgrade do seu local para atrair muito mais clientes PCDs ofertando descontos na nossa página inicial!");
+      if (confirm("❌ Recurso Exclusivo!\n\nA criação de Cupons é exclusiva dos Planos Pro ou Premium.\n\nDeseja fazer o upgrade agora para atrair mais clientes pagantes?")) {
+         window.location.href = `./pagamento.html?plan=pro&estab_id=${alvoId}`;
+      }
       return;
   }
-
+  
   const modal = document.getElementById("modalNovoCupom");
   if (modal) {
     // Guarda o id do estabelecimento para usar ao salvar

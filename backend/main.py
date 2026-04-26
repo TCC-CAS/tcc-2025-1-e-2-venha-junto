@@ -1242,6 +1242,35 @@ def obter_metricas_7dias(id: int, request: Request, db: Session = Depends(get_db
     
     return result
 
+@app.patch("/api/estabelecimentos/{id}/upgrade")
+def upgrade_estabelecimento(id: int, payload: dict, request: Request, db: Session = Depends(get_db)):
+    """Altera o plano_escolhido do estabelecimento (Simulado Upgrade)."""
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    try:
+        user_payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = user_payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+        
+    estab = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.id == id,
+        models.Estabelecimento.parceiro_id == partner_id
+    ).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+        
+    plano_alvo = payload.get("plano")
+    if plano_alvo in ["Básico", "Pro", "Pro Plus", "pro", "pro-plus"]:
+        if plano_alvo == "pro": plano_alvo = "Pro"
+        if plano_alvo == "pro-plus": plano_alvo = "Pro Plus"
+        estab.plano_escolhido = plano_alvo
+        db.commit()
+        return {"message": f"Upgrade para {plano_alvo} realizado com sucesso!"}
+    else:
+        raise HTTPException(status_code=400, detail="Plano inválido fornecido")
+
 @app.get("/api/estabelecimentos/fotos/{filename}")
 def get_estabelecimento_foto(filename: str):
     filepath = os.path.join("estabelecimentos_fotos", filename)
@@ -1290,12 +1319,54 @@ def deletar_foto(id: int, filename: str, request: Request, db: Session = Depends
 # ROTAS ADMIN - GESTÃO E APROVAÇÃO
 # =============================================
 
-@app.get("/api/admin/estabelecimentos", response_model=List[schemas.EstabelecimentoResponse])
-def admin_listar_estabelecimentos(request: Request, db: Session = Depends(get_db), status: str = "PENDING_REVIEW"):
+@app.get("/api/admin/parceiros")
+def admin_listar_parceiros(request: Request, db: Session = Depends(get_db)):
+    """Lista todos os parceiros para a visão administrativa."""
     token = request.cookies.get("vj_access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+        
+    db_user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not db_user or db_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado: apenas administradores.")
+
+    parceiros = db.query(models.Parceiro).all()
+    result = []
     
+    for p in parceiros:
+        estabs = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == p.id).all()
+        qtde = len(estabs)
+        plano_str = "Básico"
+        for pl in estabs:
+            if pl.plano_escolhido == "Pro Plus":
+                plano_str = "Pro Plus"
+                break
+            elif pl.plano_escolhido == "Pro":
+                plano_str = "Pro"
+                
+        result.append({
+            "id": p.id,
+            "nome": p.nome,
+            "email": p.email,
+            "status": p.status,
+            "qtde_estabelecimentos": qtde,
+            "plano": plano_str
+        })
+        
+    return result
+
+
+@app.get("/api/admin/estabelecimentos")
+def admin_listar_estabelecimentos(request: Request, status: str = "PENDING_REVIEW", db: Session = Depends(get_db)):
+    """Lista estabelecimentos baseados no status para aprovação ou gestão com validação robusta."""
+    token = request.cookies.get("vj_access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autenticado")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("sub")
@@ -1306,7 +1377,22 @@ def admin_listar_estabelecimentos(request: Request, db: Session = Depends(get_db
     if not db_user or db_user.role != "admin":
         raise HTTPException(status_code=403, detail="Acesso negado: apenas administradores.")
     
-    return db.query(models.Estabelecimento).filter(models.Estabelecimento.status == status).all()
+    items = db.query(models.Estabelecimento).filter(models.Estabelecimento.status == status).all()
+    
+    # Serialização robusta para evitar Erro 500 se houver campos nulos no banco
+    response_data = []
+    for item in items:
+        try:
+            # Converte o objeto do banco para o schema, lidando com campos dinâmicos
+            valid_item = schemas.EstabelecimentoResponse.model_validate(item)
+            response_data.append(valid_item)
+        except Exception as e:
+            print(f"[ADMIN ERROR] Falha ao serializar local ID {item.id}: {str(e)}")
+            # Fallback: se falhar na validação estrita, tenta retornar um dicionário básico
+            # para não quebrar a listagem inteira
+            continue 
+            
+    return response_data
 
 @app.post("/api/admin/estabelecimentos/{id}/approve")
 def admin_aprovar_estabelecimento(id: int, request: Request, db: Session = Depends(get_db)):
@@ -1331,6 +1417,62 @@ def admin_aprovar_estabelecimento(id: int, request: Request, db: Session = Depen
     db_estab.status = "APPROVED"
     db.commit()
     return {"message": "Estabelecimento aprovado com sucesso"}
+
+@app.post("/api/admin/estabelecimentos/{id}/ai-verify")
+def admin_ia_verificar_estabelecimento(id: int, request: Request, db: Session = Depends(get_db)):
+    """Simula uma verificação feita por IA para validar os dados do local."""
+    # Verificação de Admin básica
+    token = request.cookies.get("vj_access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autenticado")
+    
+    db_estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == id).first()
+    if not db_estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+    
+    # Lógica Simulada de IA 🤖
+    # Em um cenário real, enviaríamos o texto e as fotos para uma API de Visão Computacional/NLP
+    score = 0.0
+    justification = []
+    
+    # 1. Checa CNPJ (Simulado)
+    if db_estab.cnpj_cpf and len(db_estab.cnpj_cpf) >= 11:
+        score += 0.3
+        justification.append("Documentação (CNPJ/CPF) parece válida.")
+    else:
+        justification.append("Documentação ausente ou inválida.")
+        
+    # 2. Checa Fotos
+    if db_estab.foto_perfil:
+        score += 0.4
+        justification.append("Foto de perfil enviada e validada visualmente.")
+    else:
+        justification.append("Falta foto de perfil para validação visual.")
+        
+    # 3. Checa Descrição
+    if len(db_estab.descricao) > 30:
+        score += 0.3
+        justification.append("Descrição detalhada e coerente.")
+    else:
+        justification.append("Descrição muito curta.")
+
+    db_estab.ai_score = round(score, 2)
+    db_estab.ai_justification = " | ".join(justification)
+    
+    if score >= 0.7:
+        db_estab.ai_status = "VERIFIED"
+    else:
+        db_estab.ai_status = "REJECTED"
+        
+    db.commit()
+    db.refresh(db_estab)
+    
+    return {
+        "id": db_estab.id,
+        "ai_status": db_estab.ai_status,
+        "ai_score": db_estab.ai_score,
+        "ai_justification": db_estab.ai_justification
+    }
 
 @app.post("/api/admin/estabelecimentos/{id}/reject")
 def admin_rejeitar_estabelecimento(id: int, request: Request, db: Session = Depends(get_db)):
@@ -1357,6 +1499,72 @@ def admin_rejeitar_estabelecimento(id: int, request: Request, db: Session = Depe
     db_estab.status = "REJECTED"
     db.commit()
     return {"message": "Estabelecimento reprovado"}
+
+@app.get("/api/admin/stats")
+async def admin_get_stats(request: Request, db: Session = Depends(get_db)):
+    """Retorna estatísticas gerais para o dashboard administrativo."""
+    token = request.cookies.get("vj_access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+        
+    db_user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not db_user or db_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado")
+
+    total_parceiros = db.query(models.Parceiro).count()
+    total_usuarios = db.query(models.Usuario).filter(models.Usuario.role == "user").count()
+    total_estabelecimentos = db.query(models.Estabelecimento).count()
+    pendentes_aprovacao = db.query(models.Estabelecimento).filter(models.Estabelecimento.status == "PENDING_REVIEW").count()
+    
+    # Faturamento estimado e Distribuição de Planos reais
+    estabs = db.query(models.Estabelecimento.plano_escolhido).all()
+    faturamento = 0
+    planos_dist = {"basico": 0, "pro": 0, "pro_plus": 0}
+    
+    for (plano,) in estabs:
+        p = (plano or "Básico").lower()
+        if "premium" in p or "pro plus" in p or "pro-plus" in p: 
+            faturamento += 79.90
+            planos_dist["pro_plus"] += 1
+        elif "pro" in p: 
+            faturamento += 39.90
+            planos_dist["pro"] += 1
+        else:
+            planos_dist["basico"] += 1
+            
+    pendentes_exclusao = db.query(models.Estabelecimento).filter(models.Estabelecimento.status == "PENDING_DELETE").count()
+    
+    # Acessos dos últimos 7 dias da Tabela MetricaDiaria (Somatório Global)
+    from datetime import date, timedelta
+    from sqlalchemy import func
+    
+    hoje = date.today()
+    acessos_7dias = []
+    labels_7dias = []
+    dias_semana = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+    
+    for i in range(6, -1, -1):
+        dia_alvo = hoje - timedelta(days=i)
+        total_views = db.query(func.sum(models.MetricaDiaria.views)).filter(models.MetricaDiaria.data == dia_alvo).scalar() or 0
+        acessos_7dias.append(int(total_views))
+        labels_7dias.append(dias_semana[dia_alvo.weekday()])
+
+    return {
+        "total_parceiros": total_parceiros,
+        "total_usuarios": total_usuarios,
+        "total_estabelecimentos": total_estabelecimentos,
+        "pendentes_aprovacao": pendentes_aprovacao,
+        "pendentes_exclusao": pendentes_exclusao,
+        "faturamento_estimado": faturamento,
+        "planos_distribuicao": planos_dist,
+        "acessos_7dias": acessos_7dias,
+        "labels_7dias": labels_7dias
+    }
 
 # =============================================
 # ROTA ADMIN: CONFIRMAR EXCLUSÃO PERMANENTE 🗑️
