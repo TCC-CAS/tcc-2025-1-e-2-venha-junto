@@ -1,0 +1,256 @@
+/* =======================================================
+   NOVO LAYOUT EXPLORAR 
+   ======================================================= */
+
+.explorar-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 0 16px;
+  align-items: flex-start;
+}
+
+/* SIDEBAR FILTROS */
+.explorar-filters {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  position: sticky;
+  top: 90px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.filters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.linkbtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.linkbtn:hover {
+  text-decoration: underline;
+}
+
+.filters-body {
+  padding: 20px;
+}
+
+.filter-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* BOTÃO DE LOCALIZAÇÃO */
+.btn-location {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-location:hover {
+  background: #e2e8f0 !important;
+}
+
+/* LISTA DE CATEGORIAS */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.cat-btn:hover {
+  background: #f1f5f9;
+}
+
+.cat-btn.active {
+  background: #f97316; /* Laranja da imagem */
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.cat-btn .icon {
+  display: flex;
+  align-items: center;
+  color: #64748b; /* Cor do ícone inativo */
+}
+
+.cat-btn.active .icon {
+  color: #ffffff; /* Cor do ícone ativo */
+}
+
+/* CHECKBOX CUSTOMIZADO (Recursos de Acessibilidade) */
+.check-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #475569;
+  font-weight: 600;
+  user-select: none;
+}
+
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.check-container:hover input ~ .checkmark {
+  background-color: #f1f5f9;
+}
+.check-container input:checked ~ .checkmark {
+  background-color: #ea580c;
+  border-color: #ea580c;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.check-container input:checked ~ .checkmark:after {
+  display: block;
+}
+.check-container .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* =======================================================
+   ÁREA PRINCIPAL (BUSCA + CARDS) 
+   ======================================================= */
+.explorar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  padding: 8px 8px 8px 16px;
+  min-height: 60px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.top-search-bar .sicon {
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+}
+
+.top-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-weight: 500;
+  font-size: 15px;
+  outline: none;
+}
+.top-search-bar input::placeholder {
+  color: #94a3b8;
+}
+
+/* NOVO BOTÃO DE BUSCA */
+.btn-search {
+  background: #ea580c;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+.btn-search:hover {
+  background: #c2410c;
+}
+
+.count-bar {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.count-bar strong {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+/* GRID DE CARDS */
+.locais-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Nota: Estilos do .local-card e .fav-btn residem no home.css para consistência global */
+
+/* =======================================================
+   RESPONSIVO 
+   ======================================================= */
+@media (max-width: 900px) {
+  .explorar-layout {
+    grid-template-columns: 1fr;
+  }
+  .explorar-filters {
+    position: static;
+  }
+}

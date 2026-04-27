@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <style>html,body{background:#f8fafc!important}</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Venha Junto • Dashboard Admin</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/admin-dashboard-premium.css" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="dash-layout">
+    <!-- SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="dash-brand">
+        <h1>Venha Junto</h1>
+        <span>Plataforma Admin</span>
+      </div>
+
+      <div class="dash-user">
+        <div class="dash-avatar" style="background: var(--admin-accent); color: #fff;">🛡️</div>
+        <div class="dash-user-info">
+          <strong id="adminNome">Admin</strong>
+          <span class="badge-premium" style="background: rgba(249, 115, 22, 0.1); color: var(--admin-accent);">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Master Admin
+          </span>
+        </div>
+      </div>
+
+      <div class="dash-menu-title">GERAL</div>
+      <nav class="dash-nav">
+        <button class="nav-item active" data-target="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Visão Geral
+        </button>
+        <button class="nav-item" data-target="approvals">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          Aprovações
+          <span id="badgeApprovals" class="badge-count" style="display:none; background: #ef4444; color:white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; margin-left: auto;">0</span>
+        </button>
+        <button class="nav-item" data-target="partners">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Parceiros
+        </button>
+      </nav>
+
+      <div class="dash-menu-title" style="margin-top: 24px;">SISTEMA</div>
+      <nav class="dash-nav">
+        <a href="./explorar.html" class="nav-item" style="text-decoration: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          Ver Site Público
+        </a>
+      </nav>
+
+      <div class="dash-logout" id="btnLogout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Sair do Painel
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dash-main">
+      <div id="view-overview" class="view-content active">
+        <header style="margin-bottom: 32px;">
+          <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Bem-vindo, Admin 👋</h2>
+          <p style="color: var(--admin-text-secondary); margin: 0;">Aqui está o resumo de hoje do Venha Junto.</p>
+        </header>
+
+        <!-- KPI CARDS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #eef2ff; color: #6366f1;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-partners">0</div>
+            <div class="stat-label">Parceiros Ativos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #ecfdf5; color: #10b981;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-users">0</div>
+            <div class="stat-label">Comunidade / Usuários</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #fef2f2; color: #ef4444;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-estabs">0</div>
+            <div class="stat-label">Locais Cadastrados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #ecfdf5; color: #10b981;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-revenue">R$ 0,00</div>
+            <div class="stat-label">Faturamento Est.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon" style="background: #fffbeb; color: #f59e0b;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-pending">0</div>
+            <div class="stat-label">Pendentes de Aprovação</div>
+          </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              Acessos na Plataforma
+            </div>
+            <div class="chart-container-fixed">
+              <canvas id="mainChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Distribuição de Planos</div>
+            <div class="chart-container-fixed">
+              <canvas id="planChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT ACTIVITY OR MINI LIST -->
+        <div class="admin-section">
+          <div class="section-header">
+            <h3 class="section-title">Aprovações Urgentes</h3>
+            <button class="btn-action btn-details" onclick="document.querySelector('[data-target=approvals]').click()">Ver Tudo</button>
+          </div>
+          <div class="admin-list" id="mini-pending-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- APPROVALS VIEW -->
+      <div id="view-approvals" class="view-content" style="display:none;">
+        <header style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Validação de Locais</h2>
+            <p style="color: var(--admin-text-secondary); margin: 0;">Analise os novos estabelecimentos antes de publicá-los.</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <select id="filterStatus" class="btn-action btn-details" style="padding-right: 32px;">
+              <option value="PENDING_REVIEW">Aguardando Análise</option>
+              <option value="APPROVED">Já Aprovados</option>
+              <option value="REJECTED">Reprovados</option>
+              <option value="PENDING_DELETE">🗑️ Pedidos de Exclusão</option>
+            </select>
+            <button class="btn-action btn-approve" id="btnReloadList">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Atualizar
+            </button>
+          </div>
+        </header>
+
+        <div class="admin-section">
+          <div class="admin-list" id="full-approvals-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNERS VIEW -->
+      <div id="view-partners" class="view-content" style="display:none;">
+        <header style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Gestão de Parceiros</h2>
+            <p style="color: var(--admin-text-secondary); margin: 0;">Visualize os parceiros cadastrados e seus planos vigentes.</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn-action btn-approve" id="btnReloadPartnersList">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Atualizar
+            </button>
+          </div>
+        </header>
+
+        <div class="admin-section">
+          <div class="admin-list" id="full-partners-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="../js/admin-dashboard.js"></script>
+</body>
+</html>

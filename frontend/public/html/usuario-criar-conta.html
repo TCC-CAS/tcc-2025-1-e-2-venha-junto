@@ -1,0 +1,270 @@
+﻿<!doctype html>
+<html lang="pt-br">
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Criar conta</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/auth-split.css" />
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+</head>
+
+  <body>
+    <!-- Split Layout Container -->
+    <div class="vj-split-layout">
+      <!-- Left side: Orange Hero -->
+      <div class="vj-split-left">
+        <a href="./index.html" class="vj-back-btn" aria-label="Voltar ao início"
+          >← Voltar ao início</a
+        >
+        <div class="vj-split-left-content">
+          <h1>Bem-vindo ao Venha Junto</h1>
+          <p>Turismo Acessível em São Paulo</p>
+        </div>
+      </div>
+
+      <!-- Right side: White Form -->
+      <div class="vj-split-right">
+        <div class="vj-form-container">
+          <h2 class="vj-form-title">Criar sua conta</h2>
+          <p class="vj-form-sub">Preencha os dados abaixo para começar</p>
+
+          <form
+            id="formSignup"
+            class="vj-split-form"
+            autocomplete="on"
+            novalidate
+          >
+            <!-- NOME -->
+            <div class="vj-form-group">
+              <label for="nome">Nome completo</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input
+                  id="nome"
+                  name="nome"
+                  type="text"
+                  placeholder="Seu nome completo"
+                  required
+                />
+              </div>
+              <small id="nomeError" class="vj-error"></small>
+            </div>
+
+            <!-- TELEFONE -->
+            <div class="vj-form-group">
+              <label for="telefone">Telefone</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                  ></path>
+                </svg>
+                <input
+                  id="telefone"
+                  name="telefone"
+                  type="tel"
+                  placeholder="(11) 99999-9999"
+                />
+              </div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="vj-form-group">
+              <label for="email">E-mail</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  ></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="seuemail@exemplo.com"
+                  required
+                />
+              </div>
+              <small id="emailError" class="vj-error"></small>
+            </div>
+
+            <!-- SENHA -->
+            <div class="vj-form-group">
+              <label for="senha">Senha</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input
+                  id="senha"
+                  name="senha"
+                  type="password"
+                  placeholder="Mínimo 6 caracteres"
+                  minlength="6"
+                  required
+                />
+                <button
+                  class="vj-eye-btn"
+                  type="button"
+                  data-eye="senha"
+                  aria-label="Mostrar/ocultar senha"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <small id="senhaError" class="vj-error"></small>
+            </div>
+
+            <!-- CONFIRMAR SENHA -->
+            <div class="vj-form-group">
+              <label for="confirmar">Confirmar senha</label>
+              <div class="vj-input-wrapper">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input
+                  id="confirmar"
+                  name="confirmar"
+                  type="password"
+                  placeholder="Repita a senha"
+                  minlength="6"
+                  required
+                />
+                <button
+                  class="vj-eye-btn"
+                  type="button"
+                  data-eye="confirmar"
+                  aria-label="Mostrar/ocultar confirmação"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+              <small id="confirmarError" class="vj-error"></small>
+            </div>
+
+            <!-- ACEITE -->
+            <label class="vj-checkbox">
+              <input id="aceite" type="checkbox" required />
+              <span>
+                Li e concordo com os
+                <a href="./termos.html" target="_blank">Termos de Uso</a> e
+                <a href="./privacidade.html" target="_blank"
+                  >Política de Privacidade</a
+                >.
+              </span>
+            </label>
+
+            <!-- BOTAO -->
+            <button class="vj-submit-btn" type="submit">
+              Criar conta <span>→</span>
+            </button>
+
+            <!-- FOOTER LINK -->
+            <div class="vj-form-footer">
+              Já tem uma conta? <a href="./usuario-login.html">Fazer login</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/i18n.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/tests/signup-validation.js"></script>
+    <script src="../js/usuario-auth-ui.js" defer></script>
+    <script src="../js/vlibras.js" defer></script>
+  </body>
+</html>
