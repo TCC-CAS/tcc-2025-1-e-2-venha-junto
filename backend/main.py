@@ -24,7 +24,9 @@ load_dotenv()
 os.makedirs("avatars", exist_ok=True)
 os.makedirs("estabelecimentos_fotos", exist_ok=True)
 
-# models.Base.metadata.create_all(bind=engine) # Comentado para evitar travamento no startup
+# Descomentado para o SQLite criar as tabelas na AWS automaticamente.
+# No SQL Server local isso não interfere se as tabelas já existirem.
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Venha Junto API",
@@ -60,6 +62,7 @@ app.add_middleware(
         "http://127.0.0.1:5508",
         "http://localhost:3000",
         "https://venha-junto-h54n.onrender.com",
+        "https://venhajunto.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],

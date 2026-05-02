@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -6,10 +7,19 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 SERVER = 'localhost'
 DATABASE = 'VenhaJunto'
 
-# String de Conexão usando o driver ODBC Driver 17 for SQL Server.
+# String de Conexão Local usando o driver ODBC Driver 17 for SQL Server.
 # 'Trusted_Connection=yes' utiliza a autenticação do seu Windows.
-SQLALCHEMY_DATABASE_URL = "mssql+pyodbc:///?odbc_connect=Driver%3D%7BODBC+Driver+17+for+SQL+Server%7D%3BServer%3Dlocalhost%3BDatabase%3DVenhaJunto%3BTrusted_Connection%3Dyes%3B"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={'timeout': 10})
+LOCAL_DB_URL = "mssql+pyodbc:///?odbc_connect=Driver%3D%7BODBC+Driver+17+for+SQL+Server%7D%3BServer%3Dlocalhost%3BDatabase%3DVenhaJunto%3BTrusted_Connection%3Dyes%3B"
+
+# Tenta ler a variável de ambiente DATABASE_URL (necessário para a AWS).
+# Se não encontrar, usa o banco local.
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", LOCAL_DB_URL)
+
+# Se for SQLite (na nuvem), precisamos de parâmetros diferentes
+if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={'timeout': 10})
 
 # Sesssão para conversar com o banco
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
