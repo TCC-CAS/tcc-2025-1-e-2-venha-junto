@@ -31,7 +31,8 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="Venha Junto API",
     description="API de Backend para o sistema de Turismo Acessível (TCC)",
-    version="1.0.0"
+    version="1.0.0",
+    redirect_slashes=False
 )
 
 # ---------------------------------------------
