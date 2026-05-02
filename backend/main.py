@@ -76,7 +76,8 @@ def ping():
 # ---------------------------------------------
 # SEGURANÇA: SENHAS E TOKENS JWT
 # ---------------------------------------------
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Trocado bcrypt por pbkdf2_sha256 para evitar o erro de limite de 72 caracteres que estava ocorrendo na AWS
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 # O getenv busca a chave secreta no arquivo .env
 SECRET_KEY = os.getenv("SECRET_KEY", "venhajunto_secreta_tcc_2026_secur@123") 
