@@ -154,7 +154,12 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
             detail="Esse e-mail já está cadastrado em nosso sistema."
         )
 
-    senha_segura = get_password_hash(usuario.senha)
+    # DEBUG: Verificar o que está chegando na senha
+    print(f"DEBUG: Recebendo senha para cadastro. Tipo: {type(usuario.senha)}, Tamanho: {len(usuario.senha)}")
+    
+    # Trunca a senha em 72 caracteres para evitar erro do bcrypt caso venha lixo
+    senha_limpa = str(usuario.senha)[:72]
+    senha_segura = get_password_hash(senha_limpa)
 
     novo_usuario = models.Usuario(
         nome=usuario.nome,
