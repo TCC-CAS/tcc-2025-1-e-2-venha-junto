@@ -2,7 +2,7 @@
 const API_BASE = (function() {
   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
   // Preferência para 127.0.0.1 se for local para evitar problemas de resolução de nome
-  return isLocal ? "http://127.0.0.1:8000" : "https://venha-junto-h54n.onrender.com";
+  return isLocal ? "http://127.0.0.1:8000" : "";
 })();
 console.log("[Auth] API_BASE:", API_BASE);
 

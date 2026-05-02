@@ -504,6 +504,59 @@ def remover_favorito(place_id: int, request: Request, db: Session = Depends(get_
         return {"message": "Removido dos favoritos"}
     
     return {"message": "Favorito não encontrado"}
+    
+# ---------------------------------------------
+# ROTAS DE AVALIAÇÕES (REVIEWS)
+# ---------------------------------------------
+
+@app.post("/reviews/{estab_id}", response_model=schemas.ReviewResponse)
+def criar_review(estab_id: int, review: schemas.ReviewCreate, request: Request, db: Session = Depends(get_db)):
+    user = get_user_from_token(request, db)
+    if not user:
+        raise HTTPException(status_code=401, detail="Você precisa estar logado para avaliar.")
+
+    # Verifica se o estabelecimento existe
+    estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == estab_id).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
+
+    # Verifica se o usuário já avaliou este lugar
+    existente = db.query(models.Review).filter(
+        models.Review.usuario_id == user.id,
+        models.Review.estabelecimento_id == estab_id
+    ).first()
+    
+    if existente:
+        # Se já existir, atualiza a nota e comentário
+        existente.rating = review.rating
+        existente.comment = review.comment
+        existente.created_at = datetime.utcnow()
+        db.commit()
+        db.refresh(existente)
+        return existente
+
+    nova_review = models.Review(
+        usuario_id=user.id,
+        estabelecimento_id=estab_id,
+        rating=review.rating,
+        comment=review.comment
+    )
+    db.add(nova_review)
+    db.commit()
+    db.refresh(nova_review)
+    return nova_review
+
+@app.get("/public/places/{id}/reviews", response_model=List[schemas.ReviewResponse])
+def listar_reviews_publico(id: int, db: Session = Depends(get_db)):
+    """Retorna as avaliações de um local para o público."""
+    reviews = db.query(models.Review).filter(models.Review.estabelecimento_id == id).all()
+    
+    # Adiciona o nome do usuário manualmente para o esquema
+    for r in reviews:
+        user = db.query(models.Usuario).filter(models.Usuario.id == r.usuario_id).first()
+        r.usuario_nome = user.nome if user else "Usuário"
+        
+    return reviews
 
 # @app.on_event("startup")
 # async def startup_event():

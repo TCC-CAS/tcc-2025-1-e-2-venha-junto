@@ -11,7 +11,7 @@
     window.location.protocol === "file:" ||
     !window.location.hostname
       ? `http://${window.location.hostname || "localhost"}:8000`
-      : "https://venha-junto-h54n.onrender.com";
+      : "";
 
   function qs(id) {
     return document.getElementById(id);
