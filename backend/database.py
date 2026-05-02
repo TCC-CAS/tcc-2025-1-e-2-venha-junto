@@ -1,6 +1,10 @@
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+
+# Garante que o .env seja lido antes de tentar pegar as variáveis
+load_dotenv()
 
 # Configurações do Banco de Dados Microsoft SQL Server
 # Ajuste 'localhost' se o nome do seu servidor for diferente (como 'Bruna\\bruna')
