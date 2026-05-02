@@ -483,8 +483,38 @@
   }
 }
 @media (max-width: 520px) {
+  .hero {
+    padding: 30px 14px;
+  }
+  .hero h1 {
+    font-size: 32px;
+  }
+  .search-card {
+    padding: 12px;
+    border-radius: 18px;
+  }
+  .search-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+  }
+  .search-top strong {
+    font-size: 16px;
+  }
+  .switch {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+  }
+  .field select, .field input {
+    padding: 14px;
+    font-size: 16px; /* Aumenta fonte no mobile pra evitar zoom do iOS e melhorar leitura */
+  }
   #listaLocais {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 

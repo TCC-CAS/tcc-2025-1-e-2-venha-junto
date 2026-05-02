@@ -249,8 +249,41 @@
 @media (max-width: 900px) {
   .explorar-layout {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 10px auto;
   }
   .explorar-filters {
     position: static;
+    border-radius: 16px;
+  }
+  .top-search-bar {
+    flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+    height: auto;
+  }
+  .top-search-bar input {
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .btn-search {
+    width: 100%;
+    justify-content: center;
+  }
+  .category-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .cat-btn {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-list {
+    grid-template-columns: 1fr;
   }
 }
