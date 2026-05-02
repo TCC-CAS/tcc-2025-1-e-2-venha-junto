@@ -440,7 +440,8 @@ def listar_ids_favoritos(request: Request, db: Session = Depends(get_db)):
     # Retorna lista de strings por compatibilidade com o front
     return [str(f[0]) for f in fav_ids]
 
-@app.get("/favorites", response_model=List[schemas.EstabelecimentoResponse])
+@app.get("/favorites")
+@app.get("/favorites/")
 def listar_favoritos(request: Request, db: Session = Depends(get_db)):
     user = get_user_from_token(request, db)
     if not user:
