@@ -444,58 +444,24 @@ def logout(response: Response):
     return {"message": "Logout realizado com sucesso"}
 
 # ---------------------------------------------
-# REDEFINIÇÃO DE SENHA (Solicitar + Confirmar)
+# REDEFINIÇÃO DE SENHA (Simples: e-mail + nova senha)
 # ---------------------------------------------
-@app.post("/api/usuarios/solicitar-reset-senha")
-def solicitar_reset_senha(body: dict, db: Session = Depends(get_db)):
-    email = (body.get("email") or "").strip().lower()
-    if not email:
-        raise HTTPException(status_code=400, detail="E-mail obrigatório.")
-
-    user = db.query(models.Usuario).filter(models.Usuario.email == email).first()
-    # Por segurança: não revelamos se o e-mail existe ou não
-    if not user:
-        return {"message": "Se esse e-mail estiver cadastrado, você receberá as instruções em breve."}
-
-    # Gera token JWT de 30 minutos com propósito específico
-    expires = datetime.now(timezone.utc) + timedelta(minutes=30)
-    token = jwt.encode(
-        {"sub": str(user.id), "purpose": "password_reset", "exp": expires},
-        SECRET_KEY,
-        algorithm=ALGORITHM
-    )
-
-    send_reset_email(user.email, token)
-    return {"message": "Se esse e-mail estiver cadastrado, você receberá as instruções em breve."}
-
-
-@app.post("/api/usuarios/confirmar-reset-senha")
-def confirmar_reset_senha(body: dict, db: Session = Depends(get_db)):
-    token    = (body.get("token") or "").strip()
+@app.post("/api/usuarios/redefinir-senha")
+def redefinir_senha(body: dict, db: Session = Depends(get_db)):
+    email      = (body.get("email") or "").strip().lower()
     nova_senha = (body.get("nova_senha") or "").strip()
 
-    if not token or not nova_senha:
-        raise HTTPException(status_code=400, detail="Token e nova senha são obrigatórios.")
+    if not email or not nova_senha:
+        raise HTTPException(status_code=400, detail="E-mail e nova senha são obrigatórios.")
 
     if len(nova_senha) < 8:
         raise HTTPException(status_code=400, detail="A senha deve ter no mínimo 8 caracteres.")
 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=400, detail="Link expirado. Solicite um novo.")
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=400, detail="Link inválido.")
-
-    if payload.get("purpose") != "password_reset":
-        raise HTTPException(status_code=400, detail="Token inválido para esta operação.")
-
-    user_id = payload.get("sub")
-    user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    user = db.query(models.Usuario).filter(models.Usuario.email == email).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+        raise HTTPException(status_code=404, detail="Nenhuma conta encontrada com esse e-mail.")
 
-    # Atualiza a senha no banco
+    # Atualiza a senha no banco de dados
     user.senha_hash = get_password_hash(nova_senha[:72])
     db.commit()
 
