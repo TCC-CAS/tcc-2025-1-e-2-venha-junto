@@ -149,32 +149,32 @@ PLAN_LIMITS = {
         "metrics_tier": "basic"
     },
     "Pro": {
-        "max_establishments": 3,
+        "max_establishments": 5,
         "max_photos": 10,
         "max_active_coupons": 5,
         "metrics_tier": "detailed"
     },
     "Pro Plus": {
-        "max_establishments": 100,
+        "max_establishments": 9999,
         "max_photos": 100,
         "max_active_coupons": 100,
         "metrics_tier": "advanced"
     }
 }
 
-def get_partner_capacity(partner_id: int, db: Session):
+def get_partner_capacity(partner_id: int, db: Session, intended_plan: str = None):
     """
-    Calcula a capacidade da conta do parceiro baseada no seu melhor plano ativo.
+    Calcula a capacidade da conta do parceiro baseada no seu melhor plano ativo ou no plano que ele pretende assinar.
     """
     estabelecimentos = db.query(models.Estabelecimento).filter(
-        models.Estabelecimento.parceiro_id == partner_id
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.status != "ARCHIVED"
     ).all()
     
-    if not estabelecimentos:
-        return PLAN_LIMITS["Básico"] # Default se não tiver nenhum ainda
-        
-    melhor_plano = "Básico"
     tier_map = {"Básico": 0, "Pro": 1, "Pro Plus": 2}
+    
+    # Plano inicial
+    melhor_plano = intended_plan if intended_plan else "Básico"
     
     for e in estabelecimentos:
         plano_atual = e.plano_escolhido or "Básico"
@@ -857,13 +857,17 @@ async def criar_estabelecimento(estab_data: schemas.EstabelecimentoCreate, reque
          raise HTTPException(status_code=401, detail="Parceiro não encontrado")
          
     # --- NOVO: Lógica de Capacidade da Conta ---
-    capacidade = get_partner_capacity(partner_id, db)
-    contagem_atual = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == partner_id).count()
+    # Verifica a capacidade considerando o plano que o usuário ESTÁ ESCOLHENDO agora (estab_data.plano_escolhido)
+    capacidade = get_partner_capacity(partner_id, db, intended_plan=estab_data.plano_escolhido)
+    contagem_atual = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == partner_id,
+        models.Estabelecimento.status != "ARCHIVED"
+    ).count()
     
     if contagem_atual >= capacidade["max_establishments"]:
         raise HTTPException(
             status_code=403, 
-            detail=f"Você atingiu o limite de locais para o seu plano atual ({capacidade['max_establishments']}). Faça upgrade para cadastrar mais."
+            detail=f"Limite atingido: Seu plano atual ({capacidade['max_establishments']} local/is) está lotado. Faça upgrade para o Pro ou Pro Plus para cadastrar mais."
         )
     # -------------------------------------------
     novo_estab = models.Estabelecimento(
