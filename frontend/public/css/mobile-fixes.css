@@ -1,0 +1,275 @@
+/* ================================================================
+   VENHA JUNTO — MOBILE RESPONSIVE FIXES (mobile-fixes.css)
+   Aplica correções universais para qualquer celular
+   ================================================================ */
+
+/* ✅ Base: evita scroll horizontal em tudo */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ✅ Imagens nunca saem da tela */
+img, video, iframe, svg, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ✅ Inputs nunca extrapolam no iOS */
+input, select, textarea, button {
+  max-width: 100%;
+}
+
+/* ================================================================
+   HOME (index.html) — Filtros e Grid
+   ================================================================ */
+@media (max-width: 480px) {
+  /* Grid de cards: 1 coluna em telas muito pequenas */
+  #listaLocais {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    padding: 0 4px;
+  }
+
+  /* Filtros: coluna única */
+  .filters {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* Buscar: botão largo */
+  .actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Hero padding menor */
+  .hero {
+    padding: 24px 12px !important;
+  }
+
+  /* Search card sem overflow */
+  .search-card {
+    padding: 12px !important;
+    border-radius: 14px !important;
+    margin: 16px auto 0 !important;
+    width: calc(100% - 0px) !important;
+  }
+}
+
+/* ================================================================
+   TOPBAR MOBILE — Garante que nada vaze nos celulares menores
+   ================================================================ */
+@media (max-width: 400px) {
+  .mobile-topbar {
+    padding: 0 10px !important;
+    gap: 6px;
+  }
+
+  .mobile-right {
+    gap: 6px !important;
+  }
+
+  /* Botão de idioma menor */
+  #btnLangHeader {
+    padding: 5px 8px !important;
+    height: 36px !important;
+  }
+
+  /* Botão menu menor */
+  #btnMenu {
+    width: 28px !important;
+  }
+
+  /* Avatar menor */
+  .user-circle {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+
+  /* Logo menor */
+  .logo-vj {
+    width: 54px !important;
+    height: 36px !important;
+  }
+
+  .mobile-brand-text {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .mobile-brand-text strong {
+    font-size: 14px !important;
+    line-height: 1.1;
+    color: #0f172a;
+    font-weight: 900;
+  }
+  .mobile-brand-text span {
+    font-size: 10px !important;
+    line-height: 1.1;
+    color: #64748b;
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 120px;
+  }
+}
+
+/* ================================================================
+   DETALHES — Formulário de Avaliação
+   ================================================================ */
+@media (max-width: 480px) {
+  /* Card header com botão Avaliar */
+  .card-header {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: flex-start !important;
+  }
+
+  .btn-review-action {
+    white-space: nowrap !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Box do formulário */
+  .vj-reviewBox {
+    padding: 14px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* Textarea sem overflow */
+  textarea, .vj-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important; /* evita zoom no iOS */
+  }
+
+  /* Botões lado a lado */
+  .vj-reviewBox > div:last-child {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Estrelas */
+  .star-btn {
+    font-size: 26px !important;
+    padding: 6px !important;
+  }
+}
+
+/* ================================================================
+   FAVORITOS — Cards
+   ================================================================ */
+@media (max-width: 480px) {
+  .fav-grid, .favorites-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ================================================================
+   EXPLORAR — Filtros e Lista
+   ================================================================ */
+@media (max-width: 480px) {
+  .explorar-layout {
+    flex-direction: column !important;
+  }
+
+  .explorar-filters {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ================================================================
+   PERFIL — Campos de formulário
+   ================================================================ */
+@media (max-width: 480px) {
+  .perfil-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .perfil-card {
+    padding: 16px !important;
+  }
+
+  /* Inputs no iOS não fazem zoom */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"] {
+    font-size: 16px !important;
+  }
+}
+
+/* ================================================================
+   MODAL DE IDIOMAS — Full screen no mobile
+   ================================================================ */
+@media (max-width: 480px) {
+  .vj-lang-modal {
+    border-radius: 0 !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    width: 100vw !important;
+  }
+
+  .vj-lang-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .vj-lang-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ================================================================
+   SIDEBAR MOBILE — Menu navegação
+   ================================================================ */
+@media (max-width: 480px) {
+  .sidebar[data-open="true"] {
+    padding: 16px 14px !important;
+  }
+
+  .sidebar .menu a {
+    padding: 14px 16px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* ================================================================
+   FOOTER — evita overflow
+   ================================================================ */
+@media (max-width: 480px) {
+  .site-footer {
+    padding: 20px 16px 100px !important; /* espaço para nav inferior */
+    font-size: 12px;
+    text-align: center;
+  }
+}
+
+/* ================================================================
+   VLibras — não tapar conteúdo
+   ================================================================ */
+@media (max-width: 480px) {
+  [vw] {
+    transform: scale(0.65) !important;
+    transform-origin: left bottom !important;
+    left: 0 !important;
+    bottom: 80px !important;
+  }
+}

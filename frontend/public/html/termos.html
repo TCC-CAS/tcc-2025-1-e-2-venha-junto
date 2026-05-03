@@ -1,207 +1,86 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head><style>html,body{background:#f6f8fc!important}</style>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Venha Junto • Termos de Uso</title>
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Termos de Uso</title>
 
-  <style>
-    :root{
-      --bg:#f6f8fc;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --line:#e5e7eb;
-      --primary:#2563eb;
-      --shadow: 0 18px 50px rgba(2,6,23,.08);
-      --radius:16px;
-    }
-
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
-      background:var(--bg);
-    }
-
-    a{ color: var(--primary); text-decoration:none; font-weight: 700; }
-    a:hover{ text-decoration: underline; }
-
-    .skip-link{
-      position:absolute;
-      left:-999px; top:auto;
-      width:1px; height:1px;
-      overflow:hidden;
-    }
-    .skip-link:focus{
-      left:16px; top:16px;
-      width:auto; height:auto;
-      padding:10px 12px;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:10px;
-      z-index:10;
-      box-shadow: var(--shadow);
-    }
-
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 24px 16px 60px;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom: 18px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 16px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      min-width: 280px;
-    }
-    .logo{
-      width:44px; height:44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      display:grid;
-      place-items:center;
-      color:#fff;
-      font-weight: 900;
-    }
-    .brand strong{
-      display:block;
-      font-size: 15px;
-      font-weight: 900;
-      line-height: 1.1;
-    }
-    .brand span{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 700;
-      margin-top: 2px;
-    }
-
-    .back{
-      padding: 10px 12px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      height: fit-content;
-    }
-
-    .card{
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 26px 22px;
-    }
-
-    h1{
-      margin: 6px 0 6px;
-      font-size: 34px;
-      letter-spacing: -0.02em;
-      font-weight: 1000;
-    }
-
-    .meta{
-      color: var(--muted);
-      font-weight: 800;
-      margin: 0 0 18px;
-    }
-
-    .lead{
-      color: var(--text);
-      font-weight: 700;
-      line-height: 1.65;
-      margin: 0 0 16px;
-    }
-
-    .notice{
-      border: 1px solid rgba(37,99,235,.25);
-      background: rgba(37,99,235,.06);
-      border-radius: 14px;
-      padding: 14px 14px;
-      margin: 18px 0 18px;
-      font-weight: 800;
-      color: #0b1b3a;
-      line-height: 1.55;
-    }
-
-    h2{
-      margin: 22px 0 10px;
-      font-size: 18px;
-      font-weight: 950;
-    }
-
-    p{
-      margin: 0 0 12px;
-      color: var(--text);
-      line-height: 1.75;
-      font-weight: 650;
-    }
-
-    ul{
-      margin: 8px 0 14px 20px;
-      padding: 0;
-      color: var(--text);
-      line-height: 1.7;
-      font-weight: 650;
-    }
-    li{ margin: 6px 0; }
-
-    .small{
-      color: var(--muted);
-      font-weight: 750;
-      font-size: 13px;
-      line-height: 1.6;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-    }
-
-    @media (max-width: 680px){
-      .topbar{ flex-direction: column; }
-      .brand{ width: 100%; }
-      .back{ width: 100%; text-align: center; }
-      h1{ font-size: 28px; }
-    }
-  </style>
-<script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/mobile-fixes.css" />
+    <link rel="stylesheet" href="../css/perfil.css" />
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+    <link rel="stylesheet" href="../css/legal.css" />
 </head>
 
-<body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <body class="perfil-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand" aria-label="Marca Venha Junto">
-        <div class="logo" aria-hidden="true">📍</div>
-        <div>
+    <!-- Topbar mobile (Design Premium) -->
+    <header class="mobile-topbar" role="banner">
+      <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
+        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+        <div class="brand-text mobile-brand-text">
           <strong>Venha Junto</strong>
-          <span>Turismo Acessível em São Paulo</span>
+          <span>Turismo Acessível</span>
         </div>
       </div>
 
-      <div class="back">
-        <a href="./index.html" aria-label="Voltar para a página inicial">Voltar ao site</a>
+      <div class="mobile-right">
+        <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <a href="./usuario-login.html" class="user-circle" style="width: 36px; height: 36px; background: #94a3b8; text-decoration: none;">👤</a>
+        <button id="btnMenu" class="btn-icon" style="border:none; background:transparent; width: 32px;" aria-label="Abrir menu">
+          <svg id="menuIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
-    </div>
+    </header>
 
-    <main id="conteudo" class="card" role="main">
+    <div class="page">
+      <!-- Sidebar / Desktop Header -->
+      <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
+        <div class="brand">
+          <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+          <div class="brand-text">
+            <strong>Venha Junto</strong>
+            <span>Turismo Acessível em São Paulo</span>
+          </div>
+        </div>
+
+        <nav class="menu">
+          <a href="./index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Início
+          </a>
+          <a href="./explorar.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <div id="vj-translate-host"></div>
+          <div class="user-info">
+            <a href="./usuario-login.html" class="user-circle" style="background: #94a3b8; text-decoration: none;">👤</a>
+            <span>Entrar</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo -->
+      
+<main id="conteudo" class="main-content legal-content" role="main">
+  <div class="legal-card">
+
       <header>
         <h1>Termos de Uso</h1>
         <p class="meta">Última atualização: 02/01/2026</p>
@@ -315,10 +194,180 @@
         Este documento é parte demonstrativa do projeto acadêmico (TCC) e pode evoluir conforme a implementação do backend,
         integrações e requisitos institucionais.
       </div>
-    </main>
+    
   </div>
-   <script src="../js/vlibras.js" defer></script>
-   <script src="../js/i18n.js"></script>
-   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-</body>
+</main>
+
+    </div>
+
+    <!-- Avatar Script -->
+    <script>
+      (function () {
+        const input = document.getElementById("avatarInput");
+        const container = document.getElementById("avatarContainer");
+        const img = document.getElementById("avatarImgHero");
+        const fallback = document.getElementById("avatarFallbackHero");
+
+        let currentObjectUrl = null;
+
+        function applyPreview(url) {
+          if (fallback) fallback.style.display = "none";
+          if (img) {
+            img.src = url;
+            img.style.display = "block";
+            img.parentElement.style.background = "transparent";
+          }
+        }
+
+        function clearPreview() {
+          if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+          if (img) {
+            img.src = "";
+            img.style.display = "none";
+            img.parentElement.style.background = ""; // falls back to css orange
+          }
+          if (fallback) fallback.style.display = "block";
+        }
+
+        async function uploadToBackend(file) {
+          const fd = new FormData();
+          fd.append("file", file);
+
+          const res = await fetch(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar",
+            {
+              method: "POST",
+              body: fd,
+              credentials: "include",
+            },
+          );
+
+          if (!res.ok) throw new Error("Erro ao enviar avatar.");
+
+          applyPreview(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now(),
+          );
+          document.dispatchEvent(new Event("userbox:refresh"));
+        }
+
+        if (container && input) {
+          container.addEventListener("click", () => input.click());
+
+          input.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentObjectUrl = URL.createObjectURL(file);
+            applyPreview(currentObjectUrl);
+
+            try {
+              await uploadToBackend(file);
+            } catch (err) {
+              console.error(err);
+              clearPreview();
+              alert("Erro ao fazer upload da foto.");
+            }
+          });
+        }
+
+        const cachedUrl = localStorage.getItem("vj_last_avatar_url");
+        if (cachedUrl) applyPreview(cachedUrl);
+
+        window.addEventListener("load", () => {
+          const url = "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now();
+          const imgTest = new Image();
+          imgTest.onload = () => {
+             applyPreview(url);
+             localStorage.setItem("vj_last_avatar_url", url);
+          };
+          imgTest.onerror = () => {
+             if (!cachedUrl) clearPreview();
+          };
+          imgTest.src = url;
+        });
+      })();
+    </script>
+
+    <script src="../js/api.js" defer></script>
+    
+    <script src="../js/vlibras.js" defer></script>
+    <!-- ✅ Failsafe Menu & Accessibility Force -->
+    <script>
+      (function() {
+        const btn = document.getElementById('btnMenu');
+        const sidebar = document.getElementById('sidebar');
+        const icon = document.getElementById('menuIcon');
+        
+        const toggleMenu = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (!sidebar) return;
+          const isOpen = sidebar.getAttribute('data-open') === 'true';
+          const next = !isOpen;
+          sidebar.setAttribute('data-open', String(next));
+          
+          if (icon) {
+            if (next) {
+              icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            } else {
+              icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+            }
+          }
+        };
+
+        if (btn && sidebar) {
+          btn.addEventListener('click', toggleMenu);
+          btn.addEventListener('touchend', function(e){ e.preventDefault(); toggleMenu(); });
+        }
+
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay && sidebar) {
+          overlay.addEventListener('click', () => {
+            sidebar.setAttribute('data-open', 'false');
+            if (icon) icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          });
+        }
+
+        function forceLeft() {
+          const uway = document.querySelector('div[id^="userway"], #userwayAccessibilityWidget, .uway');
+          const vlibras = document.querySelector('[vw]');
+          if (uway) {
+            uway.style.setProperty('left', '10px', 'important');
+            uway.style.setProperty('right', 'auto', 'important');
+            uway.style.setProperty('bottom', '80px', 'important');
+          }
+          if (vlibras) {
+            vlibras.style.setProperty('left', '10px', 'important');
+            vlibras.style.setProperty('right', 'auto', 'important');
+            vlibras.style.setProperty('bottom', '100px', 'important');
+          }
+        }
+        setInterval(forceLeft, 1000);
+      })();
+    </script>
+    <!-- ✅ Tradução & Idiomas -->
+    <script src="../js/i18n.js" defer></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+  <script src="../js/userbox.js" defer></script>
+  
+    <!-- Navegação de rodapé (Mobile only via CSS) -->
+    <nav class="mobile-nav" role="navigation" aria-label="Navegação rápida">
+      <a href="./index.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Início
+      </a>
+      <a href="./explorar.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explorar
+      </a>
+      <a href="./favoritos.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+      <a href="./parceiro.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parceiro
+      </a>
+    </nav>
+
+  </body>
 </html>

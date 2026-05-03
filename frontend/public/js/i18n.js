@@ -150,10 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // (Div oculta do Google agora é criada na função googleTranslateElementInit para evitar race conditions)
 
-    // Monta o Modal no host (somente na Home)
-    const host = document.getElementById('vj-translate-host');
-    if (!host) return;
-
     // Gera os itens da grade
     const gridItems = VJ_LANGUAGES.map(l => `
         <button class="vj-lang-item" data-search="${l.country.toLowerCase()} ${l.lang.toLowerCase()}" onclick="vjSelectLang('${l.code}')">
@@ -165,8 +161,48 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
     `).join('');
 
+    // ✅ Gera o Modal Overlay e injeta no BODY sempre que o script carregar
+    if (!document.getElementById('vjLangOverlay')) {
+        const modalDiv = document.createElement('div');
+        modalDiv.id = 'vj-lang-modal-container';
+        modalDiv.innerHTML = `
+            <div class="vj-lang-overlay" id="vjLangOverlay" onclick="if(event.target===this)vjCloseModal()">
+                <div class="vj-lang-modal">
+                    <div class="vj-lang-header">
+                        <h2>Escolha seu país / idioma</h2>
+                        <button class="vj-lang-close" onclick="vjCloseModal()" aria-label="Fechar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="vj-lang-search-box">
+                        <div class="vj-lang-search-wrapper">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input class="vj-lang-search-input" id="vjLangSearch" type="text" placeholder="Pesquisar um país ou idioma..." oninput="vjFilterLangs(this.value)">
+                        </div>
+                    </div>
+                    <div class="vj-lang-body">
+                        <div class="vj-lang-grid" id="vjLangGrid">
+                            ${gridItems}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modalDiv);
+    }
+
+    // Monta o Modal no host (somente se existir)
+    const host = document.getElementById('vj-translate-host');
+    if (!host) return;
+
+    // Injeta APENAS o botão no host
     host.innerHTML = `
-        <!-- Botão de Abertura -->
         <div class="vj-lang-wrapper">
             <button class="vj-lang-btn" id="vjLangBtn" onclick="vjOpenModal()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -179,35 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <path d="M6 9l6 6 6-6"></path>
                 </svg>
             </button>
-        </div>
-
-        <!-- Modal Overlay -->
-        <div class="vj-lang-overlay" id="vjLangOverlay" onclick="if(event.target===this)vjCloseModal()">
-            <div class="vj-lang-modal">
-                <div class="vj-lang-header">
-                    <h2>Escolha seu país / idioma</h2>
-                    <button class="vj-lang-close" onclick="vjCloseModal()" aria-label="Fechar">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-                <div class="vj-lang-search-box">
-                    <div class="vj-lang-search-wrapper">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input class="vj-lang-search-input" id="vjLangSearch" type="text" placeholder="Pesquisar um país ou idioma..." oninput="vjFilterLangs(this.value)">
-                    </div>
-                </div>
-                <div class="vj-lang-body">
-                    <div class="vj-lang-grid" id="vjLangGrid">
-                        ${gridItems}
-                    </div>
-                </div>
-            </div>
         </div>
     `;
 

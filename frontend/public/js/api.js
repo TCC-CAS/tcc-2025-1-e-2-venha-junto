@@ -1,6 +1,6 @@
 const API_BASE = (function() {
   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
-  return isLocal ? "http://127.0.0.1:8000" : "";
+  return isLocal ? "" : "";
 })();
 
 window.API_BASE = API_BASE;
@@ -190,3 +190,4 @@ window.apiPublicPlaces = ({
 
 window.apiPublicPlaceDetails = (placeId) =>
   request(`/public/places/${placeId}`, { method: "GET" });
+

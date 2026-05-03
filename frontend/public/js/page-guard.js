@@ -16,8 +16,8 @@
     const nameEl = document.getElementById("userName");
     const emailEl = document.getElementById("userEmail");
 
-    if (nameEl) nameEl.textContent = nome || "Visitante";
-    if (emailEl) emailEl.textContent = email || "visitante@venhajunto.com";
+    if (nameEl) nameEl.textContent = nome || "Entrar";
+    if (emailEl) emailEl.textContent = email || "Faça login para continuar";
   }
 
   async function hydrateUserBox() {

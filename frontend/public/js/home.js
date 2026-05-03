@@ -38,19 +38,46 @@
   function openCloseSidebar() {
     const sidebar = document.getElementById("sidebar");
     const btn = document.getElementById("btnMenu");
+    const icon = document.getElementById("menuIcon");
     if (!sidebar || !btn) return;
 
     const open = sidebar.getAttribute("data-open") === "true";
     const next = !open;
     sidebar.setAttribute("data-open", String(next));
     btn.setAttribute("aria-expanded", String(next));
+
+    if (icon) {
+      if (next) {
+        // Ícone de fechar (X)
+        icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+      } else {
+        // Ícone de menu (barras)
+        icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+      }
+    }
   }
 
   function bindMobileMenu() {
     const btn = document.getElementById("btnMenu");
+    const overlay = document.querySelector(".sidebar-overlay");
     if (!btn) return;
 
     btn.addEventListener("click", openCloseSidebar);
+
+    // Fecha ao clicar fora (overlay)
+    if (overlay) {
+      overlay.addEventListener("click", () => {
+        const sidebar = document.getElementById("sidebar");
+        const icon = document.getElementById("menuIcon");
+        if (sidebar) {
+          sidebar.setAttribute("data-open", "false");
+          btn.setAttribute("aria-expanded", "false");
+          if (icon) {
+            icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          }
+        }
+      });
+    }
 
     document.addEventListener("click", (e) => {
       const sidebar = document.getElementById("sidebar");
@@ -413,9 +440,9 @@
 
     try {
       const me = await apiMe();
-      userEmail.textContent = me?.email || "visitante@venhajunto.com";
+      userEmail.textContent = me?.email || "Faça login para continuar";
     } catch {
-      userEmail.textContent = "visitante@venhajunto.com";
+      userEmail.textContent = "Faça login para continuar";
     }
   }
 

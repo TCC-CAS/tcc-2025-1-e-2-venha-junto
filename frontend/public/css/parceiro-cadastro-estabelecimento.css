@@ -28,7 +28,7 @@ body.cadastro-flow {
 .cadastro-topbar .brand-text strong {
   font-size: 16px;
   font-weight: 700;
-  color: #ea580c;
+  color: #E6730E;
 }
 .cadastro-topbar .brand-text span {
   font-size: 12px;
@@ -36,7 +36,7 @@ body.cadastro-flow {
 }
 .cadastro-topbar .back-link {
   background: #fff7ed;
-  color: #ea580c;
+  color: #E6730E;
   padding: 8px 16px;
   border-radius: 999px;
   text-decoration: none;
@@ -49,11 +49,11 @@ body.cadastro-flow {
   transition: all 0.2s ease;
 }
 .cadastro-topbar .back-link:hover {
-  background: #ea580c;
+  background: #E6730E;
   color: #ffffff;
-  border-color: #ea580c;
+  border-color: #E6730E;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
+  box-shadow: 0 4px 12px rgba(230, 115, 14, 0.2);
 }
 
 /* Layout Padrão em Grid Lateral */
@@ -65,7 +65,7 @@ body.cadastro-flow {
 /* SIDEBAR ESQUERDA (Passos) */
 .cadastro-sidebar {
   width: 280px;
-  background-color: #ea580c;
+  background-color: #E6730E;
   color: #ffedd5;
   padding: 24px 16px;
   display: flex;
@@ -173,17 +173,17 @@ body.cadastro-flow {
 
 .step-link.active {
   background: #ffffff;
-  color: #ea580c;
+  color: #E6730E;
 }
 .step-link.active .step-text strong {
-  color: #ea580c !important;
+  color: #E6730E !important;
 }
 .step-link.active .step-text span {
-  color: #ea580c !important;
+  color: #E6730E !important;
 }
 .step-link.active .step-icon {
-  background: #ea580c;
-  border-color: #ea580c;
+  background: #E6730E;
+  border-color: #E6730E;
   color: #ffffff;
 }
 
@@ -232,7 +232,7 @@ body.cadastro-flow {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: #ea580c;
+  background: #E6730E;
   color: white;
   display: flex;
   align-items: center;
@@ -243,7 +243,7 @@ body.cadastro-flow {
 .step-title-area h1 {
   margin: 0;
   font-size: 24px;
-  color: #ea580c;
+  color: #E6730E;
   font-weight: 800;
 }
 .step-title-area p {
@@ -260,7 +260,7 @@ body.cadastro-flow {
 }
 .progress-fill {
   height: 100%;
-  background: #ea580c; /* Lilás da imagem original/botão */
+  background: #E6730E; /* Lilás da imagem original/botão */
   transition: width 0.3s ease;
 }
 
@@ -302,7 +302,7 @@ body.cadastro-flow {
   font-weight: 700;
 }
 .card-title .icon {
-  color: #ea580c; /* Icone principal do card */
+  color: #E6730E; /* Icone principal do card */
 }
 
 /* CAMPOS E INPUTS */
@@ -360,7 +360,7 @@ body.cadastro-flow {
 .field-group input:focus,
 .field-group select:focus,
 .field-group textarea:focus {
-  border-color: #ea580c;
+  border-color: #E6730E;
 }
 
 .help-text {
@@ -434,7 +434,7 @@ body.cadastro-flow {
 }
 .progress-fill {
   height: 100%;
-  background: #ea580c; /* Lilás da imagem original/botão */
+  background: #E6730E; /* Lilás da imagem original/botão */
   transition: width 0.3s ease;
 }
 
@@ -476,7 +476,7 @@ body.cadastro-flow {
   font-weight: 700;
 }
 .card-title .icon {
-  color: #ea580c; /* Icone principal do card */
+  color: #E6730E; /* Icone principal do card */
 }
 
 /* CAMPOS E INPUTS */
@@ -534,7 +534,7 @@ body.cadastro-flow {
 .field-group input:focus,
 .field-group select:focus,
 .field-group textarea:focus {
-  border-color: #ea580c;
+  border-color: #E6730E;
 }
 
 .help-text {
@@ -623,7 +623,7 @@ body.cadastro-flow {
 
 .btn-next,
 .btn-submit {
-  background: #ea580c; /* Roxo Escuro Vibrante idêntico à foto */
+  background: #E6730E; /* Roxo Escuro Vibrante idêntico à foto */
   color: #ffffff;
   border: none;
   padding: 16px 32px;
@@ -666,8 +666,8 @@ body.cadastro-flow {
 }
 .custom-select-trigger:focus,
 .custom-select.open .custom-select-trigger {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+  border-color: #E6730E;
+  box-shadow: 0 0 0 3px rgba(230, 115, 14, 0.1);
 }
 .custom-select-text {
   display: flex;
@@ -717,7 +717,7 @@ body.cadastro-flow {
 }
 .custom-option.selected {
   background: #fff7ed;
-  color: #ea580c;
+  color: #E6730E;
   font-weight: 600;
 }
 .opt-icon {
@@ -726,7 +726,7 @@ body.cadastro-flow {
 .custom-option:hover .opt-icon,
 .custom-option.selected .opt-icon,
 .custom-select-text .opt-icon {
-  color: #ea580c;
+  color: #E6730E;
 }
 
 /* =======================================================
@@ -773,8 +773,8 @@ body.cadastro-flow {
 
 /* Quando selecionado via Radio */
 .plano-card:has(input[type="radio"]:checked) {
-  border-color: #ea580c;
-  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.15);
+  border-color: #E6730E;
+  box-shadow: 0 0 0 4px rgba(230, 115, 14, 0.15);
   transform: translateY(-2px);
 }
 .plano-card.pro:has(input[type="radio"]:checked) {
@@ -791,7 +791,7 @@ body.cadastro-flow {
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: #ea580c;
+  background: #E6730E;
   color: #fff;
   font-size: 11px;
   font-weight: 700;

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
@@ -56,12 +56,10 @@
     <div class="vj-split-layout">
       <!-- Left side: Orange Hero -->
       <div class="vj-split-left">
-        <a
-          href="./usuario-login.html"
-          class="vj-back-btn"
-          aria-label="Voltar para login"
-          >← Voltar para login</a
-        >
+        <a href="./usuario-login.html" class="vj-back-btn" aria-label="Voltar para login">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Voltar para login
+        </a>
         <div class="vj-split-left-content">
           <h1>Bem-vindo ao Venha Junto</h1>
           <p>Turismo Acessível em São Paulo</p>
@@ -209,6 +207,8 @@
               <small id="confirmarError" class="vj-error"></small>
             </div>
 
+            <p id="formMsg" style="display:none;padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;margin:8px 0;"></p>
+
             <!-- BOTAO SALVAR -->
             <button
               class="vj-submit-btn"
@@ -222,6 +222,10 @@
       </div>
     </div>
 
+    <style>
+      .vj-form-msg.success { background:#dcfce7; color:#15803d; display:block !important; }
+      .vj-form-msg.error   { background:#fee2e2; color:#b91c1c; display:block !important; }
+    </style>
     <script src="../js/usuario-esqueci-senha.js" defer></script>
   </body>
 </html>

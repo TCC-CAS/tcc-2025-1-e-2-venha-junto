@@ -29,6 +29,16 @@
 
   if (!form) return;
 
+  const telInput = document.getElementById("telefone");
+  if (telInput) {
+    telInput.addEventListener("input", (e) => {
+      let x = e.target.value.replace(/\D/g, "");
+      if (x.length <= 10) x = x.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+      else x = x.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
+      e.target.value = x.replace(/-$/, "");
+    });
+  }
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 

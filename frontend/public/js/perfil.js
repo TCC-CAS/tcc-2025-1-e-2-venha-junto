@@ -126,7 +126,16 @@ function bindActions() {
   const btnSalvarTopo = qs("btnSalvarTopo");
   const btnSair = qs("btnSair");
   const btnExcluirConta = qs("btnExcluirConta");
+  const telInput = qs("telefone");
 
+  if (telInput) {
+    telInput.addEventListener("input", (e) => {
+      let x = e.target.value.replace(/\D/g, "");
+      if (x.length <= 10) x = x.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+      else x = x.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
+      e.target.value = x.replace(/-$/, "");
+    });
+  }
   if (btnSalvar) btnSalvar.addEventListener("click", onSave);
   if (btnSalvarTopo) btnSalvarTopo.addEventListener("click", onSave);
 

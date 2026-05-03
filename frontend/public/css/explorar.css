@@ -88,7 +88,7 @@
 }
 
 .cat-btn.active {
-  background: #f97316; /* Laranja da imagem */
+  background: #F5892A; /* Laranja da imagem */
   color: #ffffff;
   font-weight: 700;
 }
@@ -141,8 +141,8 @@
   background-color: #f1f5f9;
 }
 .check-container input:checked ~ .checkmark {
-  background-color: #ea580c;
-  border-color: #ea580c;
+  background-color: #E6730E;
+  border-color: #E6730E;
 }
 .checkmark:after {
   content: "";
@@ -204,7 +204,7 @@
 
 /* NOVO BOTÃO DE BUSCA */
 .btn-search {
-  background: #ea580c;
+  background: #E6730E;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -248,42 +248,72 @@
    ======================================================= */
 @media (max-width: 900px) {
   .explorar-layout {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin: 10px auto;
-  }
-  .explorar-filters {
-    position: static;
-    border-radius: 16px;
-  }
-  .top-search-bar {
+    display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100vw;
     padding: 12px;
-    gap: 8px;
-    height: auto;
+    box-sizing: border-box;
+    gap: 16px;
   }
-  .top-search-bar input {
-    width: 100%;
-    padding: 10px 0;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .btn-search {
-    width: 100%;
-    justify-content: center;
-  }
-  .category-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .cat-btn {
-    padding: 12px 10px;
-    font-size: 13px;
-  }
-}
 
-@media (max-width: 480px) {
-  .category-list {
+  /* Faz o container de conteúdo "desaparecer" para que seus filhos (busca e grid) 
+     possam ser ordenados diretamente no grid principal */
+  .explorar-content {
+    display: contents;
+  }
+
+  .top-search-bar {
+    order: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .top-search-bar input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    font-size: 14px;
+    background: transparent;
+  }
+
+  .top-search-bar .btn-search {
+    padding: 8px 12px;
+    font-size: 13px;
+    min-width: fit-content;
+  }
+
+  .explorar-filters {
+    order: 2; /* 2. Filtros logo abaixo da busca */
+    position: static;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .locais-grid {
+    order: 3; /* 3. Resultados por último */
+    padding-bottom: 80px;
     grid-template-columns: 1fr;
+  }
+
+  /* Ajustes de botões para caberem bem no mobile */
+  .category-list {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .cat-btn {
+    font-size: 13px;
+    padding: 10px;
   }
 }

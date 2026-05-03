@@ -3,7 +3,7 @@ import { apiFetch, requireAdmin } from "./auth.js";
 
 const VJ_API_BASE = (function() {
   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
-  return isLocal ? "http://127.0.0.1:8000" : "https://venha-junto-h54n.onrender.com";
+  return isLocal ? "" : "https://venha-junto-h54n.onrender.com";
 })();
 
 (function () {
@@ -529,3 +529,4 @@ const VJ_API_BASE = (function() {
 
   init();
 })();
+

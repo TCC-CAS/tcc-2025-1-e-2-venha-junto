@@ -1,0 +1,93 @@
+
+.legal-content {
+  padding: 24px;
+}
+.legal-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.legal-card h1 {
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  color: var(--text);
+  margin-top: 0;
+}
+.legal-card h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 32px 0 16px;
+  color: var(--text);
+}
+.legal-card p, .legal-card li {
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+.legal-card .meta, .legal-card .updated {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+.legal-card .notice, .legal-card .callout {
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  background: rgba(37, 99, 235, 0.05);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 24px 0;
+  color: #1e3a8a;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.legal-card ul {
+  padding-left: 20px;
+  margin-bottom: 24px;
+}
+.legal-card .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.legal-card .table th, .legal-card .table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+.legal-card .table th {
+  background: #f8fafc;
+  color: var(--text);
+  font-weight: 800;
+}
+.legal-card .divider {
+  height: 1px;
+  background: var(--line);
+  margin: 32px 0;
+}
+.legal-card strong {
+  color: var(--text);
+  font-weight: 800;
+}
+@media (max-width: 768px) {
+  .legal-content {
+    padding: 16px;
+  }
+  .legal-card {
+    padding: 24px 20px;
+  }
+  .legal-card h1 {
+    font-size: 26px;
+  }
+}

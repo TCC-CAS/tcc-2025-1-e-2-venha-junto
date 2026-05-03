@@ -9,6 +9,9 @@ import jwt
 import os
 import shutil
 import uuid
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from typing import List, Optional, Dict
 from dotenv import load_dotenv
 
@@ -84,6 +87,44 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 SECRET_KEY = os.getenv("SECRET_KEY", "venhajunto_secreta_tcc_2026_secur@123") 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 dias logado
+
+# --- Email config (carregado do .env) ---
+SMTP_HOST     = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT     = int(os.getenv("SMTP_PORT", 587))
+SMTP_USER     = os.getenv("SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+FRONTEND_URL  = os.getenv("FRONTEND_URL", "https://venhajunto.vercel.app")
+
+def send_reset_email(to_email: str, token: str):
+    reset_link = f"{FRONTEND_URL}/html/usuario-recuperar-senha.html?token={token}"
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = "Venha Junto – Redefinição de Senha"
+    msg["From"]    = SMTP_USER
+    msg["To"]      = to_email
+    html = f"""
+    <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+      <div style="background:#F5892A;padding:32px;text-align:center;">
+        <h1 style="color:#fff;margin:0;font-size:24px;">Venha Junto</h1>
+        <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;">Turismo Acessível em São Paulo</p>
+      </div>
+      <div style="padding:32px;">
+        <h2 style="margin:0 0 12px;color:#0f172a;">Redefinição de Senha</h2>
+        <p style="color:#475569;margin:0 0 24px;">Recebemos uma solicitação para redefinir a senha da sua conta. Clique no botão abaixo para criar uma nova senha.</p>
+        <a href="{reset_link}" style="display:inline-block;background:#F5892A;color:#fff;font-weight:700;padding:14px 28px;border-radius:10px;text-decoration:none;font-size:15px;">Redefinir Senha →</a>
+        <p style="color:#94a3b8;font-size:12px;margin:24px 0 0;">Este link expira em <strong>30 minutos</strong>. Se você não solicitou a redefinição, ignore este e-mail.</p>
+      </div>
+    </div>
+    """
+    msg.attach(MIMEText(html, "html"))
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, to_email, msg.as_string())
+    except Exception as e:
+        print(f"[EMAIL ERROR] {e}")
+        raise HTTPException(status_code=500, detail="Erro ao enviar e-mail. Tente novamente mais tarde.")
 
 def get_password_hash(password: str):
     return pwd_context.hash(password)
@@ -401,6 +442,64 @@ def delete_avatar(request: Request):
 def logout(response: Response):
     response.delete_cookie("vj_access_token")
     return {"message": "Logout realizado com sucesso"}
+
+# ---------------------------------------------
+# REDEFINIÇÃO DE SENHA (Solicitar + Confirmar)
+# ---------------------------------------------
+@app.post("/api/usuarios/solicitar-reset-senha")
+def solicitar_reset_senha(body: dict, db: Session = Depends(get_db)):
+    email = (body.get("email") or "").strip().lower()
+    if not email:
+        raise HTTPException(status_code=400, detail="E-mail obrigatório.")
+
+    user = db.query(models.Usuario).filter(models.Usuario.email == email).first()
+    # Por segurança: não revelamos se o e-mail existe ou não
+    if not user:
+        return {"message": "Se esse e-mail estiver cadastrado, você receberá as instruções em breve."}
+
+    # Gera token JWT de 30 minutos com propósito específico
+    expires = datetime.now(timezone.utc) + timedelta(minutes=30)
+    token = jwt.encode(
+        {"sub": str(user.id), "purpose": "password_reset", "exp": expires},
+        SECRET_KEY,
+        algorithm=ALGORITHM
+    )
+
+    send_reset_email(user.email, token)
+    return {"message": "Se esse e-mail estiver cadastrado, você receberá as instruções em breve."}
+
+
+@app.post("/api/usuarios/confirmar-reset-senha")
+def confirmar_reset_senha(body: dict, db: Session = Depends(get_db)):
+    token    = (body.get("token") or "").strip()
+    nova_senha = (body.get("nova_senha") or "").strip()
+
+    if not token or not nova_senha:
+        raise HTTPException(status_code=400, detail="Token e nova senha são obrigatórios.")
+
+    if len(nova_senha) < 8:
+        raise HTTPException(status_code=400, detail="A senha deve ter no mínimo 8 caracteres.")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=400, detail="Link expirado. Solicite um novo.")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=400, detail="Link inválido.")
+
+    if payload.get("purpose") != "password_reset":
+        raise HTTPException(status_code=400, detail="Token inválido para esta operação.")
+
+    user_id = payload.get("sub")
+    user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    # Atualiza a senha no banco
+    user.senha_hash = get_password_hash(nova_senha[:72])
+    db.commit()
+
+    return {"message": "Senha redefinida com sucesso!"}
 
 # ---------------------------------------------
 # ROTAS DE AUTENTICAÇÃO (FRONTEND ADMIN COMPATÍVEL)

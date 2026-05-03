@@ -40,19 +40,44 @@
   function openCloseSidebar() {
     const sidebar = qs("sidebar");
     const btn = qs("btnMenu");
+    const icon = qs("menuIcon");
     if (!sidebar || !btn) return;
 
     const open = sidebar.getAttribute("data-open") === "true";
     const next = !open;
     sidebar.setAttribute("data-open", String(next));
     btn.setAttribute("aria-expanded", String(next));
+
+    if (icon) {
+      if (next) {
+        icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+      } else {
+        icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+      }
+    }
   }
 
   function bindMobileMenu() {
     const btn = qs("btnMenu");
+    const overlay = document.querySelector(".sidebar-overlay");
     if (!btn) return;
 
     btn.addEventListener("click", openCloseSidebar);
+
+    // Fecha ao clicar fora (overlay)
+    if (overlay) {
+      overlay.addEventListener("click", () => {
+        const sidebar = qs("sidebar");
+        const icon = qs("menuIcon");
+        if (sidebar) {
+          sidebar.setAttribute("data-open", "false");
+          btn.setAttribute("aria-expanded", "false");
+          if (icon) {
+            icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          }
+        }
+      });
+    }
 
     document.addEventListener("click", (e) => {
       const sidebar = qs("sidebar");
@@ -680,6 +705,17 @@
     bindFiltersPanel();
     bindLocationFilter();
 
+    // ✅ Toggle de Filtros no Mobile (Abrir/Fechar)
+    const filtersHead = document.querySelector('.filters-head');
+    const filtersBody = document.querySelector('.filters-body');
+    if (filtersHead && filtersBody) {
+      filtersHead.style.cursor = "pointer";
+      filtersHead.addEventListener('click', () => {
+        const isVisible = window.getComputedStyle(filtersBody).display !== "none";
+        filtersBody.style.display = isVisible ? "none" : "block";
+      });
+    }
+
     // Tentar pegar localização ao carregar
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
@@ -701,6 +737,25 @@
     // ✅ Filtros de acessibilidade — atualiza ao clicar em qualquer checkbox
     document.querySelectorAll('input[data-acc]').forEach(cb => {
       cb.addEventListener('change', aplicarFiltros);
+    });
+
+    // ✅ Filtros de Categorias (Botões laterais)
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Remove 'active' de todos e coloca no clicado
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Pega o texto do botão para filtrar
+        const tipoText = btn.innerText.trim();
+        const selectTipo = qs("tipo");
+        if (selectTipo) {
+          selectTipo.value = tipoText;
+          aplicarFiltros();
+        }
+      });
     });
   }
 

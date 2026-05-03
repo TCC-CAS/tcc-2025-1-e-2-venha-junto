@@ -22,7 +22,7 @@ body {
 /* SIDEBAR LARANJA */
 .dash-sidebar {
   width: 280px;
-  background: #f97316; /* Laranja VJ */
+  background: #F5892A; /* Laranja VJ */
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@ body {
   width: 32px;
   height: 32px;
   font-size: 14px;
-  background: #f97316;
+  background: #F5892A;
   color: #fff;
 }
 .dash-user-info strong {
@@ -353,7 +353,7 @@ body {
 .c-checkbox input {
   width: 16px;
   height: 16px;
-  accent-color: #f97316;
+  accent-color: #F5892A;
   cursor: pointer;
 }
 .c-label-text {
@@ -388,7 +388,7 @@ body {
   transition: background 0.2s;
 }
 .btn-criar:hover {
-  background: #f97316;
+  background: #F5892A;
 }
 
 /* CONTEUDO E SEÇÕES */
@@ -476,7 +476,7 @@ body {
 }
 .orange {
   background: #fff7ed;
-  color: #ea580c;
+  color: #E6730E;
 }
 .yellow {
   background: #fefce8;
@@ -538,7 +538,7 @@ body {
   margin: 0;
 }
 .btn-orange-small {
-  background: #f97316;
+  background: #F5892A;
   color: #fff;
   border: none;
   font-size: 14px;
@@ -550,7 +550,7 @@ body {
   transition: 0.2s;
 }
 .btn-orange-small:hover {
-  background: #ea580c;
+  background: #E6730E;
 }
 
 /* Review Faux List */
@@ -623,7 +623,7 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: #ea580c;
+  background: #E6730E;
   border-radius: 4px 4px 0 0;
 }
 .bar-label {
@@ -655,7 +655,7 @@ body {
   background: #fed7aa;
 }
 .dot.dark {
-  background: #ea580c;
+  background: #E6730E;
 }
 
 /* LISTAGEM DE LOCAIS (Preview Simples) */
@@ -853,7 +853,7 @@ body {
   overflow: hidden;
 }
 .hbar-fill {
-  background: #f97316; /* Laranja da marca */
+  background: #F5892A; /* Laranja da marca */
   height: 100%;
   border-radius: 99px;
   display: flex;
@@ -904,7 +904,7 @@ body {
   width: 100%;
 }
 .dash-input:focus {
-  border-color: #f97316;
+  border-color: #F5892A;
   background: #fff;
 }
 .style-button-config {
@@ -935,8 +935,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f97316;
-  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.1);
+  color: #F5892A;
+  box-shadow: 0 2px 4px rgba(245, 137, 42, 0.1);
   flex-shrink: 0;
 }
 .plan-icon-wrap svg {
@@ -1144,7 +1144,7 @@ body {
   background: #f8fafc;
 }
 .vis-opcao.selected {
-  border-color: #f97316;
+  border-color: #F5892A;
   background: #fff7ed;
 }
 .vis-opcao.selected .vis-opcao-radio::after {
@@ -1169,13 +1169,13 @@ body {
   justify-content: center;
 }
 .vis-opcao.selected .vis-opcao-radio {
-  border-color: #f97316;
+  border-color: #F5892A;
 }
 .vis-opcao-radio::after {
   content: "";
   width: 10px;
   height: 10px;
-  background: #f97316;
+  background: #F5892A;
   border-radius: 50%;
   opacity: 0;
   transform: scale(0);
@@ -1244,7 +1244,7 @@ body {
   outline: none;
 }
 .vis-date-block input:focus {
-  border-color: #f97316;
+  border-color: #F5892A;
 }
 
 /* Aviso de cupons ativos */
@@ -1287,7 +1287,7 @@ body {
   color: #0f172a;
 }
 .btn-vis-confirmar {
-  background: #f97316;
+  background: #F5892A;
   border: none;
   color: #fff;
   padding: 10px 24px;
@@ -1298,7 +1298,7 @@ body {
   transition: 0.2s;
 }
 .btn-vis-confirmar:hover {
-  background: #ea580c;
+  background: #E6730E;
 }
 .btn-vis-confirmar.danger-action {
   background: #ef4444;

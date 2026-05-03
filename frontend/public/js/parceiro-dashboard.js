@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function carregarDadosParceiro() {
     try {
       // 1. Carregar Parceiro Logado
-      const resMe = await fetch("http://127.0.0.1:8000/partner-auth/me", {credentials: 'include'});
+      const resMe = await fetch("/partner-auth/me", {credentials: 'include'});
       if (!resMe.ok) {
          if (resMe.status === 401) window.location.href = "./index.html"; // Redireciona se não estiver logado
          throw new Error("Erro ao buscar parceiro");
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (inputEmail) inputEmail.value = parceiro.email || "";
 
       // 2. Carregar Locais Cadastrados
-      const resLocais = await fetch("http://127.0.0.1:8000/api/estabelecimentos", {credentials: 'include'});
+      const resLocais = await fetch("/api/estabelecimentos", {credentials: 'include'});
       if (!resLocais.ok) throw new Error("Erro ao buscar locais");
       const locais = await resLocais.json();
 
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // 3. Buscar avaliações de cada local
       for (const loc of locais) {
           try {
-              const resRev = await fetch(`http://127.0.0.1:8000/public/places/${loc.id}/reviews`);
+              const resRev = await fetch(`/public/places/${loc.id}/reviews`);
               if (resRev.ok) {
                   const revs = await resRev.json();
                   revs.forEach(r => r.local_nome = loc.nome); // Anexa o nome do local na review
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
               // Buscar métricas de TODOS os locais e somar por data
               for (const loc of locais) {
-                  const resMet = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${loc.id}/metricas-7dias`, {credentials: 'include'});
+                  const resMet = await fetch(`/api/estabelecimentos/${loc.id}/metricas-7dias`, {credentials: 'include'});
                   if (resMet.ok) {
                       const dados = await resMet.json();
                       dados.forEach(m => {
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Fallback para imagem
           let imgUrl = "./assets/img/placeholder-place.png";
           if (loc.foto_perfil) {
-              imgUrl = `http://127.0.0.1:8000/api/estabelecimentos/fotos/${loc.foto_perfil}`;
+              imgUrl = `/api/estabelecimentos/fotos/${loc.foto_perfil}`;
           }
 
           const cls = getStatusStyle(loc.status);
@@ -625,7 +625,7 @@ async function salvarNovoCupom() {
   }
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}/cupons`, {
+    const res = await fetch(`/api/estabelecimentos/${estabId}/cupons`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -675,7 +675,7 @@ async function salvarNovoCupom() {
 
 async function carregarCuponsDoEstab(estabId) {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}/cupons`, {
+    const res = await fetch(`/api/estabelecimentos/${estabId}/cupons`, {
       credentials: "include",
     });
     if (!res.ok) return [];
@@ -688,7 +688,7 @@ async function carregarCuponsDoEstab(estabId) {
 async function deletarCupom(cupomId) {
   if (!confirm("Tem certeza que deseja excluir este cupom?")) return;
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/cupons/${cupomId}`, {
+    const res = await fetch(`/api/cupons/${cupomId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -850,7 +850,7 @@ async function confirmarAcaoVisibilidade() {
         btn.textContent = originalText;
         return;
       }
-      const res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${_visEstabId}/visibilidade`, {
+      const res = await fetch(`/api/estabelecimentos/${_visEstabId}/visibilidade`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -870,7 +870,7 @@ async function confirmarAcaoVisibilidade() {
     // OPÇÃO 2: Desativar
     else if (_visOpcaoSelecionada === 2) {
       // O confirm() nativo foi removido porque o modal já serve como confirmação pro usuário
-      const res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${_visEstabId}/visibilidade`, {
+      const res = await fetch(`/api/estabelecimentos/${_visEstabId}/visibilidade`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -891,7 +891,7 @@ async function confirmarAcaoVisibilidade() {
     else if (_visOpcaoSelecionada === 3) {
       // O confirm() nativo foi removido porque o usuário já leu o aviso na própria UI da modal
       
-      let res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${_visEstabId}`, {
+      let res = await fetch(`/api/estabelecimentos/${_visEstabId}`, {
         method: "DELETE",
         credentials: "include"
       });
@@ -899,7 +899,7 @@ async function confirmarAcaoVisibilidade() {
       // Se tem cupons ativos, o backend retorna 409. Como a interface já avisa o usuário (no alerta amarelo),
       // podemos simplesmente forçar a deleção automaticamente chamando novamente com force=true
       if (res.status === 409) {
-        res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${_visEstabId}?force=true`, {
+        res = await fetch(`/api/estabelecimentos/${_visEstabId}?force=true`, {
           method: "DELETE",
           credentials: "include"
         });
@@ -947,7 +947,7 @@ async function reativarEstab(estabId, btnElement) {
   }
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}/visibilidade`, {
+    const res = await fetch(`/api/estabelecimentos/${estabId}/visibilidade`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -1001,7 +1001,7 @@ window.solicitarExclusao = function(id) {
 
 function openDeactivateModal() {
     if (confirm("Deseja realmente desativar sua conta temporariamente? \n\nSeus locais serão ocultados imediatamente, mas seus dados serão preservados para quando você desejar voltar.")) {
-        fetch("http://127.0.0.1:8000/partner-auth/deactivate", {
+        fetch("/partner-auth/deactivate", {
             method: "POST",
             credentials: "include"
         })
@@ -1024,7 +1024,7 @@ async function checkDeletionPendencies() {
     btn.innerHTML = "Verificando...";
 
     try {
-        const res = await fetch("http://127.0.0.1:8000/partner-auth/pendencies", { credentials: "include" });
+        const res = await fetch("/partner-auth/pendencies", { credentials: "include" });
         const data = await res.json();
 
         const modal = document.getElementById("modalExcluirConta");
@@ -1096,7 +1096,7 @@ async function confirmDeleteAccount() {
     btn.textContent = "Excluindo...";
 
     try {
-        const res = await fetch("http://127.0.0.1:8000/partner-auth/delete-request", {
+        const res = await fetch("/partner-auth/delete-request", {
             method: "POST",
             credentials: "include"
         });
@@ -1117,3 +1117,4 @@ async function confirmDeleteAccount() {
         btn.textContent = "Excluir permanentemente";
     }
 }
+

@@ -105,7 +105,7 @@
           const locais = await window.apiPartnerListPlaces();
           hasLocais = (locais && Array.isArray(locais) && locais.length > 0);
         } else {
-          const locRes = await fetch("http://127.0.0.1:8000/api/estabelecimentos", {credentials: 'include'});
+          const locRes = await fetch("/api/estabelecimentos", {credentials: 'include'});
           if (locRes.ok) {
             const locaisData = await locRes.json();
             hasLocais = (locaisData && Array.isArray(locaisData) && locaisData.length > 0);
@@ -128,3 +128,4 @@
     }
   });
 })();
+

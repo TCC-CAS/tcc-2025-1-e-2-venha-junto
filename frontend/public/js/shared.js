@@ -3,7 +3,7 @@
 // ✅ Sem localStorage
 // ✅ Exporta buildCard para ser usado no home.js
 
-const API_BASE = window.VJ_API_BASE || "http://127.0.0.1:8000";
+const API_BASE = window.VJ_API_BASE || "";
 
 /** Tenta descobrir se existe usuário logado via cookie HttpOnly */
 async function isLoggedIn() {
@@ -165,3 +165,4 @@ export function buildCard(place) {
 
   return card;
 }
+

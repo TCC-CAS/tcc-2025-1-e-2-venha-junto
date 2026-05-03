@@ -1,7 +1,7 @@
 /* frontend/public/css/local-detalhes.css */
 
 :root {
-  --primary: #ea580c;
+  --primary: #E6730E;
   --secondary: #2563eb;
   --bg: #f8fafc;
   --card-bg: #ffffff;
@@ -175,7 +175,7 @@ body {
   color: var(--text-main);
 }
 
-/* Detalhes do Endereço */
+/* Detalhes do EndereÃ§o */
 .card-details {
   border-top: 1px solid var(--line);
   padding-top: 20px;
@@ -193,7 +193,7 @@ body {
   font-size: 13px;
 }
 
-/* 3. SEÇÕES EM CARDS */
+/* 3. SEÃÃES EM CARDS */
 .content-sections {
   display: flex;
   flex-direction: column;
@@ -274,7 +274,7 @@ body {
   background: #22c55e;
 }
 
-/* Avaliações */
+/* AvaliaÃ§Ãµes */
 .btn-review-action {
   background: var(--secondary);
   color: #fff;
@@ -457,18 +457,55 @@ body {
   .detail-header { flex-direction: column; gap: 8px; }
 }
 
-/* 🎟️ CUPOM — animação do badge */
+/* ðï¸ CUPOM â animaÃ§Ã£o do badge */
 @keyframes pulse-badge {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.4); }
-  50% { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(234, 88, 12, 0); }
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 115, 14, 0.4); }
+  50% { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(230, 115, 14, 0); }
 }
 
-/* botão do código ao passar o mouse */
+/* botÃ£o do cÃ³digo ao passar o mouse */
 #cupomCodigo:hover {
   background: #fff7ed !important;
-  border-color: #ea580c !important;
+  border-color: #E6730E !important;
   transform: scale(1.02);
 }
 #cupomCodigo:active {
   transform: scale(0.98);
+}
+
+/* ? MOBILE FIXES  Reviews e Formulário de Avaliação */
+@media (max-width: 640px) {
+  .card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .card-header .card-icon-title h2 {
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  .btn-review-action {
+    padding: 8px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .vj-reviewBox {
+    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+  }
+  .vj-input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+  }
+  .vj-stars {
+    gap: 8px;
+    justify-content: center;
+  }
+  .star-btn {
+    font-size: 28px !important;
+    padding: 4px !important;
+  }
 }

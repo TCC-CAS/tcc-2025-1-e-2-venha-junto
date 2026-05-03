@@ -1,6 +1,7 @@
 /* frontend/public/js/local-detalhes.js */
 
-const API_BASE = "http://127.0.0.1:8000";
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
+const API_BASE = isLocal ? "http://127.0.0.1:8000" : "";
 
 (function () {
   const params = new URLSearchParams(window.location.search);
@@ -398,3 +399,5 @@ const API_BASE = "http://127.0.0.1:8000";
     };
   }
 })();
+
+

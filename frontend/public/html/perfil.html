@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
@@ -6,6 +6,7 @@
     <title>Venha Junto • Meu Perfil</title>
 
     <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/mobile-fixes.css" />
     <link rel="stylesheet" href="../css/perfil.css" />
   <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
 </head>
@@ -13,128 +14,66 @@
   <body class="perfil-page">
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-    <!-- Topbar mobile -->
+    <!-- Topbar mobile (Design Premium) -->
     <header class="mobile-topbar" role="banner">
-      <button
-        id="btnMenu"
-        class="btn btn--ghost"
-        aria-controls="sidebar"
-        aria-expanded="false"
-        type="button"
-      >
-        ☰ Menu
-      </button>
+      <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
+        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+        <div class="brand-text mobile-brand-text">
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível</span>
+        </div>
+      </div>
 
-      <div class="title">Venha Junto</div>
-
-      <a class="btn btn--ghost" href="./index.html">Início</a>
+      <div class="mobile-right">
+        <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <a href="./usuario-login.html" class="user-circle" style="width: 36px; height: 36px; background: #94a3b8; text-decoration: none;">👤</a>
+        <button id="btnMenu" class="btn-icon" style="border:none; background:transparent; width: 32px;" aria-label="Abrir menu">
+          <svg id="menuIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
     </header>
 
     <div class="page">
-      <!-- Sidebar -->
-      <aside
-        id="sidebar"
-        class="sidebar"
-        data-open="false"
-        aria-label="Navegação principal"
-      >
+      <!-- Sidebar / Desktop Header -->
+      <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
         <div class="brand">
-          <div class="logo" aria-hidden="true">
-            <img
-              src="../../assets/img/venha_junto_logo.png"
-              alt="Logo Venha Junto"
-              class="logo-img"
-              fetchpriority="high"
-              decoding="async"
-              loading="eager"
-            />
-          </div>
-          <div>
+          <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+          <div class="brand-text">
             <strong>Venha Junto</strong>
             <span>Turismo Acessível em São Paulo</span>
           </div>
         </div>
 
-        <p class="nav-title">Área pública</p>
-        <nav class="menu" aria-label="Menu público">
+        <nav class="menu">
           <a href="./index.html">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Início
           </a>
           <a href="./explorar.html">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M1 6v16l7-4.06L15 22l8-4.06V2L15 6.06 8 2 1 6z" />
-              <path d="M8 2v16" />
-              <path d="M15 6v16" />
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
             Explorar
           </a>
           <a href="./favoritos.html">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-              />
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             Favoritos
           </a>
           <a href="./parceiro.html">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             Sou Parceiro
           </a>
         </nav>
 
-        <!-- ✅ Ações de Usuário (Dinâmico) -->
-        <div id="userActions" class="user-actions">
-          <a href="./usuario-login.html" class="btn-top-login">Entrar</a>
-          <a href="./usuario-criar-conta.html" class="btn-top-signup"
-            >Cadastrar</a
-          >
+        <div class="header-actions">
+          <div id="vj-translate-host"></div>
+          <div class="user-info">
+            <a href="./usuario-login.html" class="user-circle" style="background: #94a3b8; text-decoration: none;">👤</a>
+            <span>Entrar</span>
+          </div>
         </div>
-      </aside>
+      </header>
 
       <!-- Conteúdo -->
       <main id="conteudo" class="main" role="main">
@@ -156,16 +95,30 @@
             <!-- Main Profile Card -->
             <section class="perfil-card">
               <div class="perfil-card-header">
-                <div class="avatar-large" id="avatarContainer">
-                  <span id="avatarFallbackHero">B</span>
-                  <img id="avatarImgHero" alt="Sua foto de perfil" style="display: none;" />
-                  <div class="avatar-overlay" id="avatarOverlay">📷</div>
-                  <input
-                    id="avatarInput"
-                    type="file"
-                    accept="image/png,image/jpeg,image/webp"
-                    style="display: none"
-                  />
+                <!-- Avatar + botão remover (coluna) -->
+                <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                  <div class="avatar-large" id="avatarContainer">
+                    <span id="avatarFallbackHero">B</span>
+                    <img id="avatarImgHero" alt="Sua foto de perfil" style="display: none;" />
+                    <div class="avatar-overlay" id="avatarOverlay">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                      Alterar
+                    </div>
+                    <input
+                      id="avatarInput"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      style="display: none"
+                    />
+                  </div>
+                  <!-- Botão remover foto -->
+                  <button id="btnRemoverFoto" title="Remover foto"
+                    style="display:none; background:rgba(0,0,0,0.25); border:none; cursor:pointer; color:#fff; font-size:11px; font-weight:700; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; transition:background 0.2s; white-space:nowrap;"
+                    onmouseover="this.style.background='rgba(239,68,68,0.7)'"
+                    onmouseout="this.style.background='rgba(0,0,0,0.25)'">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    Remover foto
+                  </button>
                 </div>
                 <!-- Previne flash aplicando o cache imediatamente -->
                 <script>
@@ -177,6 +130,7 @@
                       imgHero.src = cachedUrl;
                       imgHero.style.display = "block";
                       imgHero.parentElement.style.background = "transparent";
+                      document.getElementById("btnRemoverFoto").style.display = "flex";
                     }
                   })();
                 </script>
@@ -223,6 +177,7 @@
                     id="telefone"
                     type="tel"
                     placeholder="(11) 99999-9999"
+                    maxlength="15"
                   />
                 </div>
 
@@ -306,6 +261,14 @@
         const fallback = document.getElementById("avatarFallbackHero");
 
         let currentObjectUrl = null;
+        const btnRemover = document.getElementById("btnRemoverFoto");
+
+        function showRemoveBtn() {
+          if (btnRemover) btnRemover.style.display = "flex";
+        }
+        function hideRemoveBtn() {
+          if (btnRemover) btnRemover.style.display = "none";
+        }
 
         function applyPreview(url) {
           if (fallback) fallback.style.display = "none";
@@ -314,6 +277,7 @@
             img.style.display = "block";
             img.parentElement.style.background = "transparent";
           }
+          showRemoveBtn();
         }
 
         function clearPreview() {
@@ -324,6 +288,7 @@
             img.parentElement.style.background = ""; // falls back to css orange
           }
           if (fallback) fallback.style.display = "block";
+          hideRemoveBtn();
         }
 
         async function uploadToBackend(file) {
@@ -331,7 +296,7 @@
           fd.append("file", file);
 
           const res = await fetch(
-            "http://127.0.0.1:8000/api/usuarios/me/avatar",
+            "/api/usuarios/me/avatar",
             {
               method: "POST",
               body: fd,
@@ -341,10 +306,28 @@
 
           if (!res.ok) throw new Error("Erro ao enviar avatar.");
 
-          applyPreview(
-            "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now(),
-          );
+          applyPreview("/api/usuarios/me/avatar?t=" + Date.now());
           document.dispatchEvent(new Event("userbox:refresh"));
+        }
+
+        // ── Remove button ────────────────────────────────────────────────
+        if (btnRemover) {
+          btnRemover.addEventListener("click", async (e) => {
+            e.stopPropagation(); // don't trigger avatar click
+            if (!confirm("Tem certeza que deseja remover sua foto de perfil?")) return;
+            try {
+              const res = await fetch("/api/usuarios/me/avatar", {
+                method: "DELETE",
+                credentials: "include",
+              });
+              if (!res.ok) throw new Error("Erro ao remover foto.");
+              localStorage.removeItem("vj_last_avatar_url");
+              clearPreview();
+              document.dispatchEvent(new Event("userbox:refresh"));
+            } catch (err) {
+              alert("Não foi possível remover a foto. Tente novamente.");
+            }
+          });
         }
 
         if (container && input) {
@@ -371,7 +354,7 @@
         if (cachedUrl) applyPreview(cachedUrl);
 
         window.addEventListener("load", () => {
-          const url = "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now();
+          const url = "/api/usuarios/me/avatar?t=" + Date.now();
           const imgTest = new Image();
           imgTest.onload = () => {
              applyPreview(url);
@@ -386,9 +369,85 @@
     </script>
 
     <script src="../js/api.js" defer></script>
-    <script src="../js/userbox.js" defer></script>
-
     <script src="../js/perfil.js" defer></script>
     <script src="../js/vlibras.js" defer></script>
+    <!-- ✅ Failsafe Menu & Accessibility Force -->
+    <script>
+      (function() {
+        const btn = document.getElementById('btnMenu');
+        const sidebar = document.getElementById('sidebar');
+        const icon = document.getElementById('menuIcon');
+        
+        const toggleMenu = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (!sidebar) return;
+          const isOpen = sidebar.getAttribute('data-open') === 'true';
+          const next = !isOpen;
+          sidebar.setAttribute('data-open', String(next));
+          
+          if (icon) {
+            if (next) {
+              icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            } else {
+              icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+            }
+          }
+        };
+
+        if (btn && sidebar) {
+          btn.addEventListener('click', toggleMenu);
+          btn.addEventListener('touchend', function(e){ e.preventDefault(); toggleMenu(); });
+        }
+
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay && sidebar) {
+          overlay.addEventListener('click', () => {
+            sidebar.setAttribute('data-open', 'false');
+            if (icon) icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          });
+        }
+
+        function forceLeft() {
+          const uway = document.querySelector('div[id^="userway"], #userwayAccessibilityWidget, .uway');
+          const vlibras = document.querySelector('[vw]');
+          if (uway) {
+            uway.style.setProperty('left', '10px', 'important');
+            uway.style.setProperty('right', 'auto', 'important');
+            uway.style.setProperty('bottom', '80px', 'important');
+          }
+          if (vlibras) {
+            vlibras.style.setProperty('left', '10px', 'important');
+            vlibras.style.setProperty('right', 'auto', 'important');
+            vlibras.style.setProperty('bottom', '100px', 'important');
+          }
+        }
+        setInterval(forceLeft, 1000);
+      })();
+    </script>
+    <!-- ✅ Tradução & Idiomas -->
+    <script src="../js/i18n.js" defer></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+  <script src="../js/userbox.js" defer></script>
+  
+    <!-- Navegação de rodapé (Mobile only via CSS) -->
+    <nav class="mobile-nav" role="navigation" aria-label="Navegação rápida">
+      <a href="./index.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Início
+      </a>
+      <a href="./explorar.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explorar
+      </a>
+      <a href="./favoritos.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+      <a href="./parceiro.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parceiro
+      </a>
+    </nav>
+
   </body>
 </html>

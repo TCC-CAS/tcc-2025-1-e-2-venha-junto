@@ -1,6 +1,7 @@
 // frontend/public/js/favoritos.js
 (function () {
-  const API_BASE = window.VJ_API_BASE || "http://127.0.0.1:8000";
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || !window.location.hostname;
+  const API_BASE = isLocal ? "" : "";
 
   function qs(id) {
     return document.getElementById(id);
@@ -345,3 +346,4 @@
 
   main();
 })();
+

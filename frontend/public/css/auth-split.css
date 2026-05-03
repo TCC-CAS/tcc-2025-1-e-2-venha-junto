@@ -1,6 +1,7 @@
 /* New Split Layout for Auth Pages */
 body {
   margin: 0;
+  padding-top: 0 !important;
   font-family:
     ui-sans-serif,
     system-ui,
@@ -21,7 +22,7 @@ body {
 /* Left Hero Section (Orange) */
 .vj-split-left {
   flex: 1;
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #F5892A, #E6730E);
   color: #fff;
   position: relative;
   display: flex;
@@ -45,6 +46,7 @@ body {
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: fit-content;
+  margin-bottom: 24px;
   transition:
     background 0.2s,
     transform 0.2s;
@@ -171,8 +173,8 @@ body {
 }
 
 .vj-input-wrapper input:focus {
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  border-color: #F5892A;
+  box-shadow: 0 0 0 3px rgba(245, 137, 42, 0.15);
 }
 
 .vj-eye-btn {
@@ -214,7 +216,7 @@ body {
   margin-top: 2px;
   width: 16px;
   height: 16px;
-  accent-color: #f97316;
+  accent-color: #F5892A;
 }
 
 .vj-checkbox span {
@@ -224,7 +226,7 @@ body {
 }
 
 .vj-checkbox a {
-  color: #f97316;
+  color: #F5892A;
   font-weight: 700;
   text-decoration: none;
 }
@@ -237,7 +239,7 @@ body {
   margin-top: 12px;
   height: 50px;
   width: 100%;
-  background: #f97316;
+  background: #F5892A;
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -248,7 +250,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 8px 20px rgba(245, 137, 42, 0.3);
   transition:
     transform 0.15s,
     box-shadow 0.15s,
@@ -256,9 +258,9 @@ body {
 }
 
 .vj-submit-btn:hover {
-  background: #ea580c;
+  background: #E6730E;
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 10px 24px rgba(245, 137, 42, 0.4);
 }
 
 .vj-submit-btn:active {
@@ -274,7 +276,7 @@ body {
 }
 
 .vj-form-footer a {
-  color: #f97316;
+  color: #F5892A;
   font-weight: 700;
   text-decoration: none;
   margin-left: 4px;
@@ -299,11 +301,16 @@ body {
 
   .vj-split-left {
     flex: none;
-    padding: 30px 20px;
+    padding: 20px 20px 16px;
   }
 
   .vj-split-left-content h1 {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .vj-split-left-content p {
+    margin: 0 0 16px;
+    font-size: 14px;
   }
 
   .vj-decorative-block {
@@ -311,7 +318,7 @@ body {
   }
 
   .vj-split-right {
-    padding: 30px 20px;
+    padding: 20px 20px 16px;
     align-items: flex-start;
   }
 }
