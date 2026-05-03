@@ -14,6 +14,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import List, Optional, Dict
 from dotenv import load_dotenv
+import boto3
+from botocore.exceptions import ClientError
 
 import models
 import schemas
@@ -24,8 +26,22 @@ from utils.validation import validar_documento_com_receita
 load_dotenv()
 
 
-os.makedirs("avatars", exist_ok=True)
-os.makedirs("estabelecimentos_fotos", exist_ok=True)
+# AWS Clients Initialization
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_REGION", "sa-east-1")
+)
+
+rekognition = boto3.client(
+    'rekognition',
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_REGION", "sa-east-1")
+)
+
+S3_BUCKET = os.getenv("AWS_S3_BUCKET")
 
 # Descomentado para o SQLite criar as tabelas na AWS automaticamente.
 # No SQL Server local isso não interfere se as tabelas já existirem.
@@ -1156,6 +1172,33 @@ def validar_imagem(file: UploadFile):
         raise HTTPException(status_code=413, detail="A imagem é muito grande (máximo 10MB).")
     
     file.file.seek(0)
+    
+    # --- Segurança: Moderação com IA (Rekognition) ---
+    try:
+        # Lê os bytes reais para a IA
+        img_bytes = file.file.read()
+        file.file.seek(0) # Volta pro início para o upload
+        
+        moderation_response = rekognition.detect_moderation_labels(
+            Image={'Bytes': img_bytes},
+            MinConfidence=75
+        )
+        
+        labels = moderation_response.get('ModerationLabels', [])
+        if labels:
+            # Se encontrar algo proibido (Nudity, Violence, etc)
+            label_names = [l['Name'] for l in labels]
+            print(f"[SECURITY] Imagem bloqueada por IA: {label_names}")
+            raise HTTPException(
+                status_code=400, 
+                detail="A imagem enviada contém conteúdo inapropriado e foi bloqueada pelo sistema de segurança."
+            )
+    except ClientError as e:
+        print(f"[AWS ERROR] Falha na moderação: {e}")
+        # Em caso de erro na API da AWS, decidimos se deixamos passar ou bloqueamos. 
+        # Aqui deixaremos passar para não travar o sistema se a API cair.
+        pass
+
     return True
 
 @app.post("/api/estabelecimentos/{id}/foto-perfil")
@@ -1181,16 +1224,18 @@ def upload_foto_perfil(id: int, request: Request, file: UploadFile = File(...), 
     
     ext = os.path.splitext(file.filename)[1].lower()
     filename = f"perfil_{id}_{uuid.uuid4().hex}{ext}"
-    filepath = os.path.join("estabelecimentos_fotos", filename)
     
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-        
-    # Deletar foto antiga se existir
-    if db_estab.foto_perfil:
-        old_path = os.path.join("estabelecimentos_fotos", db_estab.foto_perfil)
-        if os.path.exists(old_path):
-            os.remove(old_path)
+    # Upload para o S3
+    try:
+        s3_client.upload_fileobj(
+            file.file,
+            S3_BUCKET,
+            f"fotos/{filename}",
+            ExtraArgs={'ACL': 'public-read', 'ContentType': file.content_type}
+        )
+    except Exception as e:
+        print(f"[S3 ERROR] {e}")
+        raise HTTPException(status_code=500, detail="Erro ao enviar imagem para a nuvem.")
             
     db_estab.foto_perfil = filename
     db.commit()
@@ -1220,10 +1265,18 @@ def upload_galeria(id: int, request: Request, file: UploadFile = File(...), db: 
     
     ext = os.path.splitext(file.filename)[1].lower()
     filename = f"galeria_{id}_{uuid.uuid4().hex}{ext}"
-    filepath = os.path.join("estabelecimentos_fotos", filename)
     
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # Upload para o S3
+    try:
+        s3_client.upload_fileobj(
+            file.file,
+            S3_BUCKET,
+            f"fotos/{filename}",
+            ExtraArgs={'ACL': 'public-read', 'ContentType': file.content_type}
+        )
+    except Exception as e:
+        print(f"[S3 ERROR] {e}")
+        raise HTTPException(status_code=500, detail="Erro ao enviar imagem para a nuvem.")
         
     # Salvar na galeria (armazenado como string separada por vírgula)
     fotos = db_estab.fotos_galeria.split(",") if db_estab.fotos_galeria else []
@@ -1448,10 +1501,15 @@ def upgrade_estabelecimento(id: int, payload: dict, request: Request, db: Sessio
 
 @app.get("/api/estabelecimentos/fotos/{filename}")
 def get_estabelecimento_foto(filename: str):
-    filepath = os.path.join("estabelecimentos_fotos", filename)
-    if not os.path.exists(filepath):
-        raise HTTPException(status_code=404, detail="Foto não encontrada")
-    return FileResponse(filepath)
+    """Redireciona para a foto no S3 ou serve local se existir (migração)"""
+    local_path = os.path.join("estabelecimentos_fotos", filename)
+    if os.path.exists(local_path):
+        return FileResponse(local_path)
+    
+    # Se não está local, redireciona para o S3
+    s3_url = f"https://{S3_BUCKET}.s3.{os.getenv('AWS_REGION', 'sa-east-1')}.amazonaws.com/fotos/{filename}"
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(s3_url)
 
 @app.delete("/api/estabelecimentos/{id}/fotos/{filename}")
 def deletar_foto(id: int, filename: str, request: Request, db: Session = Depends(get_db)):
