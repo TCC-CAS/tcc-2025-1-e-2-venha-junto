@@ -68,6 +68,7 @@ class ParceiroResponse(BaseModel):
     telefone: Optional[str] = None
     is_active: bool
     status: str = "ATIVO"
+    plano_ativo: Optional[str] = "Básico"
 
     class Config:
         from_attributes = True

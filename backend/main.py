@@ -722,6 +722,18 @@ def ler_parceiro_atual(request: Request, db: Session = Depends(get_db)):
     db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == partner_id).first()
     if not db_parceiro:
          raise HTTPException(status_code=401, detail="Parceiro não encontrado")
+    
+    # Calcula o plano ativo baseado na capacidade atual
+    capacidade = get_partner_capacity(db_parceiro.id, db)
+    # Encontra o nome do plano de volta do limite
+    plano_ativo = "Básico"
+    for nome, limites in PLAN_LIMITS.items():
+        if limites["max_establishments"] == capacidade["max_establishments"]:
+            plano_ativo = nome
+            break
+            
+    # Adiciona dinamicamente para o schema (Pydantic vai ler do objeto se setado)
+    db_parceiro.plano_ativo = plano_ativo
     return db_parceiro
 
 @app.patch("/partner-auth/me", response_model=schemas.ParceiroResponse)
