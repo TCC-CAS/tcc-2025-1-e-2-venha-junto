@@ -171,13 +171,24 @@ def get_partner_capacity(partner_id: int, db: Session, intended_plan: str = None
         models.Estabelecimento.status != "ARCHIVED"
     ).all()
     
+    # Mapeamento para aceitar o que vem do frontend (basico, pro, pro_plus)
+    plan_mapping = {
+        "basico": "Básico",
+        "pro": "Pro",
+        "pro_plus": "Pro Plus",
+        "Básico": "Básico",
+        "Pro": "Pro",
+        "Pro Plus": "Pro Plus"
+    }
+    
     tier_map = {"Básico": 0, "Pro": 1, "Pro Plus": 2}
     
-    # Plano inicial
-    melhor_plano = intended_plan if intended_plan else "Básico"
+    # Normaliza o plano pretendido
+    normalized_intended = plan_mapping.get(intended_plan, "Básico")
+    melhor_plano = normalized_intended
     
     for e in estabelecimentos:
-        plano_atual = e.plano_escolhido or "Básico"
+        plano_atual = plan_mapping.get(e.plano_escolhido, "Básico")
         if tier_map.get(plano_atual, 0) > tier_map.get(melhor_plano, 0):
             melhor_plano = plano_atual
             
