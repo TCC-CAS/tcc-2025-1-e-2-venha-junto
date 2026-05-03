@@ -323,7 +323,7 @@ def excluir_usuario_atual(request: Request, response: Response, db: Session = De
 # ROTAS DE AVATAR (UPLOAD, LEITURA E DELEÇÃO)
 # ---------------------------------------------
 @app.post("/api/usuarios/me/avatar")
-def upload_avatar(request: Request, file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_avatar(request: Request, file: UploadFile = File(...), db: Session = Depends(get_db)):
     token = request.cookies.get("vj_access_token")
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Não autenticado")
@@ -337,9 +337,28 @@ def upload_avatar(request: Request, file: UploadFile = File(...), db: Session = 
     
     filename = f"usuario_{user_id}.jpg"
     filepath = os.path.join("avatars", filename)
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-        
+
+    # Validate file type
+    allowed_types = {"image/jpeg", "image/png", "image/webp"}
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Tipo de arquivo inválido. Use JPG, PNG ou WEBP.")
+
+    try:
+        from PIL import Image as PILImage
+        import io
+        contents = await file.read()
+        if len(contents) > 5 * 1024 * 1024:  # 5MB limit
+            raise HTTPException(status_code=400, detail="Arquivo muito grande. Tamanho máximo: 5MB.")
+        image = PILImage.open(io.BytesIO(contents))
+        image = image.convert("RGB")
+        # Resize maintaining aspect ratio, max 512x512
+        image.thumbnail((512, 512), PILImage.LANCZOS)
+        image.save(filepath, "JPEG", quality=85)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Erro ao processar imagem: {str(e)}")
+
     return {"message": "Avatar atualizado com sucesso", "filename": filename}
 
 @app.get("/api/usuarios/me/avatar")
