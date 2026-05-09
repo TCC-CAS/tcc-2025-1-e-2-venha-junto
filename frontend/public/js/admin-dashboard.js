@@ -625,6 +625,7 @@ const VJ_API_BASE = (function() {
   async function apiUpdateSupportStatus(id, data) {
     return apiFetch(`/api/admin/suporte/chamados/${id}`, {
       method: "PATCH",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
   }

@@ -1239,8 +1239,10 @@ def atualizar_status_chamado(id: int, ticket_upd: schemas.SupportTicketUpdate, r
     if ticket_upd.admin_response:
         db_ticket.admin_response = ticket_upd.admin_response
         
+    db.add(db_ticket)
     db.commit()
-    return {"message": "Status atualizado com sucesso"}
+    db.refresh(db_ticket)
+    return {"message": "Chamado atualizado com sucesso", "status": db_ticket.status}
 
 # ---------------------------------------------
 # ROTAS DE FOTOS - ESTABELECIMENTOS
