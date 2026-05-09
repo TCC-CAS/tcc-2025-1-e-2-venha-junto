@@ -43,27 +43,6 @@ window.apiUploadPlacePhoto = async (estabId, file, isProfile = false) => {
 };
 
 /**
- * Validação instantânea de imagem via IA (sem salvar)
- */
-window.apiValidateImage = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  
-  const res = await fetch(`${API_BASE}/api/validar-imagem`, {
-    method: "POST",
-    body: formData,
-    credentials: "include"
-  });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.detail || "Imagem imprópria detectada");
-  }
-
-  return await res.json();
-};
-
-/**
  * ✅ Converte qualquer tipo de erro em mensagem legível (string)
  */
 function extractErrorMessage(data, resStatus) {

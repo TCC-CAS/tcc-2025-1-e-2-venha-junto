@@ -32,6 +32,22 @@ class Parceiro(Base):
     # Relacionamentos
     estabelecimentos = relationship("Estabelecimento", back_populates="parceiro")
 
+class SupportTicket(Base):
+    __tablename__ = "support_tickets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    partner_id = Column(Integer, ForeignKey("parceiros.id"), nullable=False)
+    title = Column(String(150), nullable=False)
+    category = Column(String(50), nullable=False)
+    priority = Column(String(20), nullable=False)
+    description = Column(Text, nullable=False)
+    status = Column(String(20), default="ABERTO") # ABERTO, EM_ANDAMENTO, RESOLVIDO, CANCELADO
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relacionamentos
+    partner = relationship("Parceiro")
+
 class Estabelecimento(Base):
     __tablename__ = "estabelecimentos"
 

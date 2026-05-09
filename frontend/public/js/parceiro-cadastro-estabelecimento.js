@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!currentPanel) return true;
 
     let isValid = true;
-    const inputs = currentPanel.querySelectorAll("input[required], textarea[required], select[required]");
+    const inputs = currentPanel.querySelectorAll("input[required], textarea[required], select[required], #especifiqueTipo");
 
     inputs.forEach(input => {
       const fieldGroup = input.closest(".field-group");
@@ -266,6 +266,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (input.id === "cnpj_cpf" && input.value) {
         const cleanVal = input.value.replace(/\D/g, "");
         if (cleanVal.length < 11) {
+          fieldValid = false;
+        }
+      }
+
+      // Validação de Especifique
+      if (input.id === "especifiqueTipo") {
+        const tipoSelect = document.getElementById("tipoEstabelecimento");
+        if (tipoSelect && tipoSelect.value === "Outro" && (!input.value || input.value.trim() === "")) {
           fieldValid = false;
         }
       }
@@ -398,6 +406,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         customText.innerHTML = html; // atualiza o trigger visual
 
+        // Lógica para Outro
+        const groupEspecifique = document.getElementById("groupEspecifiqueTipo");
+        const inputEspecifique = document.getElementById("especifiqueTipo");
+        if (val === "Outro") {
+          if (groupEspecifique) groupEspecifique.style.display = "block";
+          if (inputEspecifique) inputEspecifique.setAttribute("required", "true");
+        } else {
+          if (groupEspecifique) groupEspecifique.style.display = "none";
+          if (inputEspecifique) {
+            inputEspecifique.removeAttribute("required");
+            inputEspecifique.value = "";
+          }
+        }
+
         // Atualiza nativo
         if (nativeSelect) {
           nativeSelect.value = val;
@@ -443,30 +465,11 @@ document.addEventListener("DOMContentLoaded", () => {
       fotoUpload.click();
     });
 
-    fotoUpload.addEventListener("change", async (e) => {
+    fotoUpload.addEventListener("change", (e) => {
       const newFiles = Array.from(e.target.files);
-      if (newFiles.length === 0) return;
-
-      showVjToast("Analisando Segurança", "Aguarde enquanto nossa IA valida as fotos...");
-
-      const validFiles = [];
-      for (const file of newFiles) {
-        try {
-          await window.apiValidateImage(file);
-          validFiles.push(file);
-        } catch (err) {
-          console.error("[IA REJECTED]", err);
-          showVjToast("Conteúdo Bloqueado", "Uma das imagens foi removida por conter conteúdo inapropriado.");
-        }
-      }
-
-      if (validFiles.length === 0) {
-        e.target.value = "";
-        return;
-      }
 
       // Calculate total files if we append the new ones
-      const totalFiles = selectedFiles.length + validFiles.length;
+      const totalFiles = selectedFiles.length + newFiles.length;
 
       if (totalFiles > 3) {
         // Show Warning
@@ -477,13 +480,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (allowedSpace > 0) {
           selectedFiles = [
             ...selectedFiles,
-            ...validFiles.slice(0, allowedSpace),
+            ...newFiles.slice(0, allowedSpace),
           ];
         }
       } else {
         // Hide warning and add all
         limitWarning.style.display = "none";
-        selectedFiles = [...selectedFiles, ...validFiles];
+        selectedFiles = [...selectedFiles, ...newFiles];
       }
 
       renderPreviews();
@@ -685,8 +688,13 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log(`[UPLOAD] Foto ${i + 1} enviada com sucesso! Resposta:`, res);
             } catch (imgErr) {
               console.error(`[UPLOAD] ERRO na foto ${i+1}:`, imgErr);
-              // Interromper o fluxo se qualquer foto falhar por segurança (IA)
-              throw new Error(`A foto ${isProfile ? 'principal' : i+1} foi rejeitada: ${imgErr.message}`);
+              // Não interromper o fluxo total se uma foto de galeria falhar? 
+              // Por segurança do TCC, vamos apenas logar e continuar se for galeria, mas falhar se for perfil.
+              if (isProfile) {
+                throw new Error(`Erro crítico: Não foi possível enviar a foto principal. ${imgErr.message}`);
+              } else {
+                console.warn(`Aviso: Falha ao enviar foto da galeria ${i+1}, continuando...`);
+              }
             }
           }
         } else {

@@ -127,6 +127,22 @@
             </svg>
             Avaliações
           </button>
+          <button class="nav-item" data-target="suporte">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+              <path
+                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"
+              ></path>
+            </svg>
+            Suporte
+          </button>
           <button class="nav-item" data-target="configuracoes">
             <svg
               viewBox="0 0 24 24"
@@ -997,7 +1013,46 @@
             </div>
           </section>
 
-          <!-- SEÇÃO 5: CONFIGURAÇÕES -->
+          <!-- SEÇÃO 5: SUPORTE -->
+          <section id="section-suporte" class="dash-section">
+            <div class="welcome-box" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 style="font-size: 20px">🎧 Central de Suporte</h3>
+                <p>Abra chamados e acompanhe o atendimento da nossa equipe.</p>
+              </div>
+              <button class="btn-orange-small" onclick="openSupportModal()">+ Novo Chamado</button>
+            </div>
+
+            <!-- Stats de Suporte -->
+            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px">
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #ea580c" id="stat-tickets-abertos">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Em aberto</span>
+              </div>
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #22c55e" id="stat-tickets-resolvidos">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Resolvidos</span>
+              </div>
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #0f172a" id="stat-tickets-total">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Total</span>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <h4 style="margin-bottom: 20px">Seus Chamados</h4>
+              <div id="ticketsList" class="tickets-list">
+                <!-- Injetado via JS -->
+                <div style="text-align: center; padding: 40px; color: #64748b;">
+                  <span style="font-size: 40px; display: block; margin-bottom: 16px;">💬</span>
+                  <p>Nenhum chamado aberto ainda. Nossa equipe está pronta para te ajudar!</p>
+                  <button class="btn-orange-small" style="margin-top: 16px;" onclick="openSupportModal()">Abrir primeiro chamado</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 6: CONFIGURAÇÕES -->
           <section id="section-configuracoes" class="dash-section">
             <div class="welcome-box">
               <h3>Configurações</h3>
@@ -1316,6 +1371,51 @@
           <button class="btn-vis-confirmar" id="btnConfirmDeleteAccount" onclick="confirmDeleteAccount()" disabled style="display: none; padding: 12px 24px; background: #ef4444; color: #fff; border: none; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s; opacity: 0.5;">
              Excluir permanentemente
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL ABRIR NOVO CHAMADO 🎧 -->
+    <div id="modalNovoChamado" class="cupom-modal-overlay">
+      <div class="cupom-modal-content" style="max-width: 500px;">
+        <div class="cupom-modal-header">
+          <h3>Abrir Novo Chamado</h3>
+          <button type="button" class="btn-close-modal" onclick="closeSupportModal()">✕</button>
+        </div>
+        <div class="cupom-modal-body">
+          <div class="c-form-group">
+            <label>Título <span>*</span></label>
+            <input type="text" id="sup_titulo" placeholder="Descreva brevemente o problema..." />
+          </div>
+          <div class="c-form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="c-form-group">
+              <label>Categoria</label>
+              <select id="sup_categoria" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <option value="Cadastro de Local">Cadastro de Local</option>
+                <option value="Aprovação">Aprovação</option>
+                <option value="Pagamento / Plano">Pagamento / Plano</option>
+                <option value="Problema Técnico">Problema Técnico</option>
+                <option value="Outro" selected>Outro</option>
+              </select>
+            </div>
+            <div class="c-form-group">
+              <label>Prioridade</label>
+              <select id="sup_prioridade" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <option value="Baixa">Baixa</option>
+                <option value="Média" selected>Média</option>
+                <option value="Alta">Alta</option>
+                <option value="Urgente">Urgente</option>
+              </select>
+            </div>
+          </div>
+          <div class="c-form-group">
+            <label>Descrição detalhada <span>*</span></label>
+            <textarea id="sup_descricao" rows="5" placeholder="Explique em detalhes o problema, inclua informações relevantes..." style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical;"></textarea>
+          </div>
+        </div>
+        <div class="cupom-modal-footer">
+          <button type="button" class="btn-cancelar" onclick="closeSupportModal()">Cancelar</button>
+          <button type="button" class="btn-criar" id="btnSalvarChamado" onclick="salvarNovoChamado()">Abrir Chamado</button>
         </div>
       </div>
     </div>

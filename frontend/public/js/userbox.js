@@ -53,11 +53,11 @@
   }
 
   // ─── Render user name / state ─────────────────────────────────────────────
-  function renderUserBox(user) {
-    const userCircles = document.querySelectorAll(".user-circle");
-    const userNames   = document.querySelectorAll(".user-info span");
+    // SEGURANÇA: Se o usuário for ADMIN, não mostramos ele como "logado" no portal comum.
+    // Isso garante que o admin não acesse áreas de usuário por engano.
+    const isAdmin = user && (user.role === 'admin' || user.role === 'master' || user.email === 'admin@gmail.com');
 
-    if (!user || !user.nome) {
+    if (!user || !user.nome || isAdmin) {
       userCircles.forEach(el => {
         el.textContent = "👤";
         el.href = "./usuario-login.html";

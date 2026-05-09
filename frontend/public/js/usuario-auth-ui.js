@@ -142,8 +142,29 @@
       }
 
       try {
-        await doLogin(email, senha);
-        window.location.href = getReturnUrl();
+        const user = await doLogin(email, senha);
+        
+        // Identificação do papel (role)
+        let role = 'usuario';
+        if (user) {
+          role = String(user.role || user.perfil || user.tipo || 'usuario').toLowerCase();
+        }
+
+        // SEGURANÇA TOTAL: Se um administrador tentar logar por aqui, nós barramos.
+        // O login é apenas para usuários comuns. Administradores devem usar o portal admin.
+        if (role === "admin" || role === "master" || (user && user.email === "admin@gmail.com")) {
+          try { await window.apiLogout(); } catch(e){} // Limpa o cookie gerado
+          alert("Acesso Negado: Administradores devem utilizar o Portal Administrativo.");
+          window.location.replace("./admin-login.html");
+          return;
+        } 
+        
+        if (role === "parceiro") {
+          window.location.replace("./parceiro-dashboard.html");
+          return;
+        }
+
+        window.location.replace(getReturnUrl());
       } catch (err) {
         const raw = String(
           typeof err === "string"

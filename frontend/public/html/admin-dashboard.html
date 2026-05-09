@@ -54,6 +54,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           Parceiros
         </button>
+        <button class="nav-item" data-target="support">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          Suporte
+          <span id="badgeSupport" class="badge-count" style="display:none; background: #ea580c; color:white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; margin-left: auto;">0</span>
+        </button>
       </nav>
 
       <div class="dash-menu-title" style="margin-top: 24px;">SISTEMA</div>
@@ -203,6 +208,26 @@
 
         <div class="admin-section">
           <div class="admin-list" id="full-partners-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SUPPORT VIEW -->
+      <div id="view-support" class="view-content" style="display:none;">
+        <header style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h2 style="font-size: 28px; font-weight: 800; margin: 0 0 8px 0;">Atendimento ao Parceiro</h2>
+            <p style="color: var(--admin-text-secondary); margin: 0;">Responda e gerencie as solicitações de suporte dos parceiros.</p>
+          </div>
+          <button class="btn-action btn-approve" id="btnReloadSupportList">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Atualizar
+          </button>
+        </header>
+
+        <div class="admin-section">
+          <div class="admin-list" id="full-support-list">
             <!-- Renderizado via JS -->
           </div>
         </div>

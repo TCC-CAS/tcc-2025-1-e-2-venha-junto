@@ -208,6 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
+      // Carrega os chamados de suporte
+      carregarChamados();
+
     } catch (error) {
         console.error("Erro no Dashboard:", error);
     }
@@ -1140,4 +1143,134 @@ async function confirmDeleteAccount() {
         btn.textContent = "Excluir permanentemente";
     }
 }
+
+// =============================================
+// LÓGICA DE SUPORTE 🎧
+// =============================================
+
+function openSupportModal() {
+  const modal = document.getElementById("modalNovoChamado");
+  if (modal) {
+    modal.classList.add("active");
+    document.getElementById("sup_titulo").value = "";
+    document.getElementById("sup_descricao").value = "";
+    document.getElementById("sup_categoria").value = "Outro";
+    document.getElementById("sup_prioridade").value = "Média";
+  }
+}
+
+function closeSupportModal() {
+  const modal = document.getElementById("modalNovoChamado");
+  if (modal) modal.classList.remove("active");
+}
+
+async function salvarNovoChamado() {
+  const title = document.getElementById("sup_titulo").value.trim();
+  const description = document.getElementById("sup_descricao").value.trim();
+  const category = document.getElementById("sup_categoria").value;
+  const priority = document.getElementById("sup_prioridade").value;
+
+  if (!title || !description) {
+    alert("Por favor, preencha o título e a descrição.");
+    return;
+  }
+
+  const btn = document.getElementById("btnSalvarChamado");
+  btn.disabled = true;
+  btn.textContent = "Abrindo...";
+
+  try {
+    const res = await fetch("/api/suporte/chamados", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ title, description, category, priority })
+    });
+
+    if (res.ok) {
+      alert("Chamado aberto com sucesso!");
+      closeSupportModal();
+      carregarChamados();
+    } else {
+      const err = await res.json();
+      alert("Erro: " + (err.detail || "Não foi possível abrir o chamado."));
+    }
+  } catch (e) {
+    alert("Erro de conexão.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Abrir Chamado";
+  }
+}
+
+async function carregarChamados() {
+  try {
+    const res = await fetch("/api/suporte/chamados", { credentials: "include" });
+    if (res.ok) {
+      const tickets = await res.json();
+      renderizarChamados(tickets);
+    }
+  } catch (e) {
+    console.error("Erro ao carregar chamados:", e);
+  }
+}
+
+function renderizarChamados(tickets) {
+  const list = document.getElementById("ticketsList");
+  const statAbertos = document.getElementById("stat-tickets-abertos");
+  const statResolvidos = document.getElementById("stat-tickets-resolvidos");
+  const statTotal = document.getElementById("stat-tickets-total");
+
+  if (!list) return;
+
+  if (!tickets || tickets.length === 0) {
+    list.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #64748b;">
+        <span style="font-size: 40px; display: block; margin-bottom: 16px;">💬</span>
+        <p>Nenhum chamado aberto ainda. Nossa equipe está pronta para te ajudar!</p>
+        <button class="btn-orange-small" style="margin-top: 16px;" onclick="openSupportModal()">Abrir primeiro chamado</button>
+      </div>
+    `;
+    if (statAbertos) statAbertos.textContent = "0";
+    if (statResolvidos) statResolvidos.textContent = "0";
+    if (statTotal) statTotal.textContent = "0";
+    return;
+  }
+
+  let abertos = 0;
+  let resolvidos = 0;
+
+  const html = tickets.map(t => {
+    if (t.status === "RESOLVIDO") resolvidos++;
+    else if (t.status !== "CANCELADO") abertos++;
+
+    const statusCls = t.status === "ABERTO" ? "status-analise" : t.status === "RESOLVIDO" ? "status-aprovado" : "status-reprovado";
+    const priorityColor = t.priority === "Urgente" ? "#ef4444" : t.priority === "Alta" ? "#f97316" : "#64748b";
+
+    return `
+      <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <div>
+            <span style="font-size: 11px; text-transform: uppercase; color: ${priorityColor}; font-weight: 800;">${t.priority} • ${t.category}</span>
+            <h5 style="margin: 4px 0; font-size: 15px; color: #0f172a;">${t.title}</h5>
+          </div>
+          <span class="local-status ${statusCls}" style="font-size: 11px; padding: 2px 8px;">${t.status}</span>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin: 0;">${t.description}</p>
+        <div style="margin-top: 12px; font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between;">
+           <span>Aberto em: ${new Date(t.created_at).toLocaleString('pt-BR')}</span>
+           <span>ID: #${t.id}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  list.innerHTML = html;
+  if (statAbertos) statAbertos.textContent = abertos;
+  if (statResolvidos) statResolvidos.textContent = resolvidos;
+  if (statTotal) statTotal.textContent = tickets.length;
+}
+
+// Iniciar carregamento de chamados se estiver na aba de suporte
+// Adicionar ao carregarDadosParceiro
 

@@ -272,6 +272,32 @@ class MetricaDiariaResponse(BaseModel):
         from_attributes = True
 
 # =============================================
+# SCHEMAS PARA CHAMADOS DE SUPORTE 🎧
+# =============================================
+
+class SupportTicketBase(BaseModel):
+    title: str
+    category: str
+    priority: str
+    description: str
+
+class SupportTicketCreate(SupportTicketBase):
+    pass
+
+class SupportTicketUpdate(BaseModel):
+    status: Optional[str] = None
+
+class SupportTicketResponse(SupportTicketBase):
+    id: int
+    partner_id: int
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# =============================================
 # SCHEMAS PARA ADMIN 🛡️
 # =============================================
 

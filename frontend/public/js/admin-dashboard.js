@@ -21,10 +21,13 @@ const VJ_API_BASE = (function() {
   const badgeApprovals = document.getElementById("badgeApprovals");
   const miniPendingList = document.getElementById("mini-pending-list");
   
-  // Approvals View Elements
-  const fullApprovalsList = document.getElementById("full-approvals-list");
-  const filterStatus = document.getElementById("filterStatus");
-  const btnReloadList = document.getElementById("btnReloadList");
+  // Partners View Elements
+  const fullPartnersList = document.getElementById("full-partners-list");
+
+  // Support View Elements 🎧
+  const fullSupportList = document.getElementById("full-support-list");
+  const btnReloadSupportList = document.getElementById("btnReloadSupportList");
+  const badgeSupport = document.getElementById("badgeSupport");
 
   let mainChart = null;
   let planChart = null;
@@ -45,6 +48,7 @@ const VJ_API_BASE = (function() {
     if (target === "overview") loadStats();
     if (target === "approvals") loadApprovals();
     if (target === "partners") loadPartners();
+    if (target === "support") loadSupport();
   }
 
   navItems.forEach(item => {
@@ -83,6 +87,17 @@ const VJ_API_BASE = (function() {
 
   async function apiAiVerify(id) {
     return apiFetch(`/api/admin/estabelecimentos/${id}/ai-verify`, { method: "POST" });
+  }
+
+  async function apiListSupport() {
+    return apiFetch(`/api/admin/suporte/chamados`);
+  }
+
+  async function apiUpdateSupportStatus(id, status) {
+    return apiFetch(`/api/admin/suporte/chamados/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status })
+    });
   }
 
   // ---------------------------
@@ -503,6 +518,95 @@ const VJ_API_BASE = (function() {
   }
 
   // ---------------------------
+  // Support 🎧
+  // ---------------------------
+  async function loadSupport() {
+    try {
+      const tickets = await apiListSupport();
+      renderSupport(tickets);
+    } catch (e) {
+      console.error("Erro ao carregar suporte:", e);
+    }
+  }
+
+  function renderSupport(tickets) {
+    if (!fullSupportList) return;
+    if (!tickets || tickets.length === 0) {
+      fullSupportList.innerHTML = `<div class="empty-state"><h3>Nenhum chamado encontrado</h3><p>Não há solicitações de parceiros no momento.</p></div>`;
+      badgeSupport.style.display = "none";
+      return;
+    }
+
+    let openCount = 0;
+    const html = tickets.map(t => {
+      if (t.status === "ABERTO" || t.status === "EM_ANDAMENTO") openCount++;
+      
+      const statusCls = t.status === "ABERTO" ? "badge-pending" : t.status === "RESOLVIDO" ? "badge-approved" : "badge-rejected";
+      
+      let priorityColor = "#64748b";
+      if (t.priority === "Urgente") priorityColor = "#ef4444";
+      else if (t.priority === "Alta") priorityColor = "#f97316";
+
+      return `
+        <div class="admin-card" style="margin-bottom: 16px;">
+          <div class="admin-card-info">
+            <div class="admin-entity-details" style="width: 100%;">
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <span class="item-badge ${statusCls}" style="font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase;">${t.status}</span>
+                <span style="font-size: 11px; font-weight: 800; color: ${priorityColor}; text-transform: uppercase;">${t.priority}</span>
+                <span style="font-size: 12px; color: var(--admin-text-secondary); margin-left: auto;">${t.category}</span>
+              </div>
+              <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: var(--admin-text-primary);">${t.title}</h3>
+              <p style="margin: 0 0 12px 0; font-size: 14px; color: #475569; line-height: 1.5;">${t.description}</p>
+              <div style="font-size: 12px; color: var(--admin-text-secondary); display: flex; gap: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px;">
+                 <span>👤 <strong>${t.partner_nome}</strong> (${t.partner_email})</span>
+                 <span>📅 ${new Date(t.created_at).toLocaleString('pt-BR')}</span>
+                 <span>ID: #${t.id}</span>
+              </div>
+            </div>
+          </div>
+          <div class="admin-card-actions" style="margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 16px; display: flex; gap: 8px;">
+            ${t.status !== 'RESOLVIDO' ? `
+              <button class="btn-action btn-approve" onclick="updateTicketStatus(${t.id}, 'RESOLVIDO')">Marcar como Resolvido</button>
+              ${t.status === 'ABERTO' ? `
+                <button class="btn-action btn-details" onclick="updateTicketStatus(${t.id}, 'EM_ANDAMENTO')">Atender Chamado</button>
+              ` : ''}
+            ` : '<span style="color: #10b981; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 4px;">✅ Resolvido</span>'}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    fullSupportList.innerHTML = html;
+    if (openCount > 0) {
+      badgeSupport.textContent = openCount;
+      badgeSupport.style.display = "flex";
+    } else {
+      badgeSupport.style.display = "none";
+    }
+  }
+
+  window.updateTicketStatus = async (id, status) => {
+    try {
+      await apiUpdateSupportStatus(id, status);
+      loadSupport();
+      showToast(`Chamado #${id} atualizado para ${status}`);
+    } catch (e) {
+      console.error(e);
+      showToast("Erro ao atualizar chamado", "error");
+    }
+  };
+
+  function showToast(msg, type = "success") {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.background = type === "error" ? "#ef4444" : "#10b981";
+    toast.hidden = false;
+    setTimeout(() => { toast.hidden = true; }, 3000);
+  }
+
+  // ---------------------------
   // Init
   // ---------------------------
   async function init() {
@@ -519,6 +623,8 @@ const VJ_API_BASE = (function() {
     
     const btnReloadPartners = document.getElementById("btnReloadPartnersList");
     if(btnReloadPartners) btnReloadPartners.addEventListener("click", loadPartners);
+
+    if(btnReloadSupportList) btnReloadSupportList.addEventListener("click", loadSupport);
     
     btnLogout.addEventListener("click", () => {
       apiFetch("/api/usuarios/logout", { method: "POST" }).then(() => {

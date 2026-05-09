@@ -284,6 +284,19 @@ def get_user_from_token(request: Request, db: Session):
     except jwt.PyJWTError:
         return None
 
+def get_partner_from_token(request: Request, db: Session):
+    token = request.cookies.get("vj_partner_token")
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        partner_id = payload.get("sub")
+        if partner_id is None:
+            return None
+        return db.query(models.Parceiro).filter(models.Parceiro.id == partner_id).first()
+    except jwt.PyJWTError:
+        return None
+
 # ---------------------------------------------
 # ROTA DE LOGIN
 # ---------------------------------------------
@@ -1149,9 +1162,83 @@ def gerenciar_visibilidade(
     db.refresh(db_estab)
     return {
         "message": msg,
+        "status": db_estab.status,
         "visibilidade": db_estab.visibilidade,
-        "oculto_ate": db_estab.oculto_ate.isoformat() if db_estab.oculto_ate else None
+        "oculto_ate": db_estab.oculto_ate
     }
+
+# =============================================
+# CHAMADOS DE SUPORTE 🎧
+# =============================================
+
+@app.post("/api/suporte/chamados", response_model=schemas.SupportTicketResponse)
+def abrir_chamado_suporte(ticket: schemas.SupportTicketCreate, request: Request, db: Session = Depends(get_db)):
+    db_parceiro = get_partner_from_token(request, db)
+    if not db_parceiro:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    
+    novo_ticket = models.SupportTicket(
+        partner_id=db_parceiro.id,
+        title=ticket.title,
+        category=ticket.category,
+        priority=ticket.priority,
+        description=ticket.description,
+        status="ABERTO"
+    )
+    db.add(novo_ticket)
+    db.commit()
+    db.refresh(novo_ticket)
+    return novo_ticket
+
+@app.get("/api/suporte/chamados", response_model=List[schemas.SupportTicketResponse])
+def listar_chamados_parceiro(request: Request, db: Session = Depends(get_db)):
+    db_parceiro = get_partner_from_token(request, db)
+    if not db_parceiro:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    
+    return db.query(models.SupportTicket).filter(models.SupportTicket.partner_id == db_parceiro.id).order_by(models.SupportTicket.created_at.desc()).all()
+
+# ENDPOINTS ADMIN PARA SUPORTE
+@app.get("/api/admin/suporte/chamados")
+def listar_chamados_admin(request: Request, db: Session = Depends(get_db)):
+    db_admin = get_user_from_token(request, db)
+    if not db_admin or db_admin.role not in ["admin", "master"]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Não autorizado")
+
+    tickets = db.query(models.SupportTicket).order_by(models.SupportTicket.created_at.desc()).all()
+    
+    # Enriquecer com dados do parceiro
+    resultado = []
+    for t in tickets:
+        p = db.query(models.Parceiro).filter(models.Parceiro.id == t.partner_id).first()
+        resultado.append({
+            "id": t.id,
+            "title": t.title,
+            "category": t.category,
+            "priority": t.priority,
+            "description": t.description,
+            "status": t.status,
+            "created_at": t.created_at,
+            "partner_nome": p.nome if p else "Desconhecido",
+            "partner_email": p.email if p else ""
+        })
+    return resultado
+
+@app.patch("/api/admin/suporte/chamados/{id}")
+def atualizar_status_chamado(id: int, ticket_upd: schemas.SupportTicketUpdate, request: Request, db: Session = Depends(get_db)):
+    db_admin = get_user_from_token(request, db)
+    if not db_admin or db_admin.role not in ["admin", "master"]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Não autorizado")
+    
+    db_ticket = db.query(models.SupportTicket).filter(models.SupportTicket.id == id).first()
+    if not db_ticket:
+        raise HTTPException(status_code=404, detail="Chamado não encontrado")
+    
+    if ticket_upd.status:
+        db_ticket.status = ticket_upd.status
+    
+    db.commit()
+    return {"message": "Status atualizado com sucesso"}
 
 # ---------------------------------------------
 # ROTAS DE FOTOS - ESTABELECIMENTOS
