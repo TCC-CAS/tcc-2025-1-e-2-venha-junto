@@ -17,10 +17,10 @@ from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
 
-import models
-import schemas
-from database import engine, get_db
-from utils.validation import validar_documento_com_receita
+import backend.models as models
+import backend.schemas as schemas
+from backend.database import engine, get_db
+from backend.utils.validation import validar_documento_com_receita
 
 # Carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -1195,9 +1195,8 @@ def validar_imagem(file: UploadFile):
             )
     except ClientError as e:
         print(f"[AWS ERROR] Falha na moderação: {e}")
-        # Em caso de erro na API da AWS, decidimos se deixamos passar ou bloqueamos. 
-        # Aqui deixaremos passar para não travar o sistema se a API cair.
-        pass
+        # Mudamos para levantar erro ao invés de 'pass' para que possamos ver o erro de permissão (AccessDeniedException)
+        raise HTTPException(status_code=500, detail=f"Erro de configuração AWS Rekognition: {e}")
 
     return True
 
@@ -1861,7 +1860,7 @@ def listar_reviews(id: int, db: Session = Depends(get_db)):
     return res
 
 @app.post("/public/places/{id}/reviews", response_model=schemas.ReviewResponse)
-def criar_review(id: int, review: schemas.ReviewCreate, request: Request, db: Session = Depends(get_db)):
+def criar_review_publico(id: int, review: schemas.ReviewCreate, request: Request, db: Session = Depends(get_db)):
     user = get_user_from_token(request, db)
     if not user:
         raise HTTPException(status_code=401, detail="Faça login para avaliar.")
