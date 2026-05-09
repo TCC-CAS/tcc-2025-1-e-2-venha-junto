@@ -65,6 +65,7 @@ body {
   font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--text-main);
+  overflow-wrap: break-word;
 }
 
 .header-content .loc-line {
@@ -75,6 +76,8 @@ body {
   color: var(--text-muted);
   font-weight: 600;
   font-size: 14px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* 2. HERO GRID */
@@ -98,7 +101,8 @@ body {
 .hero-main-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Mudado para contain para garantir que logos e fotos inteiras apareçam sem cortes */
+  background-color: #f1f5f9; /* Fundo neutro caso a imagem seja menor */
   display: block;
 }
 
@@ -245,6 +249,10 @@ body {
   font-weight: 500;
   font-size: 15px;
   margin: 0;
+  /* Segurança para responsividade: */
+  overflow-wrap: break-word; /* Quebra palavras longas */
+  word-wrap: break-word;     /* Compatibilidade */
+  word-break: break-word;    /* Garante que não ultrapasse o limite do card */
 }
 
 /* Acessibilidade (Pills) */
@@ -446,15 +454,60 @@ body {
 }
 .auth-btn.outline:hover { background: #f8fafc; border-color: var(--text-main); }
 
-/* RESPONSIVIDADE */
+/* RESPONSIVIDADE MELHORADA */
 @media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-main-img { height: 300px; }
-  .detail-header h1 { font-size: 26px; }
+  .hero-grid { 
+    grid-template-columns: 1fr; 
+    gap: 16px;
+  }
+  .hero-main-img { 
+    height: auto; 
+    aspect-ratio: 16 / 9; /* Mantém proporção de cinema em tablets */
+    min-height: 250px;
+  }
+  .detail-header h1 { font-size: 24px; }
+  .vj-page { padding: 12px; }
 }
 
 @media (max-width: 640px) {
-  .detail-header { flex-direction: column; gap: 8px; }
+  .detail-header { 
+    flex-direction: row; /* Mantém ao lado */
+    align-items: flex-start;
+    text-align: left;
+    gap: 12px; 
+  }
+  .header-content .loc-line {
+    justify-content: flex-start; /* Alinha endereço à esquerda */
+  }
+  .hero-main-img { 
+    height: auto;
+    aspect-ratio: 4 / 3; /* Mais quadrado no celular para destacar o local */
+    border-radius: var(--radius-md);
+  }
+  .info-card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+  .rating-highlight {
+    padding: 12px;
+  }
+  .rating-score span {
+    font-size: 20px;
+  }
+  .white-card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+}
+
+/* Fix para telas muito pequenas (iPhone SE, etc) */
+@media (max-width: 360px) {
+  .auth-btn {
+    width: 100%;
+  }
+  .badges-row {
+    justify-content: center;
+  }
 }
 
 /* ðï¸ CUPOM â animaÃ§Ã£o do badge */

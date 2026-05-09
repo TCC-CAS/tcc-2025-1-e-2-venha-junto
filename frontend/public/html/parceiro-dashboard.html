@@ -12,15 +12,39 @@
 
   <body>
     <div class="dash-layout">
+      <!-- MOBILE HEADER -->
+      <header class="dash-mobile-header">
+        <div class="dash-mobile-logo">
+          <img src="../img/logo-vj.png" alt="VJ">
+          <span>Venha Junto</span>
+        </div>
+        <button id="dashMenuBtn" class="dash-menu-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </header>
+
       <!-- SIDEBAR LARANJA -->
       <aside class="dash-sidebar">
-        <div class="dash-brand">
-          <h1>Venha Junto</h1>
-          <span>Turismo Acessível em São Paulo</span>
+        <a href="./index.html" class="back-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Voltar ao Site
+        </a>
+
+        <div class="sidebar-header-profile">
+          <div class="brand-avatar">
+            <img src="../img/logo-vj.png" alt="VJ">
+          </div>
+          <div class="brand-info">
+            <h1>Venha Junto</h1>
+            <span>Área do Parceiro</span>
+          </div>
         </div>
 
+
         <div class="dash-user">
-          <div class="dash-avatar">J</div>
+          <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="dash-avatar-link" style="text-decoration: none;">
+            <div class="dash-avatar">J</div>
+          </a>
           <div class="dash-user-info">
             <strong>João Silva</strong>
             <span class="badge-premium">
@@ -178,8 +202,12 @@
               </svg>
               <div class="notification-dot"></div>
             </button>
-            <div class="dash-avatar small">J</div>
-            <span class="user-name">João Silva</span>
+            <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="dash-avatar-link" style="text-decoration: none;">
+              <div class="dash-avatar small">J</div>
+            </a>
+            <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="user-name-link" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+              <span class="user-name">João Silva</span>
+            </a>
           </div>
         </header>
 

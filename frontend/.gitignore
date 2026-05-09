@@ -1,0 +1,4 @@
+public/js/config.js
+.env
+node_modules/
+.vercel

@@ -4,26 +4,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".dash-section");
   const pageTitle = document.getElementById("pageTitle");
 
+  // === FUNÇÃO PARA TROCAR DE SEÇÃO (Exposta globalmente) ===
+  window.switchToSection = function(target) {
+    navBtns.forEach((b) => {
+      if (b.getAttribute("data-target") === target) b.classList.add("active");
+      else b.classList.remove("active");
+    });
+    const activeBtn = Array.from(navBtns).find(b => b.getAttribute("data-target") === target);
+    if (activeBtn) pageTitle.textContent = activeBtn.textContent.trim();
+    sections.forEach((sec) => {
+      if (sec.id === `section-${target}`) sec.classList.add("active");
+      else sec.classList.remove("active");
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   navBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // 1. Remove active das tabs
-      navBtns.forEach((b) => b.classList.remove("active"));
-      // 2. Add active na tab clicada
-      btn.classList.add("active");
-
-      // 3. Muda título (extrai o texto limpo, sem o SVG)
-      const titleText = btn.textContent.trim();
-      pageTitle.textContent = titleText;
-
-      // 4. Mostra/Esconde seções
       const target = btn.getAttribute("data-target");
-      sections.forEach((sec) => {
-        if (sec.id === `section-${target}`) {
-          sec.classList.add("active");
-        } else {
-          sec.classList.remove("active");
-        }
-      });
+      window.switchToSection(target);
+    });
+  });
+
+  // === LÓGICA DE MENU MOBILE (HAMBURGER) ===
+  const dashMenuBtn = document.getElementById("dashMenuBtn");
+  const dashSidebar = document.querySelector(".dash-sidebar");
+  const dashOverlay = document.createElement("div");
+  dashOverlay.className = "dash-sidebar-overlay";
+  document.body.appendChild(dashOverlay);
+
+  const toggleMenu = () => {
+    dashSidebar.classList.toggle("active");
+    dashOverlay.classList.toggle("active");
+  };
+
+  if (dashMenuBtn) {
+    dashMenuBtn.addEventListener("click", toggleMenu);
+    dashOverlay.addEventListener("click", toggleMenu);
+  }
+
+  // Fechar menu ao clicar em um item (mobile)
+  navBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (window.innerWidth <= 992 && dashSidebar.classList.contains("active")) toggleMenu();
     });
   });
 

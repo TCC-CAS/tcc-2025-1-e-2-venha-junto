@@ -150,19 +150,21 @@ select:focus-visible {
 
 /* Logo Venha Junto (Imagem) */
 .logo-vj {
-  width: 72px;
+  display: flex;
+  align-items: center;
   height: 48px;
-  background-image: url('../img/logo-vj.png');
-  background-size: contain;
-  background-position: center left;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  color: transparent !important;
-  border-radius: 0;
-  display: block;
-  flex-shrink: 0;
-  overflow: hidden;
-  text-indent: -9999px;
+  text-decoration: none;
+}
+
+.logo-vj img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .brand-text {

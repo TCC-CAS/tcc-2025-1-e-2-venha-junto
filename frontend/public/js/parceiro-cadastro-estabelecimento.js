@@ -1,3 +1,5 @@
+let partnerActivePlan = "Básico"; // Global state
+
 document.addEventListener("DOMContentLoaded", () => {
   const steps = document.querySelectorAll(".step-link");
   const panels = document.querySelectorAll(".form-panel");
@@ -84,6 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Dados do parceiro:", user);
 
         if (user && user.nome) {
+          partnerActivePlan = user.plano_ativo || "Básico";
+          console.log("Plano ativo do parceiro:", partnerActivePlan);
+          
           const nomeCurto = user.nome.split(" ")[0]; // Primeiro nome
           const avatarG = document.querySelector(
             ".cadastro-sidebar .user-info .avatar",
@@ -181,13 +186,166 @@ document.addEventListener("DOMContentLoaded", () => {
           mapPreview.resize();
       }, 250);
     }
+
+    // Auto-seleção de plano se for passo 4
+    if (stepNumber === 4) {
+      const planMap = { "Básico": "basico", "Pro": "pro", "Pro Plus": "pro_plus" };
+      const targetId = planMap[partnerActivePlan] || "basico";
+      const radio = document.querySelector(`input[name="plano_escolhido"][value="${targetId}"]`);
+      if (radio && !document.querySelector('input[name="plano_escolhido"]:checked')) {
+          radio.checked = true;
+          // Dispara o evento visual
+          radio.dispatchEvent(new Event('change'));
+      }
+    }
+  }
+
+  function showVjToast(title, message) {
+    let toast = document.querySelector(".vj-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "vj-toast";
+      toast.innerHTML = `
+        <div class="toast-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="toast-content">
+          <strong>${title}</strong>
+          <span>${message}</span>
+        </div>
+      `;
+      document.body.appendChild(toast);
+    } else {
+      toast.querySelector("strong").innerText = title;
+      toast.querySelector("span").innerText = message;
+    }
+
+    // Reset animation
+    toast.classList.remove("active");
+    void toast.offsetWidth; // trigger reflow
+    toast.classList.add("active");
+
+    // Auto-hide
+    setTimeout(() => {
+      toast.classList.remove("active");
+    }, 4500);
+  }
+
+  function validateStep(step) {
+    const currentPanel = document.querySelector(`.form-panel[data-step="${step}"]`);
+    if (!currentPanel) return true;
+
+    let isValid = true;
+    const inputs = currentPanel.querySelectorAll("input[required], textarea[required], select[required]");
+
+    inputs.forEach(input => {
+      const fieldGroup = input.closest(".field-group");
+      
+      // Remove estilos de erro anteriores
+      if (fieldGroup) fieldGroup.classList.remove("has-error");
+      input.style.borderColor = "";
+      const wrapper = input.closest(".input-wrapper");
+      if (wrapper) wrapper.style.borderColor = "";
+
+      let fieldValid = true;
+
+      // Validação básica (vazio)
+      if (!input.value || input.value.trim() === "") {
+        fieldValid = false;
+      }
+
+      // Validação de E-mail
+      if (input.type === "email" && input.value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(input.value)) {
+          fieldValid = false;
+        }
+      }
+
+      // Validação de CNPJ/CPF (básico de tamanho)
+      if (input.id === "cnpj_cpf" && input.value) {
+        const cleanVal = input.value.replace(/\D/g, "");
+        if (cleanVal.length < 11) {
+          fieldValid = false;
+        }
+      }
+      
+      // Validação de Descrição (mínimo 100 caracteres)
+      if (input.id === "descEstabelecimento" && input.value.length < 100) {
+        fieldValid = false;
+      }
+
+      if (!fieldValid) {
+        isValid = false;
+        if (fieldGroup) {
+          fieldGroup.classList.add("has-error");
+          // Adiciona mensagem de erro se não existir
+          let errorMsg = fieldGroup.querySelector(".error-msg");
+          if (!errorMsg) {
+            errorMsg = document.createElement("span");
+            errorMsg.className = "error-msg";
+            errorMsg.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Verifique este campo`;
+            fieldGroup.appendChild(errorMsg);
+          }
+        }
+      }
+    });
+
+    // Caso especial: Passo 2 - Endereço
+    if (step === 2) {
+      const addressSearchView = document.getElementById("addressSearchView");
+      if (addressSearchView && addressSearchView.style.display !== "none") {
+        isValid = false;
+        showVjToast("Localização Necessária", "Por favor, selecione seu endereço no mapa antes de continuar por segurança.");
+        const fakeSearch = document.getElementById("fakeSearchMap");
+        if (fakeSearch) {
+          const wrapper = fakeSearch.closest(".floating-search-bar");
+          if (wrapper) wrapper.style.borderColor = "#ef4444";
+        }
+        return false;
+      }
+    }
+
+    // Caso especial: Custom Select do Tipo de Estabelecimento
+    const nativeSelect = document.getElementById("tipoEstabelecimento");
+    if (step === 2 && nativeSelect && !nativeSelect.value) {
+       const customSelect = document.getElementById("customTipoSelect");
+       if (customSelect) {
+         customSelect.style.borderColor = "#ef4444";
+         isValid = false;
+       }
+    }
+
+    if (!isValid) {
+      showVjToast("Campos Obrigatórios", "Existem campos pendentes ou incorretos. Verifique os destaques em vermelho.");
+    }
+
+    return isValid;
+  }
+
+  // Contador de caracteres para a descrição
+  const descInput = document.getElementById("descEstabelecimento");
+  const descHelpText = document.querySelector("#descEstabelecimento + .help-text");
+  if (descInput && descHelpText) {
+    descInput.addEventListener("input", () => {
+      const len = descInput.value.length;
+      descHelpText.innerText = `${len}/100 caracteres mínimos. Seja específico sobre acessibilidade.`;
+      if (len >= 100) {
+        descHelpText.style.color = "#22c55e";
+      } else {
+        descHelpText.style.color = "#64748b";
+      }
+    });
   }
 
   // Event Listeners pros botões Próximo / Voltar
   btnNexts.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const nextStep = parseInt(btn.getAttribute("data-next"));
-      if (nextStep) goToStep(nextStep);
+      // Antes de ir para o próximo, valida o ATUAL
+      if (validateStep(currentStep)) {
+        const nextStep = parseInt(btn.getAttribute("data-next"));
+        if (nextStep) goToStep(nextStep);
+      }
     });
   });
 
@@ -285,11 +443,30 @@ document.addEventListener("DOMContentLoaded", () => {
       fotoUpload.click();
     });
 
-    fotoUpload.addEventListener("change", (e) => {
+    fotoUpload.addEventListener("change", async (e) => {
       const newFiles = Array.from(e.target.files);
+      if (newFiles.length === 0) return;
+
+      showVjToast("Analisando Segurança", "Aguarde enquanto nossa IA valida as fotos...");
+
+      const validFiles = [];
+      for (const file of newFiles) {
+        try {
+          await window.apiValidateImage(file);
+          validFiles.push(file);
+        } catch (err) {
+          console.error("[IA REJECTED]", err);
+          showVjToast("Conteúdo Bloqueado", "Uma das imagens foi removida por conter conteúdo inapropriado.");
+        }
+      }
+
+      if (validFiles.length === 0) {
+        e.target.value = "";
+        return;
+      }
 
       // Calculate total files if we append the new ones
-      const totalFiles = selectedFiles.length + newFiles.length;
+      const totalFiles = selectedFiles.length + validFiles.length;
 
       if (totalFiles > 3) {
         // Show Warning
@@ -300,13 +477,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (allowedSpace > 0) {
           selectedFiles = [
             ...selectedFiles,
-            ...newFiles.slice(0, allowedSpace),
+            ...validFiles.slice(0, allowedSpace),
           ];
         }
       } else {
         // Hide warning and add all
         limitWarning.style.display = "none";
-        selectedFiles = [...selectedFiles, ...newFiles];
+        selectedFiles = [...selectedFiles, ...validFiles];
       }
 
       renderPreviews();
@@ -389,19 +566,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const regras = document.getElementById("cupom_regras").value;
 
         if (!titulo || titulo.trim() === "") {
-          alert("Por favor, preencha o Título do cupom.");
+          showVjToast("Cupom Incompleto", "Por favor, preencha o Título do cupom.");
           return;
         }
         if (!codigo || codigo.trim() === "") {
-          alert("Por favor, preencha o Código do cupom.");
+          showVjToast("Cupom Incompleto", "Por favor, preencha o Código do cupom.");
           return;
         }
         if (!valor || parseFloat(valor) <= 0) {
-          alert("O valor do desconto deve ser maior que 0.");
+          showVjToast("Valor Inválido", "O valor do desconto deve ser maior que 0.");
           return;
         }
         if (tipo === "percentual" && parseFloat(valor) > 100) {
-          alert("O valor percentual não pode ser maior que 100%.");
+          showVjToast("Valor Inválido", "O valor percentual não pode ser maior que 100%.");
           return;
         }
 
@@ -410,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
           hoje.setHours(0, 0, 0, 0);
           const dataValidade = new Date(validade + "T00:00:00");
           if (dataValidade < hoje) {
-            alert("A data de validade não pode estar no passado.");
+            showVjToast("Data Inválida", "A data de validade não pode estar no passado.");
             return;
           }
         }
@@ -508,13 +685,8 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log(`[UPLOAD] Foto ${i + 1} enviada com sucesso! Resposta:`, res);
             } catch (imgErr) {
               console.error(`[UPLOAD] ERRO na foto ${i+1}:`, imgErr);
-              // Não interromper o fluxo total se uma foto de galeria falhar? 
-              // Por segurança do TCC, vamos apenas logar e continuar se for galeria, mas falhar se for perfil.
-              if (isProfile) {
-                throw new Error(`Erro crítico: Não foi possível enviar a foto principal. ${imgErr.message}`);
-              } else {
-                console.warn(`Aviso: Falha ao enviar foto da galeria ${i+1}, continuando...`);
-              }
+              // Interromper o fluxo se qualquer foto falhar por segurança (IA)
+              throw new Error(`A foto ${isProfile ? 'principal' : i+1} foi rejeitada: ${imgErr.message}`);
             }
           }
         } else {
@@ -530,8 +702,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let contagem = 4;
         const btnDash = form.querySelector("#stepSuccess .btn");
         
+        const tierMap = { "Básico": 0, "Pro": 1, "Pro Plus": 2, "basico": 0, "pro": 1, "pro_plus": 2 };
+        const isUpgrade = tierMap[planoEscolhido] > tierMap[partnerActivePlan];
+
         let destination = "./parceiro-dashboard.html";
-        if (planoEscolhido !== "basico") {
+        if (isUpgrade && planoEscolhido !== "basico") {
            destination = `./pagamento.html?plan=${planoEscolhido}&estabId=${estabId}`;
            if (btnDash) btnDash.innerText = `Ir para Pagamento (${contagem}s)`;
         } else {
@@ -540,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const timer = setInterval(() => {
             contagem--;
-            if (planoEscolhido !== "basico") {
+            if (isUpgrade && planoEscolhido !== "basico") {
                 if (btnDash) btnDash.innerText = `Ir para Pagamento (${contagem}s)`;
             } else {
                 if (btnDash) btnDash.innerText = `Acessar Área do Parceiro (${contagem}s)`;
@@ -552,7 +727,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1000);
       } catch (error) {
         console.error("ERRO NO PROCESSO DE CADASTRO:", error);
-        alert("Erro no cadastro: " + error.message);
+        showVjToast("Erro no Cadastro", "Ocorreu um problema ao salvar seus dados: " + error.message);
         
         const btnSubmit = form.querySelector(".btn-submit");
         if (btnSubmit) {
@@ -667,8 +842,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // INTEGRAÇÃO MAPBOX
 // ==========================================
 
-// Token fornecido pelo usuário via config.js (segurança do GitHub)
-mapboxgl.accessToken = window.ENV.MAPBOX_TOKEN;
+// Token fornecido pelo usuário via config.js ou Vercel
+const token = window.ENV?.MAPBOX_TOKEN || "";
+console.log("[Mapbox] Inicializando com token:", token ? "Token presente" : "Token AUSENTE");
+mapboxgl.accessToken = token;
 
 let mapSearch, mapPreview, markerPreview;
 

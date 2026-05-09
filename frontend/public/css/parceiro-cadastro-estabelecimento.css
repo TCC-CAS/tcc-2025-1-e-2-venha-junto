@@ -1186,3 +1186,144 @@ body.cadastro-flow {
   border-style: solid;
   border-color: white transparent transparent transparent;
 }
+
+/* =======================================================
+   TOAST NOTIFICATION PREMIUM (SISTEMA DE SEGURANÇA)
+   ======================================================= */
+.vj-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #ffffff;
+  border-left: 6px solid #ef4444;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 10000;
+  transform: translateX(130%);
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  max-width: 350px;
+}
+
+.vj-toast.active {
+  transform: translateX(0);
+}
+
+.vj-toast .toast-icon {
+  width: 32px;
+  height: 32px;
+  background: #fef2f2;
+  color: #ef4444;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.vj-toast .toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.vj-toast .toast-content strong {
+  font-size: 14px;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.vj-toast .toast-content span {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* MENSAGENS DE ERRO INLINE */
+.error-msg {
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  animation: vj-slide-up 0.2s ease;
+}
+
+@keyframes vj-slide-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.field-group.has-error input,
+.field-group.has-error textarea,
+.field-group.has-error .input-wrapper {
+  border-color: #ef4444 !important;
+}
+
+.field-group.has-error .error-msg {
+  display: flex;
+}
+/* =======================================================
+   RESPONSIVIDADE (MOBILE)
+   ======================================================= */
+@media (max-width: 960px) {
+  .cadastro-layout {
+    flex-direction: column;
+  }
+  .cadastro-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+  }
+  .steps-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    gap: 12px;
+  }
+  .step-link {
+    flex-shrink: 0;
+    padding: 8px 12px;
+  }
+  .step-link .step-text {
+    display: none; /* Esconde texto na sidebar mobile para caber os circulos */
+  }
+  .step-link.active .step-text {
+    display: block; /* Mostra apenas o texto do passo atual */
+  }
+  .user-info, .menu-label, .sidebar-tip {
+    display: none;
+  }
+  
+  .cadastro-main {
+    padding: 20px 16px;
+  }
+  .form-card {
+    padding: 20px;
+  }
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .planos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cadastro-topbar {
+    padding: 12px;
+  }
+  .cadastro-topbar .brand-text {
+    display: none;
+  }
+  .panel-actions {
+    flex-direction: column;
+  }
+  .btn-next, .btn-submit {
+    width: 100%;
+  }
+}

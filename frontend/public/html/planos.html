@@ -281,7 +281,6 @@
       .pricing { grid-template-columns: 1fr; }
     }
   </style>
-  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
 </head>
 <body>
   <div class="wrap">
@@ -315,6 +314,7 @@
 
         <div class="features-title">INCLUSO:</div>
         <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> <strong>Cadastre 1 estabelecimento</strong></li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Perfil público do estabelecimento</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Até 3 fotos do local</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Informações de contato direto</li>
@@ -348,6 +348,7 @@
 
         <div class="features-title">INCLUSO:</div>
         <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> <strong>Cadastre até 5 estabelecimentos</strong></li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Tudo do plano Básico (até 10 fotos)</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Destaque nos resultados de busca</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Exibição de localização aproximada</li>
@@ -379,6 +380,7 @@
 
         <div class="features-title">INCLUSO:</div>
         <ul class="features-list">
+          <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> <strong>Cadastre locais ILIMITADOS</strong></li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Tudo do plano Pro</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Fotos ilimitadas</li>
           <li><span class="icon check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Destaque máximo na plataforma</li>
@@ -407,7 +409,7 @@
       if (estabId) {
         // --- NOVO: Buscar plano atual para detectar Downgrade ---
         let currentPlanName = "Basico";
-        fetch(`http://127.0.0.1:8000/api/estabelecimentos`, {credentials: 'include'})
+        fetch(`/api/estabelecimentos`, {credentials: 'include'})
           .then(r => r.json())
           .then(locais => {
              const loc = locais.find(l => l.id == estabId);
@@ -431,7 +433,7 @@
 
             if (confirm(confirmMsg)) {
               try {
-                const response = await fetch(`http://127.0.0.1:8000/api/estabelecimentos/${estabId}`, {
+                const response = await fetch(`/api/estabelecimentos/${estabId}`, {
                   method: 'PATCH',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ plano_escolhido: newPlan }),
@@ -463,7 +465,5 @@
       }
     });
   </script>
-  <script src="../js/i18n.js"></script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

@@ -431,7 +431,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 // MAPS (MAPBOX)
 // ==========================================
 let mapSearch, mapPreview, markerPreview;
-mapboxgl.accessToken = window.ENV.MAPBOX_TOKEN;
+const token = window.ENV?.MAPBOX_TOKEN || "";
+console.log("[Mapbox Edit] Inicializando com token:", token ? "Token presente" : "Token AUSENTE");
+mapboxgl.accessToken = token;
 
 function initMapas() {
   const defaultCenter = [-46.6333, -23.5505];

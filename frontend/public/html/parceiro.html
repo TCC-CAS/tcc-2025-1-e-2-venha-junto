@@ -24,8 +24,19 @@
       .dark-section {
         background: var(--bg-dark);
         color: #ffffff;
+        margin-top: 0 !important;
+        padding-top: 60px !important;
         padding-bottom: 60px;
       }
+      
+      .main {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        background: var(--bg-dark) !important;
+      }
+
+
+
       
       .hero-container {
         max-width: 1200px;
@@ -71,7 +82,7 @@
       .pill-content small { color: #64748b; font-size: 13px; }
 
       .benefits-section { max-width: 1200px; margin: 60px auto; padding: 0 40px; text-align: center; }
-      .benefits-title { font-size: 28px; font-weight: 800; margin-bottom: 40px; color: var(--text-dark); }
+      .benefits-title { font-size: 28px; font-weight: 800; margin-bottom: 40px; color: #ffffff; }
       .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: left; }
       .benefit-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
       .benefit-icon { width: 40px; height: 40px; border-radius: 10px; background: #fff7ed; color: #f97316; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
@@ -95,12 +106,14 @@
 
     <!-- Topbar mobile (Design Premium) -->
     <header class="mobile-topbar" role="banner">
-      <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
-        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
-        <div class="brand-text mobile-brand-text">
-          <strong>Venha Junto</strong>
-          <span>Turismo Acessível</span>
-        </div>
+      <div class="mobile-left">
+        <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 32px;">
+          <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.1;">
+            <strong style="color: #0f172a; font-size: 14px;">Venha Junto</strong>
+            <span style="color: #64748b; font-size: 11px;">Turismo Acessível</span>
+          </div>
+        </a>
       </div>
       <div class="mobile-right">
         <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
@@ -118,11 +131,13 @@
       <!-- Sidebar / Desktop Header -->
       <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
         <div class="brand">
-          <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
-          <div class="brand-text">
-            <strong>Venha Junto</strong>
-            <span>Turismo Acessível em São Paulo</span>
-          </div>
+          <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+            <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 40px;">
+            <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.2;">
+              <strong style="color: #0f172a; font-size: 16px;">Venha Junto</strong>
+              <span style="color: #64748b; font-size: 12px;">Turismo Acessível</span>
+            </div>
+          </a>
         </div>
         <nav class="menu">
           <a href="./index.html">
