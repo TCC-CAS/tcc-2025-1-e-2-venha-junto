@@ -1188,15 +1188,28 @@ async function salvarNovoChamado() {
     });
 
     if (res.ok) {
-      alert("Chamado aberto com sucesso!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Chamado Aberto!',
+        text: 'Seu chamado foi registrado e nossa equipe já foi notificada.',
+        confirmButtonColor: '#ea580c'
+      });
       closeSupportModal();
       carregarChamados();
     } else {
       const err = await res.json();
-      alert("Erro: " + (err.detail || "Não foi possível abrir o chamado."));
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro ao abrir chamado',
+        text: err.detail || 'Não foi possível registrar sua solicitação no momento.'
+      });
     }
   } catch (e) {
-    alert("Erro de conexão.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro de conexão',
+      text: 'Verifique sua internet e tente novamente.'
+    });
   } finally {
     btn.disabled = false;
     btn.textContent = "Abrir Chamado";
