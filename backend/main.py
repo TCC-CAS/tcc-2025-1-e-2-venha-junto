@@ -1157,6 +1157,16 @@ def gerenciar_visibilidade(
 # ROTAS DE FOTOS - ESTABELECIMENTOS
 # ---------------------------------------------
 
+# --- Endpoint para Validação Instantânea (Frontend) ---
+@app.post("/api/validar-imagem")
+def validar_imagem_instantanea(file: UploadFile = File(...)):
+    """
+    Endpoint usado pelo frontend para validar uma imagem antes mesmo do upload final.
+    Não salva no S3, apenas roda a moderação da AWS.
+    """
+    validar_imagem(file)
+    return {"message": "Imagem aprovada"}
+
 def validar_imagem(file: UploadFile):
     if not file.filename:
         raise HTTPException(status_code=400, detail="Arquivo sem nome.")
