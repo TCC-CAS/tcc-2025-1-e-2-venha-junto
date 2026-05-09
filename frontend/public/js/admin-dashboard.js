@@ -558,6 +558,14 @@ const VJ_API_BASE = (function() {
               </div>
               <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: var(--admin-text-primary);">${t.title}</h3>
               <p style="margin: 0 0 12px 0; font-size: 14px; color: #475569; line-height: 1.5;">${t.description}</p>
+              
+              ${t.admin_response ? `
+                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                  <strong style="font-size: 12px; color: #166534; display: block; margin-bottom: 4px;">Sua Resposta:</strong>
+                  <p style="font-size: 13px; color: #166534; margin: 0;">${t.admin_response}</p>
+                </div>
+              ` : ''}
+
               <div style="font-size: 12px; color: var(--admin-text-secondary); display: flex; gap: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px;">
                  <span>👤 <strong>${t.partner_nome}</strong> (${t.partner_email})</span>
                  <span>📅 ${new Date(t.created_at).toLocaleString('pt-BR')}</span>
@@ -588,14 +596,38 @@ const VJ_API_BASE = (function() {
 
   window.updateTicketStatus = async (id, status) => {
     try {
-      await apiUpdateSupportStatus(id, status);
+      let admin_response = null;
+
+      if (status === 'RESOLVIDO' || status === 'EM_ANDAMENTO') {
+        const { value: text } = await Swal.fire({
+          title: 'Enviar resposta ao parceiro?',
+          input: 'textarea',
+          inputLabel: 'Sua mensagem (opcional)',
+          inputPlaceholder: 'Digite aqui as orientações ou resposta para o parceiro...',
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar e Enviar',
+          cancelButtonText: 'Apenas mudar status',
+          confirmButtonColor: '#ea580c'
+        });
+        
+        if (text) admin_response = text;
+      }
+
+      await apiUpdateSupportStatus(id, { status, admin_response });
       loadSupport();
-      showToast(`Chamado #${id} atualizado para ${status}`);
+      showToast(`Chamado #${id} atualizado com sucesso!`);
     } catch (e) {
       console.error(e);
       showToast("Erro ao atualizar chamado", "error");
     }
   };
+
+  async function apiUpdateSupportStatus(id, data) {
+    return apiFetch(`/api/admin/suporte/chamados/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data)
+    });
+  }
 
   function showToast(msg, type = "success") {
     const toast = document.getElementById("toast");

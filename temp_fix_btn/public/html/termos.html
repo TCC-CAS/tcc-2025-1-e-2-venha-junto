@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-br">
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Termos de Uso</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/mobile-fixes.css" />
+    <link rel="stylesheet" href="../css/perfil.css" />
+  <script>(function(d){var s = d.createElement('script');s.setAttribute('data-account', 'SEU_ID_AQUI');s.setAttribute('src', 'https://cdn.userway.org/widget.js');(d.body || d.head).appendChild(s);})(document);</script>
+    <link rel="stylesheet" href="../css/legal.css" />
+</head>
+
+  <body class="perfil-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- Topbar mobile (Design Premium) -->
+    <header class="mobile-topbar" role="banner">
+      <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
+        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+        <div class="brand-text mobile-brand-text">
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível</span>
+        </div>
+      </div>
+
+      <div class="mobile-right">
+        <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <a href="./usuario-login.html" class="user-circle" style="width: 36px; height: 36px; background: #94a3b8; text-decoration: none;">👤</a>
+        <button id="btnMenu" class="btn-icon" style="border:none; background:transparent; width: 32px;" aria-label="Abrir menu">
+          <svg id="menuIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="page">
+      <!-- Sidebar / Desktop Header -->
+      <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
+        <div class="brand">
+          <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+          <div class="brand-text">
+            <strong>Venha Junto</strong>
+            <span>Turismo Acessível em São Paulo</span>
+          </div>
+        </div>
+
+        <nav class="menu">
+          <a href="./index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Início
+          </a>
+          <a href="./explorar.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <div id="vj-translate-host"></div>
+          <div class="user-info">
+            <a href="./usuario-login.html" class="user-circle" style="background: #94a3b8; text-decoration: none;">👤</a>
+            <span>Entrar</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo -->
+      
+<main id="conteudo" class="main-content legal-content" role="main">
+  <div class="legal-card">
+
+      <header>
+        <h1>Termos de Uso</h1>
+        <p class="meta">Última atualização: 02/01/2026</p>
+
+        <p class="lead">
+          Estes Termos de Uso regulam o acesso e a utilização da plataforma <strong>Venha Junto</strong>, destinada à
+          <strong>divulgação</strong> de locais e serviços relacionados ao turismo acessível na cidade de São Paulo,
+          incluindo funcionalidades para visitantes e para parceiros (estabelecimentos).
+        </p>
+
+        <div class="notice" role="note" aria-label="Aviso importante">
+          A plataforma tem finalidade de divulgação e informação.
+          <strong>O Venha Junto não realiza reservas e não intermedia pagamentos</strong>.
+          O contato, negociação e contratação de serviços ocorrem diretamente entre visitante e estabelecimento.
+        </div>
+      </header>
+
+      <section aria-label="1. Definições">
+        <h2>1. Definições</h2>
+        <ul>
+          <li><strong>Plataforma:</strong> o site Venha Junto e suas páginas e funcionalidades.</li>
+          <li><strong>Visitante/Usuário:</strong> pessoa que navega, pesquisa, favoritou locais e consulta informações.</li>
+          <li><strong>Parceiro:</strong> estabelecimento que cria conta e cadastra seu local para divulgação.</li>
+          <li><strong>Conteúdo:</strong> textos, imagens, descrições, dados de acessibilidade, contato e demais informações publicadas.</li>
+        </ul>
+      </section>
+
+      <section aria-label="2. Aceite">
+        <h2>2. Aceite</h2>
+        <p>
+          Ao acessar a plataforma, você declara que leu, compreendeu e concorda com estes Termos.
+          Ao criar conta de parceiro ou enviar cadastros e informações, o aceite é confirmado no formulário correspondente.
+        </p>
+      </section>
+
+      <section aria-label="3. Finalidade da Plataforma">
+        <h2>3. Finalidade da Plataforma</h2>
+        <p>
+          O Venha Junto oferece uma vitrine digital para divulgar locais com informações de acessibilidade e características do serviço.
+          As informações publicadas têm caráter informativo e podem variar ao longo do tempo.
+        </p>
+      </section>
+
+      <section aria-label="4. Conta e Responsabilidades do Parceiro">
+        <h2>4. Conta e Responsabilidades do Parceiro</h2>
+        <p>
+          O parceiro é responsável por manter seus dados corretos, completos e atualizados, incluindo:
+          descrição do estabelecimento, endereço, formas de contato, fotos e informações de acessibilidade.
+        </p>
+        <ul>
+          <li>O parceiro declara ter autorização para publicar imagens e informações do local.</li>
+          <li>O parceiro compromete-se a não inserir conteúdo enganoso, discriminatório, ilegal ou que viole direitos de terceiros.</li>
+          <li>O parceiro é responsável pela veracidade das informações e pelo atendimento ao visitante.</li>
+        </ul>
+      </section>
+
+      <section aria-label="5. Uso Adequado e Condutas Proibidas">
+        <h2>5. Uso Adequado e Condutas Proibidas</h2>
+        <p>
+          É proibido utilizar a plataforma para fins ilícitos ou que prejudiquem terceiros e/ou a própria plataforma, incluindo:
+        </p>
+        <ul>
+          <li>tentar invadir, explorar vulnerabilidades, coletar dados de forma indevida ou interromper o funcionamento do site;</li>
+          <li>publicar conteúdo ofensivo, discriminatório, fraudulento, falso ou que viole leis e direitos autorais;</li>
+          <li>usar a plataforma para spam, propaganda enganosa ou práticas abusivas.</li>
+        </ul>
+      </section>
+
+      <section aria-label="6. Conteúdo e Propriedade Intelectual">
+        <h2>6. Conteúdo e Propriedade Intelectual</h2>
+        <p>
+          O layout, identidade visual, textos institucionais e elementos do Venha Junto podem ser protegidos por direitos autorais.
+          O conteúdo enviado pelo parceiro permanece de sua responsabilidade, concedendo à plataforma autorização para exibir e divulgar
+          esse conteúdo para fins de funcionamento do serviço.
+        </p>
+      </section>
+
+      <section aria-label="7. Limitação de Responsabilidade">
+        <h2>7. Limitação de Responsabilidade</h2>
+        <p>
+          O Venha Junto não se responsabiliza por negociações, reservas, pagamentos, cancelamentos, qualidade do serviço,
+          prazos ou qualquer relação comercial entre visitante e estabelecimento.
+        </p>
+        <p>
+          Embora busquemos manter informações organizadas e úteis, não garantimos ausência de erros, indisponibilidades
+          ou que o conteúdo esteja sempre atualizado, especialmente quando fornecido por terceiros.
+        </p>
+      </section>
+
+      <section aria-label="8. Suspensão, Remoção e Modificações">
+        <h2>8. Suspensão, Remoção e Modificações</h2>
+        <p>
+          Poderemos, quando necessário, suspender ou remover cadastros e conteúdos que violem estes Termos,
+          ou que apresentem indícios de fraude, inconsistência grave ou reclamações relevantes.
+        </p>
+        <p>
+          Estes Termos podem ser atualizados para refletir melhorias da plataforma. A data de atualização será informada nesta página.
+        </p>
+      </section>
+
+      <section aria-label="9. Contato">
+        <h2>9. Contato</h2>
+        <p>
+          Para dúvidas, solicitações ou reporte de conteúdo, utilize o canal oficial do projeto.
+          <strong>Recomendação para o TCC:</strong> informe um e-mail institucional do projeto (ex.: <em>contato@venhajunto.com</em>)
+          ou um e-mail acadêmico destinado ao trabalho.
+        </p>
+      </section>
+
+      <div class="small" aria-label="Nota final">
+        Este documento é parte demonstrativa do projeto acadêmico (TCC) e pode evoluir conforme a implementação do backend,
+        integrações e requisitos institucionais.
+      </div>
+    
+  </div>
+</main>
+
+    </div>
+
+    <!-- Avatar Script -->
+    <script>
+      (function () {
+        const input = document.getElementById("avatarInput");
+        const container = document.getElementById("avatarContainer");
+        const img = document.getElementById("avatarImgHero");
+        const fallback = document.getElementById("avatarFallbackHero");
+
+        let currentObjectUrl = null;
+
+        function applyPreview(url) {
+          if (fallback) fallback.style.display = "none";
+          if (img) {
+            img.src = url;
+            img.style.display = "block";
+            img.parentElement.style.background = "transparent";
+          }
+        }
+
+        function clearPreview() {
+          if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+          if (img) {
+            img.src = "";
+            img.style.display = "none";
+            img.parentElement.style.background = ""; // falls back to css orange
+          }
+          if (fallback) fallback.style.display = "block";
+        }
+
+        async function uploadToBackend(file) {
+          const fd = new FormData();
+          fd.append("file", file);
+
+          const res = await fetch(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar",
+            {
+              method: "POST",
+              body: fd,
+              credentials: "include",
+            },
+          );
+
+          if (!res.ok) throw new Error("Erro ao enviar avatar.");
+
+          applyPreview(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now(),
+          );
+          document.dispatchEvent(new Event("userbox:refresh"));
+        }
+
+        if (container && input) {
+          container.addEventListener("click", () => input.click());
+
+          input.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentObjectUrl = URL.createObjectURL(file);
+            applyPreview(currentObjectUrl);
+
+            try {
+              await uploadToBackend(file);
+            } catch (err) {
+              console.error(err);
+              clearPreview();
+              alert("Erro ao fazer upload da foto.");
+            }
+          });
+        }
+
+        const cachedUrl = localStorage.getItem("vj_last_avatar_url");
+        if (cachedUrl) applyPreview(cachedUrl);
+
+        window.addEventListener("load", () => {
+          const url = "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now();
+          const imgTest = new Image();
+          imgTest.onload = () => {
+             applyPreview(url);
+             localStorage.setItem("vj_last_avatar_url", url);
+          };
+          imgTest.onerror = () => {
+             if (!cachedUrl) clearPreview();
+          };
+          imgTest.src = url;
+        });
+      })();
+    </script>
+
+    <script src="../js/api.js" defer></script>
+    
+    <script src="../js/vlibras.js" defer></script>
+    <!-- ✅ Failsafe Menu & Accessibility Force -->
+    <script>
+      (function() {
+        const btn = document.getElementById('btnMenu');
+        const sidebar = document.getElementById('sidebar');
+        const icon = document.getElementById('menuIcon');
+        
+        const toggleMenu = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (!sidebar) return;
+          const isOpen = sidebar.getAttribute('data-open') === 'true';
+          const next = !isOpen;
+          sidebar.setAttribute('data-open', String(next));
+          
+          if (icon) {
+            if (next) {
+              icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            } else {
+              icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+            }
+          }
+        };
+
+        if (btn && sidebar) {
+          btn.addEventListener('click', toggleMenu);
+          btn.addEventListener('touchend', function(e){ e.preventDefault(); toggleMenu(); });
+        }
+
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay && sidebar) {
+          overlay.addEventListener('click', () => {
+            sidebar.setAttribute('data-open', 'false');
+            if (icon) icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          });
+        }
+
+        function forceLeft() {
+          const uway = document.querySelector('div[id^="userway"], #userwayAccessibilityWidget, .uway');
+          const vlibras = document.querySelector('[vw]');
+          if (uway) {
+            uway.style.setProperty('left', '10px', 'important');
+            uway.style.setProperty('right', 'auto', 'important');
+            uway.style.setProperty('bottom', '80px', 'important');
+          }
+          if (vlibras) {
+            vlibras.style.setProperty('left', '10px', 'important');
+            vlibras.style.setProperty('right', 'auto', 'important');
+            vlibras.style.setProperty('bottom', '100px', 'important');
+          }
+        }
+        setInterval(forceLeft, 1000);
+      })();
+    </script>
+    <!-- ✅ Tradução & Idiomas -->
+    <script src="../js/i18n.js" defer></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+  <script src="../js/userbox.js" defer></script>
+  
+    <!-- Navegação de rodapé (Mobile only via CSS) -->
+    <nav class="mobile-nav" role="navigation" aria-label="Navegação rápida">
+      <a href="./index.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Início
+      </a>
+      <a href="./explorar.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explorar
+      </a>
+      <a href="./favoritos.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+      <a href="./parceiro.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parceiro
+      </a>
+    </nav>
+
+  </body>
+</html>

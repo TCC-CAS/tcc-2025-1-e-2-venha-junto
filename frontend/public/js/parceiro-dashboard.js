@@ -1257,6 +1257,17 @@ function renderizarChamados(tickets) {
           <span class="local-status ${statusCls}" style="font-size: 11px; padding: 2px 8px;">${t.status}</span>
         </div>
         <p style="font-size: 13px; color: #475569; margin: 0;">${t.description}</p>
+        
+        ${t.admin_response ? `
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #ea580c; border-radius: 8px; padding: 12px; margin-top: 12px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #ea580c; margin-bottom: 4px;">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+               Resposta da Equipe
+            </div>
+            <p style="font-size: 13px; color: #334155; margin: 0; line-height: 1.4;">${t.admin_response}</p>
+          </div>
+        ` : ''}
+
         <div style="margin-top: 12px; font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between;">
            <span>Aberto em: ${new Date(t.created_at).toLocaleString('pt-BR')}</span>
            <span>ID: #${t.id}</span>

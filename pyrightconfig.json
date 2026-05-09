@@ -1,10 +1,10 @@
 {
-  "extraPaths": [
-    "./backend"
-  ],
-  "executionEnvironments": [
-    {
-      "root": "./backend"
-    }
-  ]
+    "executionEnvironments": [
+        {
+            "root": "backend"
+        }
+    ],
+    "extraPaths": [
+        "./backend"
+    ]
 }

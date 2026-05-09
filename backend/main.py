@@ -1236,7 +1236,9 @@ def atualizar_status_chamado(id: int, ticket_upd: schemas.SupportTicketUpdate, r
     
     if ticket_upd.status:
         db_ticket.status = ticket_upd.status
-    
+    if ticket_upd.admin_response:
+        db_ticket.admin_response = ticket_upd.admin_response
+        
     db.commit()
     return {"message": "Status atualizado com sucesso"}
 

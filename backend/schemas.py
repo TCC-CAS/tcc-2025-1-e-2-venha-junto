@@ -286,13 +286,16 @@ class SupportTicketCreate(SupportTicketBase):
 
 class SupportTicketUpdate(BaseModel):
     status: Optional[str] = None
+    admin_response: Optional[str] = None
 
 class SupportTicketResponse(SupportTicketBase):
     id: int
     partner_id: int
     status: str
+    admin_response: Optional[str] = None
     created_at: datetime
-    updated_at: datetime
+    partner_nome: Optional[str] = None
+    partner_email: Optional[str] = None
 
     class Config:
         from_attributes = True

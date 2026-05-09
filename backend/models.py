@@ -41,7 +41,8 @@ class SupportTicket(Base):
     category = Column(String(50), nullable=False)
     priority = Column(String(20), nullable=False)
     description = Column(Text, nullable=False)
-    status = Column(String(20), default="ABERTO") # ABERTO, EM_ANDAMENTO, RESOLVIDO, CANCELADO
+    status = Column(String(50), default="ABERTO") # ABERTO, EM_ANDAMENTO, RESOLVIDO
+    admin_response = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

@@ -1,5 +1,12 @@
 {
   "liveServer.settings.port": 5508,
-  "python.analysis.extraPaths": ["./backend"],
-  "python.defaultInterpreterPath": "C:\\Users\\bruna\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/backend"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/backend"
+  ],
+  "python.defaultInterpreterPath": "python",
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.typeCheckingMode": "off"
 }
