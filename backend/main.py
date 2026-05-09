@@ -1181,10 +1181,12 @@ def validar_imagem(file: UploadFile):
         
         moderation_response = rekognition.detect_moderation_labels(
             Image={'Bytes': img_bytes},
-            MinConfidence=75
+            MinConfidence=60
         )
         
         labels = moderation_response.get('ModerationLabels', [])
+        print(f"[REKOGNITION] Análise realizada. Encontrado: {len(labels)} categorias.")
+        
         if labels:
             # Se encontrar algo proibido (Nudity, Violence, etc)
             label_names = [l['Name'] for l in labels]
@@ -1193,11 +1195,16 @@ def validar_imagem(file: UploadFile):
                 status_code=400, 
                 detail="A imagem enviada contém conteúdo inapropriado e foi bloqueada pelo sistema de segurança."
             )
+            
     except ClientError as e:
         print(f"[AWS ERROR] Falha na moderação: {e}")
-        # Mudamos para levantar erro ao invés de 'pass' para que possamos ver o erro de permissão (AccessDeniedException)
         raise HTTPException(status_code=500, detail=f"Erro de configuração AWS Rekognition: {e}")
-
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[MODERATION DEBUG] Erro inesperado: {e}")
+        pass
+    
     return True
 
 @app.post("/api/estabelecimentos/{id}/foto-perfil")
