@@ -1181,7 +1181,7 @@ def validar_imagem(file: UploadFile):
         
         moderation_response = rekognition.detect_moderation_labels(
             Image={'Bytes': img_bytes},
-            MinConfidence=60
+            MinConfidence=50
         )
         
         labels = moderation_response.get('ModerationLabels', [])
