@@ -1267,7 +1267,12 @@ function renderizarChamados(tickets) {
             <span style="font-size: 11px; text-transform: uppercase; color: ${priorityColor}; font-weight: 800;">${t.priority} • ${t.category}</span>
             <h5 style="margin: 4px 0; font-size: 15px; color: #0f172a;">${t.title}</h5>
           </div>
-          <span class="local-status ${statusCls}" style="font-size: 11px; padding: 2px 8px;">${t.status}</span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            ${t.status === "ABERTO" ? `
+              <button onclick="cancelarChamado(${t.id})" style="background: none; border: 1px solid #cbd5e1; color: #64748b; font-size: 10px; padding: 2px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#ef4444'; this.style.color='#ef4444'" onmouseout="this.style.borderColor='#cbd5e1'; this.style.color='#64748b'">Cancelar</button>
+            ` : ''}
+            <span class="local-status ${statusCls}" style="font-size: 11px; padding: 2px 8px;">${t.status}</span>
+          </div>
         </div>
         <p style="font-size: 13px; color: #475569; margin: 0;">${t.description}</p>
         
@@ -1293,6 +1298,42 @@ function renderizarChamados(tickets) {
   if (statAbertos) statAbertos.textContent = abertos;
   if (statResolvidos) statResolvidos.textContent = resolvidos;
   if (statTotal) statTotal.textContent = tickets.length;
+}
+
+async function cancelarChamado(id) {
+  const result = await Swal.fire({
+    title: 'Cancelar chamado?',
+    text: "Esta ação não pode ser desfeita.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#64748b',
+    confirmButtonText: 'Sim, cancelar!',
+    cancelButtonText: 'Manter aberto'
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const res = await fetch(`/api/suporte/chamados/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+
+      if (res.ok) {
+        Swal.fire(
+          'Cancelado!',
+          'Seu chamado foi encerrado com sucesso.',
+          'success'
+        );
+        carregarChamados();
+      } else {
+        const err = await res.json();
+        Swal.fire('Erro', err.detail || 'Não foi possível cancelar.', 'error');
+      }
+    } catch (e) {
+      Swal.fire('Erro', 'Falha na conexão.', 'error');
+    }
+  }
 }
 
 // Iniciar carregamento de chamados se estiver na aba de suporte

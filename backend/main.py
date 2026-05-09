@@ -1198,6 +1198,27 @@ def listar_chamados_parceiro(request: Request, db: Session = Depends(get_db)):
     
     return db.query(models.SupportTicket).filter(models.SupportTicket.partner_id == db_parceiro.id).order_by(models.SupportTicket.created_at.desc()).all()
 
+@app.delete("/api/suporte/chamados/{id}")
+def cancelar_chamado_parceiro(id: int, request: Request, db: Session = Depends(get_db)):
+    db_parceiro = get_partner_from_token(request, db)
+    if not db_parceiro:
+        raise HTTPException(status_code=401, detail="Parceiro não autenticado")
+    
+    ticket = db.query(models.SupportTicket).filter(
+        models.SupportTicket.id == id, 
+        models.SupportTicket.partner_id == db_parceiro.id
+    ).first()
+    
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Chamado não encontrado")
+    
+    if ticket.status != "ABERTO":
+        raise HTTPException(status_code=400, detail="Apenas chamados com status ABERTO podem ser cancelados")
+    
+    ticket.status = "CANCELADO"
+    db.commit()
+    return {"message": "Chamado cancelado com sucesso"}
+
 # ENDPOINTS ADMIN PARA SUPORTE
 @app.get("/api/admin/suporte/chamados")
 def listar_chamados_admin(request: Request, db: Session = Depends(get_db)):
