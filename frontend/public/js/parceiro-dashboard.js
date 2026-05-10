@@ -1336,6 +1336,89 @@ async function cancelarChamado(id) {
   }
 }
 
-// Iniciar carregamento de chamados se estiver na aba de suporte
-// Adicionar ao carregarDadosParceiro
+// ---------------------------
+// Central de Notificações 🔔
+// ---------------------------
+const btnNotif = document.getElementById("btnNotifications");
+const dropdownNotif = document.getElementById("notifDropdown");
+const notifList = document.getElementById("notifList");
+const notifDot = document.getElementById("notifDot");
+const notifCount = document.getElementById("notifCount");
+
+if (btnNotif) {
+  btnNotif.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isVisible = dropdownNotif.style.display === "block";
+    dropdownNotif.style.display = isVisible ? "none" : "block";
+    if (!isVisible) carregarNotificacoes();
+  });
+}
+
+document.addEventListener("click", () => {
+  if (dropdownNotif) dropdownNotif.style.display = "none";
+});
+
+if (dropdownNotif) {
+  dropdownNotif.addEventListener("click", (e) => e.stopPropagation());
+}
+
+async function carregarNotificacoes() {
+  try {
+    // Vamos usar os chamados como fonte de notificações por enquanto
+    const tickets = await apiFetch("/api/suporte/chamados");
+    const respondidos = tickets.filter(t => t.admin_response && t.status !== "CANCELADO");
+    
+    // Atualizar Badge
+    if (respondidos.length > 0) {
+      notifDot.style.display = "block";
+      notifCount.style.display = "block";
+      notifCount.textContent = respondidos.length;
+    } else {
+      notifDot.style.display = "none";
+      notifCount.style.display = "none";
+    }
+
+    if (!notifList) return;
+
+    if (respondidos.length === 0) {
+      notifList.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+          Nenhuma nova notificação.
+        </div>
+      `;
+      return;
+    }
+
+    notifList.innerHTML = respondidos.map(t => `
+      <div class="notif-item" onclick="switchToSection('suporte'); carregarChamados();">
+        <div class="notif-icon-circle" style="background: #fff7ed; color: #ea580c;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="notif-content">
+          <span class="notif-title">Resposta no chamado #${t.id}</span>
+          <span class="notif-text">A equipe enviou uma devolutiva sobre: "${t.title}"</span>
+          <span class="notif-time">${new Date(t.created_at).toLocaleDateString('pt-BR')}</span>
+        </div>
+      </div>
+    `).join("");
+
+  } catch (e) {
+    console.error("Erro ao carregar notificações:", e);
+  }
+}
+
+// Chamar uma vez no início para atualizar o badge
+carregarNotificacoes();
+setInterval(carregarNotificacoes, 60000); // Atualiza a cada 1 minuto
+
+// Inicialização
+function switchToSection(target) {
+  // Já existe uma função similar provavelmente, mas vou garantir o acesso global
+  const items = document.querySelectorAll(".nav-item");
+  const sections = document.querySelectorAll(".dash-section");
+  
+  items.forEach(i => {
+    if (i.getAttribute("data-target") === target) i.click();
+  });
+}
 

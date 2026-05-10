@@ -205,20 +205,38 @@
         <header class="dash-header">
           <h2 id="pageTitle">Dashboard</h2>
           <div class="dash-header-right">
-            <button class="btn-icon">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-              <div class="notification-dot"></div>
-            </button>
+            <div class="notification-container" style="position: relative;">
+              <button class="btn-icon" id="btnNotifications">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <div class="notification-dot" id="notifDot" style="display: none;"></div>
+              </button>
+              
+              <!-- Dropdown de Notificações -->
+              <div class="notif-dropdown" id="notifDropdown" style="display: none; position: absolute; top: 50px; right: 0; width: 300px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; z-index: 1000; overflow: hidden;">
+                <div style="padding: 12px 16px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                  <strong style="font-size: 14px; color: #0f172a;">Notificações</strong>
+                  <span id="notifCount" style="font-size: 11px; background: #ea580c; color: white; padding: 2px 6px; border-radius: 10px; display: none;">0</span>
+                </div>
+                <div id="notifList" style="max-height: 350px; overflow-y: auto;">
+                  <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+                    Carregando...
+                  </div>
+                </div>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid #f1f5f9; background: #f8fafc;">
+                   <a href="javascript:void(0)" onclick="switchToSection('suporte')" style="font-size: 12px; color: #ea580c; text-decoration: none; font-weight: 600;">Ver suporte</a>
+                </div>
+              </div>
+            </div>
             <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="dash-avatar-link" style="text-decoration: none;">
               <div class="dash-avatar small">J</div>
             </a>
