@@ -767,22 +767,6 @@
           });
         }
 
-        // Forçar Acessibilidade na Esquerda (VLibras e Userway)
-        function forceLeft() {
-          const uway = document.querySelector('div[id^="userway"], #userwayAccessibilityWidget, .uway');
-          const vlibras = document.querySelector('[vw]');
-          if (uway) {
-            uway.style.setProperty('left', '10px', 'important');
-            uway.style.setProperty('right', 'auto', 'important');
-            uway.style.setProperty('bottom', '180px', 'important');
-          }
-          if (vlibras) {
-            vlibras.style.setProperty('left', '10px', 'important');
-            vlibras.style.setProperty('right', 'auto', 'important');
-            vlibras.style.setProperty('bottom', '100px', 'important');
-          }
-        }
-        setInterval(forceLeft, 1000);
       })();
     </script>
 
@@ -792,5 +776,16 @@
 
     <!-- ✅ Utils Internos -->
     <script src="../js/carousel.js" defer></script>
+    <!-- ✅ VLibras (plugin oficial gov.br) -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget("https://vlibras.gov.br/app");
+    </script>
   </body>
 </html>

@@ -454,8 +454,6 @@
           });
         }
 
-        function forceLeft() {
-          const uway = document.querySelector('div[id^="userway"], #userwayAccessibilityWidget, .uway');
           const vlibras = document.querySelector('[vw]');
           if (uway) {
             uway.style.setProperty('left', '10px', 'important');
@@ -468,7 +466,6 @@
             vlibras.style.setProperty('bottom', '100px', 'important');
           }
         }
-        setInterval(forceLeft, 1000);
       })();
     </script>
 
