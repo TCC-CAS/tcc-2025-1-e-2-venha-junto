@@ -1314,8 +1314,8 @@ async function cancelarChamado(id) {
 
   if (result.isConfirmed) {
     try {
-      const res = await fetch(`/api/suporte/chamados/${id}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/suporte/chamados/${id}/cancelar`, {
+        method: "POST",
         credentials: "include"
       });
 

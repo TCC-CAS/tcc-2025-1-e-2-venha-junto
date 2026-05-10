@@ -1198,7 +1198,8 @@ def listar_chamados_parceiro(request: Request, db: Session = Depends(get_db)):
     
     return db.query(models.SupportTicket).filter(models.SupportTicket.partner_id == db_parceiro.id).order_by(models.SupportTicket.created_at.desc()).all()
 
-@app.delete("/api/suporte/chamados/{id}")
+@app.post("/api/suporte/chamados/{id}/cancelar")
+@app.post("/api/suporte/chamados/{id}/cancelar/")
 def cancelar_chamado_parceiro(id: int, request: Request, db: Session = Depends(get_db)):
     db_parceiro = get_partner_from_token(request, db)
     if not db_parceiro:
