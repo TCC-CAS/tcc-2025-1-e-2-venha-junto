@@ -10,3 +10,4 @@ pyodbc
 httpx
 validate-docbr
 Pillow>=10.0.0
+boto3

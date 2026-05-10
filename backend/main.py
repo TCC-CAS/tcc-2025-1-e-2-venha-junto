@@ -178,7 +178,7 @@ PLAN_LIMITS = {
     }
 }
 
-def get_partner_capacity(partner_id: int, db: Session, intended_plan: str = None):
+def get_partner_capacity(partner_id: int, db: Session, intended_plan: Optional[str] = None):
     """
     Calcula a capacidade da conta do parceiro baseada no seu melhor plano ativo ou no plano que ele pretende assinar.
     """
@@ -200,11 +200,11 @@ def get_partner_capacity(partner_id: int, db: Session, intended_plan: str = None
     tier_map = {"Básico": 0, "Pro": 1, "Pro Plus": 2}
     
     # Normaliza o plano pretendido
-    normalized_intended = plan_mapping.get(intended_plan, "Básico")
+    normalized_intended = plan_mapping.get(intended_plan, "Básico")  # type: ignore
     melhor_plano = normalized_intended
     
     for e in estabelecimentos:
-        plano_atual = plan_mapping.get(e.plano_escolhido, "Básico")
+        plano_atual = plan_mapping.get(e.plano_escolhido, "Básico")  # type: ignore
         if tier_map.get(plano_atual, 0) > tier_map.get(melhor_plano, 0):
             melhor_plano = plano_atual
             
@@ -228,7 +228,7 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
     print(f"DEBUG: Recebendo senha para cadastro. Tipo: {type(usuario.senha)}, Tamanho: {len(usuario.senha)}")
     
     # Trunca a senha em 72 caracteres para evitar erro do bcrypt caso venha lixo
-    senha_limpa = str(usuario.senha)[:72]
+    senha_limpa = usuario.senha[:72]
     senha_segura = get_password_hash(senha_limpa)
 
     novo_usuario = models.Usuario(
@@ -304,7 +304,7 @@ def get_partner_from_token(request: Request, db: Session):
 def login(usuario: schemas.UsuarioLogin, response: Response, db: Session = Depends(get_db)):
     db_user = db.query(models.Usuario).filter(models.Usuario.email == usuario.email.lower()).first()
     
-    if not db_user or not verify_password(usuario.senha, db_user.senha_hash):
+    if not db_user or not verify_password(usuario.senha, db_user.senha_hash):  # type: ignore
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha inválidos."
@@ -367,9 +367,9 @@ def atualizar_usuario_atual(usuario_update: schemas.UsuarioUpdate, request: Requ
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuário não encontrado")
         
     if usuario_update.nome is not None:
-        db_user.nome = usuario_update.nome
+        db_user.nome = usuario_update.nome  # type: ignore
     if usuario_update.telefone is not None:
-        db_user.telefone = usuario_update.telefone
+        db_user.telefone = usuario_update.telefone  # type: ignore
         
     db.commit()
     db.refresh(db_user)
@@ -433,7 +433,7 @@ async def upload_avatar(request: Request, file: UploadFile = File(...), db: Sess
         image = PILImage.open(io.BytesIO(contents))
         image = image.convert("RGB")
         # Resize maintaining aspect ratio, max 512x512
-        image.thumbnail((512, 512), PILImage.LANCZOS)
+        image.thumbnail((512, 512), PILImage.LANCZOS)  # type: ignore
         image.save(filepath, "JPEG", quality=85)
     except HTTPException:
         raise
@@ -516,7 +516,7 @@ def auth_login(usuario: schemas.UsuarioLogin, response: Response, db: Session = 
     # Reutiliza a lógica de login existente, mas com o caminho que o frontend admin espera
     db_user = db.query(models.Usuario).filter(models.Usuario.email == usuario.email.lower()).first()
     
-    if not db_user or not verify_password(usuario.senha, db_user.senha_hash):
+    if not db_user or not verify_password(usuario.senha, db_user.senha_hash):  # type: ignore
         raise HTTPException(status_code=401, detail="E-mail ou senha inválidos.")
     
     access_token = create_access_token(data={"sub": str(db_user.id)})
@@ -654,9 +654,9 @@ def criar_review(estab_id: int, review: schemas.ReviewCreate, request: Request, 
     
     if existente:
         # Se já existir, atualiza a nota e comentário
-        existente.rating = review.rating
-        existente.comment = review.comment
-        existente.created_at = datetime.utcnow()
+        existente.rating = review.rating  # type: ignore
+        existente.comment = review.comment  # type: ignore
+        existente.created_at = datetime.now(timezone.utc)  # type: ignore
         db.commit()
         db.refresh(existente)
         return existente
@@ -720,7 +720,7 @@ def criar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(get_d
 @app.post("/partner-auth/login")
 def login_parceiro(parceiro: schemas.ParceiroLogin, response: Response, db: Session = Depends(get_db)):
     db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.email == parceiro.email.lower()).first()
-    if not db_parceiro or not verify_password(parceiro.senha, db_parceiro.senha_hash):
+    if not db_parceiro or not verify_password(parceiro.senha, db_parceiro.senha_hash):  # type: ignore
         raise HTTPException(status_code=401, detail="E-mail ou senha inválidos.")
     
     if db_parceiro.status == "ENCERRADO":
@@ -753,7 +753,7 @@ def ler_parceiro_atual(request: Request, db: Session = Depends(get_db)):
          raise HTTPException(status_code=401, detail="Parceiro não encontrado")
     
     # Calcula o plano ativo baseado na capacidade atual
-    capacidade = get_partner_capacity(db_parceiro.id, db)
+    capacidade = get_partner_capacity(db_parceiro.id, db)  # type: ignore
     # Encontra o nome do plano de volta do limite
     plano_ativo = "Básico"
     for nome, limites in PLAN_LIMITS.items():
@@ -781,9 +781,9 @@ def atualizar_parceiro_atual(parceiro_update: schemas.ParceiroUpdate, request: R
          raise HTTPException(status_code=401, detail="Parceiro não encontrado")
          
     if parceiro_update.nome is not None:
-        db_parceiro.nome = parceiro_update.nome
+        db_parceiro.nome = parceiro_update.nome  # type: ignore
     if parceiro_update.telefone is not None:
-        db_parceiro.telefone = parceiro_update.telefone
+        db_parceiro.telefone = parceiro_update.telefone  # type: ignore
         
     db.commit()
     db.refresh(db_parceiro)
@@ -832,7 +832,7 @@ def desativar_conta_parceiro(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Parceiro não encontrado")
         
     # 1. Altera status do parceiro
-    db_parceiro.status = "INATIVO"
+    db_parceiro.status = "INATIVO"  # type: ignore
     
     # 2. Oculta todos os locais
     db.query(models.Estabelecimento).filter(
@@ -869,8 +869,8 @@ def solicitar_exclusao_parceiro(response: Response, request: Request, db: Sessio
          raise HTTPException(status_code=400, detail="Não é possível excluir a conta enquanto houver pendências ativas.")
          
     # 1. Altera status do parceiro para ENCERRADO
-    db_parceiro.status = "ENCERRADO"
-    db_parceiro.is_active = False
+    db_parceiro.status = "ENCERRADO"  # type: ignore
+    db_parceiro.is_active = False  # type: ignore
     
     # 2. Oculta todos os locais permanentemente
     db.query(models.Estabelecimento).filter(
@@ -910,7 +910,7 @@ async def criar_estabelecimento(estab_data: schemas.EstabelecimentoCreate, reque
          
     # --- NOVO: Lógica de Capacidade da Conta ---
     # Verifica a capacidade considerando o plano que o usuário ESTÁ ESCOLHENDO agora (estab_data.plano_escolhido)
-    capacidade = get_partner_capacity(partner_id, db, intended_plan=estab_data.plano_escolhido)
+    capacidade = get_partner_capacity(partner_id, db, intended_plan=estab_data.plano_escolhido)  # type: ignore
     contagem_atual = db.query(models.Estabelecimento).filter(
         models.Estabelecimento.parceiro_id == partner_id,
         models.Estabelecimento.status != "ARCHIVED"
@@ -1102,8 +1102,8 @@ def solicitar_exclusao_estabelecimento(
             )
     
     # Mudar status para ARCHIVED (Esconde do parceiro e do público imediatamente)
-    db_estab.status = "ARCHIVED"
-    db_estab.visibilidade = "INATIVO" 
+    db_estab.status = "ARCHIVED"  # type: ignore
+    db_estab.visibilidade = "INATIVO"  # type: ignore
     db.commit()
     
     return {"message": "O estabelecimento foi removido com sucesso de sua lista e da plataforma pública."}
@@ -1139,21 +1139,21 @@ def gerenciar_visibilidade(
     acao = dados.acao
 
     if acao == "REATIVAR":
-        db_estab.visibilidade = "ATIVO"
-        db_estab.oculto_ate = None
+        db_estab.visibilidade = "ATIVO"  # type: ignore
+        db_estab.oculto_ate = None  # type: ignore
         msg = "Estabelecimento reativado com sucesso. Já está visível na plataforma."
 
     elif acao == "DESATIVAR":
-        db_estab.visibilidade = "INATIVO"
-        db_estab.oculto_ate = None
+        db_estab.visibilidade = "INATIVO"  # type: ignore
+        db_estab.oculto_ate = None  # type: ignore
         msg = "Estabelecimento desativado. Não aparecerá na plataforma até ser reativado."
 
     elif acao == "OCULTAR_PERIODO":
         if not dados.oculto_ate:
             raise HTTPException(status_code=400, detail="Informe a data de fim do período de ocultação.")
         from datetime import date as date_type
-        db_estab.visibilidade = "OCULTO_TEMPORARIO"
-        db_estab.oculto_ate = dados.oculto_ate
+        db_estab.visibilidade = "OCULTO_TEMPORARIO"  # type: ignore
+        db_estab.oculto_ate = dados.oculto_ate  # type: ignore
         msg = f"Estabelecimento ocultado até {dados.oculto_ate.strftime('%d/%m/%Y')}."
     else:
         raise HTTPException(status_code=400, detail="Ação inválida. Use: REATIVAR, DESATIVAR ou OCULTAR_PERIODO")
@@ -1216,7 +1216,7 @@ def cancelar_chamado_parceiro(id: int, request: Request, db: Session = Depends(g
     if ticket.status != "ABERTO":
         raise HTTPException(status_code=400, detail="Apenas chamados com status ABERTO podem ser cancelados")
     
-    ticket.status = "CANCELADO"
+    ticket.status = "CANCELADO"  # type: ignore
     db.commit()
     return {"message": "Chamado cancelado com sucesso"}
 
@@ -1257,9 +1257,9 @@ def atualizar_status_chamado(id: int, ticket_upd: schemas.SupportTicketUpdate, r
         raise HTTPException(status_code=404, detail="Chamado não encontrado")
     
     if ticket_upd.status:
-        db_ticket.status = ticket_upd.status
+        db_ticket.status = ticket_upd.status  # type: ignore
     if ticket_upd.admin_response:
-        db_ticket.admin_response = ticket_upd.admin_response
+        db_ticket.admin_response = ticket_upd.admin_response  # type: ignore
         
     db.add(db_ticket)
     db.commit()
@@ -1351,7 +1351,7 @@ def upload_foto_perfil(id: int, request: Request, file: UploadFile = File(...), 
     
     validar_imagem(file)
     
-    ext = os.path.splitext(file.filename)[1].lower()
+    ext = os.path.splitext(file.filename)[1].lower()  # type: ignore
     filename = f"perfil_{id}_{uuid.uuid4().hex}{ext}"
     
     # Upload para o S3
@@ -1366,7 +1366,7 @@ def upload_foto_perfil(id: int, request: Request, file: UploadFile = File(...), 
         print(f"[S3 ERROR] {e}")
         raise HTTPException(status_code=500, detail="Erro ao enviar imagem para a nuvem.")
             
-    db_estab.foto_perfil = filename
+    db_estab.foto_perfil = filename  # type: ignore
     db.commit()
     
     return {"message": "Foto de perfil atualizada", "filename": filename}
@@ -1392,7 +1392,7 @@ def upload_galeria(id: int, request: Request, file: UploadFile = File(...), db: 
     
     validar_imagem(file)
     
-    ext = os.path.splitext(file.filename)[1].lower()
+    ext = os.path.splitext(file.filename)[1].lower()  # type: ignore
     filename = f"galeria_{id}_{uuid.uuid4().hex}{ext}"
     
     # Upload para o S3
@@ -1410,7 +1410,7 @@ def upload_galeria(id: int, request: Request, file: UploadFile = File(...), db: 
     # Salvar na galeria (armazenado como string separada por vírgula)
     fotos = db_estab.fotos_galeria.split(",") if db_estab.fotos_galeria else []
     fotos.append(filename)
-    db_estab.fotos_galeria = ",".join(fotos)
+    db_estab.fotos_galeria = ",".join(fotos)  # type: ignore
     db.commit()
     
     return {"message": "Foto adicionada à galeria", "filename": filename}
@@ -1503,7 +1503,7 @@ def obter_local_publico(id: int, db: Session = Depends(get_db)):
     avg = db.query(func.avg(models.Review.rating)).filter(models.Review.estabelecimento_id == id).scalar()
     
     # Incrementar View Count (Total)
-    estab.views_count = (estab.views_count or 0) + 1
+    estab.views_count = (estab.views_count or 0) + 1  # type: ignore
     
     # Incrementar Métrica Diária (Histórico)
     _incrementar_metrica_diaria(db, id, "view")
@@ -1537,7 +1537,7 @@ def registrar_clique_publico(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Local não encontrado")
     
     # Incrementar Clicks (Total)
-    estab.clicks_count = (estab.clicks_count or 0) + 1
+    estab.clicks_count = (estab.clicks_count or 0) + 1  # type: ignore
     
     # Incrementar Métrica Diária (Histórico)
     _incrementar_metrica_diaria(db, id, "click")
@@ -1562,9 +1562,9 @@ def _incrementar_metrica_diaria(db: Session, estab_id: int, tipo: str):
         db.flush()
     
     if tipo == "view":
-        metrica.views += 1
+        metrica.views += 1  # type: ignore
     elif tipo == "click":
-        metrica.clicks += 1
+        metrica.clicks += 1  # type: ignore
 
 @app.get("/api/estabelecimentos/{id}/metricas-7dias", response_model=List[schemas.MetricaDiariaResponse])
 def obter_metricas_7dias(id: int, request: Request, db: Session = Depends(get_db)):
@@ -1622,7 +1622,7 @@ def upgrade_estabelecimento(id: int, payload: dict, request: Request, db: Sessio
     if plano_alvo in ["Básico", "Pro", "Pro Plus", "pro", "pro-plus"]:
         if plano_alvo == "pro": plano_alvo = "Pro"
         if plano_alvo == "pro-plus": plano_alvo = "Pro Plus"
-        estab.plano_escolhido = plano_alvo
+        estab.plano_escolhido = plano_alvo  # type: ignore
         db.commit()
         return {"message": f"Upgrade para {plano_alvo} realizado com sucesso!"}
     else:
@@ -1630,15 +1630,45 @@ def upgrade_estabelecimento(id: int, payload: dict, request: Request, db: Sessio
 
 @app.get("/api/estabelecimentos/fotos/{filename}")
 def get_estabelecimento_foto(filename: str):
-    """Redireciona para a foto no S3 ou serve local se existir (migração)"""
+    """Serve a foto do S3 via proxy para evitar erros de Redirect/CORS"""
+    print(f"[IMAGE PROXY] Solicitando arquivo: {filename}")
+    
+    # 1. Tenta local primeiro (legado/dev)
     local_path = os.path.join("estabelecimentos_fotos", filename)
     if os.path.exists(local_path):
         return FileResponse(local_path)
     
-    # Se não está local, redireciona para o S3
-    s3_url = f"https://{S3_BUCKET}.s3.{os.getenv('AWS_REGION', 'sa-east-1')}.amazonaws.com/fotos/{filename}"
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(s3_url)
+    # 2. Tenta S3
+    bucket = S3_BUCKET or "venha-junto-imagens" # Fallback para o nome descoberto
+    try:
+        # Busca no S3 e serve os bytes diretamente
+        obj = s3_client.get_object(Bucket=bucket, Key=f"fotos/{filename}")
+        return Response(
+            content=obj['Body'].read(),
+            media_type=obj.get('ContentType', 'image/jpeg'),
+            headers={"Cache-Control": "public, max-age=31536000"}
+        )
+    except ClientError as e:
+        error_code = e.response.get('Error', {}).get('Code')
+        print(f"[IMAGE PROXY S3 ERROR] {filename}: {error_code} - {e}")
+        
+        # Se for erro de redirecionamento permanente, tenta reconstruir o client com a região correta
+        if error_code == 'PermanentRedirect' or error_code == '301':
+            try:
+                # Tenta uma última vez com o endpoint específico do sa-east-1
+                temp_s3 = boto3.client('s3', region_name='sa-east-1')
+                obj = temp_s3.get_object(Bucket=bucket, Key=f"fotos/{filename}")
+                return Response(
+                    content=obj['Body'].read(),
+                    media_type=obj.get('ContentType', 'image/jpeg')
+                )
+            except:
+                pass
+                
+        raise HTTPException(status_code=404, detail=f"Foto não encontrada: {error_code}")
+    except Exception as e:
+        print(f"[IMAGE PROXY CRITICAL ERROR] {filename}: {e}")
+        raise HTTPException(status_code=500, detail="Erro interno ao processar imagem")
 
 @app.delete("/api/estabelecimentos/{id}/fotos/{filename}")
 def deletar_foto(id: int, filename: str, request: Request, db: Session = Depends(get_db)):
@@ -1662,12 +1692,12 @@ def deletar_foto(id: int, filename: str, request: Request, db: Session = Depends
     filepath = os.path.join("estabelecimentos_fotos", filename)
     
     if filename == db_estab.foto_perfil:
-        db_estab.foto_perfil = None
+        db_estab.foto_perfil = None  # type: ignore
     else:
         fotos = db_estab.fotos_galeria.split(",") if db_estab.fotos_galeria else []
         if filename in fotos:
             fotos.remove(filename)
-            db_estab.fotos_galeria = ",".join(fotos)
+            db_estab.fotos_galeria = ",".join(fotos)  # type: ignore
         else:
             raise HTTPException(status_code=404, detail="Foto não encontrada na galeria")
             
@@ -1776,7 +1806,7 @@ def admin_aprovar_estabelecimento(id: int, request: Request, db: Session = Depen
     if not db_estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
         
-    db_estab.status = "APPROVED"
+    db_estab.status = "APPROVED"  # type: ignore
     db.commit()
     return {"message": "Estabelecimento aprovado com sucesso"}
 
@@ -1798,7 +1828,7 @@ def admin_ia_verificar_estabelecimento(id: int, request: Request, db: Session = 
     justification = []
     
     # 1. Checa CNPJ (Simulado)
-    if db_estab.cnpj_cpf and len(db_estab.cnpj_cpf) >= 11:
+    if db_estab.cnpj_cpf and len(db_estab.cnpj_cpf) >= 11:  # type: ignore
         score += 0.3
         justification.append("Documentação (CNPJ/CPF) parece válida.")
     else:
@@ -1812,19 +1842,19 @@ def admin_ia_verificar_estabelecimento(id: int, request: Request, db: Session = 
         justification.append("Falta foto de perfil para validação visual.")
         
     # 3. Checa Descrição
-    if len(db_estab.descricao) > 30:
+    if len(db_estab.descricao) > 30:  # type: ignore
         score += 0.3
         justification.append("Descrição detalhada e coerente.")
     else:
         justification.append("Descrição muito curta.")
 
-    db_estab.ai_score = round(score, 2)
-    db_estab.ai_justification = " | ".join(justification)
+    db_estab.ai_score = round(score, 2)  # type: ignore
+    db_estab.ai_justification = " | ".join(justification)  # type: ignore
     
     if score >= 0.7:
-        db_estab.ai_status = "VERIFIED"
+        db_estab.ai_status = "VERIFIED"  # type: ignore
     else:
-        db_estab.ai_status = "REJECTED"
+        db_estab.ai_status = "REJECTED"  # type: ignore
         
     db.commit()
     db.refresh(db_estab)
@@ -1858,7 +1888,7 @@ def admin_rejeitar_estabelecimento(id: int, request: Request, db: Session = Depe
     if not db_estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
         
-    db_estab.status = "REJECTED"
+    db_estab.status = "REJECTED"  # type: ignore
     db.commit()
     return {"message": "Estabelecimento reprovado"}
 
@@ -2002,13 +2032,13 @@ def criar_review_publico(id: int, review: schemas.ReviewCreate, request: Request
     ).first()
     
     if existente:
-        existente.rating = review.rating
-        existente.comment = review.comment
-        existente.created_at = datetime.utcnow()
+        existente.rating = review.rating  # type: ignore
+        existente.comment = review.comment  # type: ignore
+        existente.created_at = datetime.now(timezone.utc)  # type: ignore
         db.commit()
         db.refresh(existente)
         res = schemas.ReviewResponse.model_validate(existente)
-        res.usuario_nome = user.nome
+        res.usuario_nome = user.nome  # type: ignore
         return res
 
     novo_review = models.Review(
@@ -2023,7 +2053,7 @@ def criar_review_publico(id: int, review: schemas.ReviewCreate, request: Request
     db.refresh(novo_review)
     
     res = schemas.ReviewResponse.model_validate(novo_review)
-    res.usuario_nome = user.nome
+    res.usuario_nome = user.nome  # type: ignore
     return res
 
 # =============================================
