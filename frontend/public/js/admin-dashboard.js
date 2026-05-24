@@ -907,36 +907,39 @@ const VJ_API_BASE = (function() {
 
       listDiv.innerHTML = denuncias.map(d => {
         let statusBadge = '';
-        if (d.status === 'PENDENTE') statusBadge = '<span class="status-badge" style="background:#fef2f2; color:#ef4444;">Pendente</span>';
-        else if (d.status === 'ANALISADA') statusBadge = '<span class="status-badge" style="background:#fffbeb; color:#f59e0b;">Em Análise</span>';
-        else statusBadge = '<span class="status-badge" style="background:#ecfdf5; color:#10b981;">Resolvida</span>';
+        if (d.status === 'PENDENTE') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fee2e2; color:#ef4444; font-weight: 700;">🚨 Pendente</span>';
+        else if (d.status === 'ANALISADA') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fef3c7; color:#d97706; font-weight: 700;">⏳ Em Análise</span>';
+        else statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#dcfce7; color:#16a34a; font-weight: 700;">✅ Resolvida</span>';
 
         return `
-          <div class="list-item" style="align-items:flex-start;">
-            <div style="width: 40px; height: 40px; background: #fee2e2; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #ef4444; font-size: 18px; flex-shrink: 0;">
-              !
-            </div>
-            <div class="item-info">
-              <strong style="display:flex; align-items:center; gap:8px;">
-                ${d.categoria}
-                ${statusBadge}
-              </strong>
-              <span style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Enviado por: ${d.nome_usuario} (${d.email_usuario})</span>
-              ${d.estabelecimento_nome ? `<span style="font-size: 13px; color: #0f172a; font-weight: 600; margin-bottom: 8px;">📍 Local reportado: ${d.estabelecimento_nome}</span>` : ''}
-              
-              <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; color: #334155; margin-top: 8px;">
-                "${d.mensagem}"
+          <div class="admin-card">
+            <div class="admin-card-info" style="align-items: flex-start;">
+              <div style="width: 48px; height: 48px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">
+                💬
+              </div>
+              <div class="admin-entity-details" style="width: 100%;">
+                <h3 style="display:flex; align-items:center; justify-content:space-between;">
+                  ${d.categoria} 
+                  ${statusBadge}
+                </h3>
+                <p style="margin-top: 4px;">Enviado por: <strong>${d.nome_usuario}</strong> (${d.email_usuario})</p>
+                ${d.estabelecimento_nome ? `<p style="color: #ea580c; font-weight: 600; margin-top: 4px;">📍 Local: ${d.estabelecimento_nome}</p>` : ''}
+                
+                <div style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 14px; color: #334155; line-height: 1.5; border-left: 4px solid #cbd5e1;">
+                  "${d.mensagem}"
+                </div>
               </div>
             </div>
-            <div class="item-actions" style="flex-direction: column; gap: 8px; min-width: 140px;">
+
+            <div class="admin-card-actions">
               ${d.status !== 'RESOLVIDA' ? `
-                <button class="btn-action btn-approve" style="width: 100%; justify-content:center;" onclick="handleDenunciaStatus(${d.id}, 'RESOLVIDA')">Marcar Resolvida</button>
+                <button class="btn-action btn-approve" onclick="handleDenunciaStatus(${d.id}, 'RESOLVIDA')">✅ Marcar Resolvida</button>
               ` : ''}
               ${d.status === 'PENDENTE' ? `
-                <button class="btn-action btn-details" style="width: 100%; justify-content:center;" onclick="handleDenunciaStatus(${d.id}, 'ANALISADA')">Em Análise</button>
+                <button class="btn-action btn-details" onclick="handleDenunciaStatus(${d.id}, 'ANALISADA')">⏳ Pôr em Análise</button>
               ` : ''}
               ${d.estabelecimento_id && d.status !== 'RESOLVIDA' ? `
-                <button class="btn-action btn-reject" style="width: 100%; justify-content:center;" onclick="handleSuspendLocal(${d.estabelecimento_id}, 'Local suspenso via Denúncia do usuário')">Suspender Local</button>
+                <button class="btn-action btn-reject" onclick="handleSuspendLocal(${d.estabelecimento_id}, 'Local suspenso via Denúncia do usuário')">🚫 Suspender Local</button>
               ` : ''}
             </div>
           </div>
