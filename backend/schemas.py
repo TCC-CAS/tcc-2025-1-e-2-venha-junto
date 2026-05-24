@@ -333,3 +333,28 @@ class AuditLogResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class DenunciaCreate(BaseModel):
+    estabelecimento_id: Optional[int] = None
+    nome_usuario: str
+    email_usuario: str
+    categoria: str
+    mensagem: str
+
+class DenunciaUpdate(BaseModel):
+    status: str
+
+class DenunciaResponse(BaseModel):
+    id: int
+    estabelecimento_id: Optional[int] = None
+    nome_usuario: str
+    email_usuario: str
+    categoria: str
+    mensagem: str
+    status: str
+    created_at: datetime
+    estabelecimento_nome: Optional[str] = None
+
+    class Config:
+        from_attributes = True

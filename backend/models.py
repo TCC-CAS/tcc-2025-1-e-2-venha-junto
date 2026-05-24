@@ -49,6 +49,20 @@ class SupportTicket(Base):
     # Relacionamentos
     partner = relationship("Parceiro")
 
+class Denuncia(Base):
+    __tablename__ = "denuncias"
+
+    id = Column(Integer, primary_key=True, index=True)
+    estabelecimento_id = Column(Integer, ForeignKey("estabelecimentos.id"), nullable=True) # Se null, é contato genérico
+    nome_usuario = Column(String(100), nullable=False)
+    email_usuario = Column(String(100), nullable=False)
+    categoria = Column(String(50), nullable=False)
+    mensagem = Column(Text, nullable=False)
+    status = Column(String(50), default="PENDENTE") # PENDENTE, ANALISADA, RESOLVIDA
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    estabelecimento = relationship("Estabelecimento")
+
 class Estabelecimento(Base):
     __tablename__ = "estabelecimentos"
 

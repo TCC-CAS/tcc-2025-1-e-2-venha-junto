@@ -2432,3 +2432,41 @@ def listar_cupons_publico(id: int, db: Session = Depends(get_db)):
         models.Cupom.estabelecimento_id == id,
         models.Cupom.ativo == True
     ).all()
+
+@app.post("/api/public/denuncias", response_model=schemas.DenunciaResponse)
+def create_denuncia(req_data: schemas.DenunciaCreate, db: Session = Depends(get_db)):
+    nova_denuncia = models.Denuncia(
+        estabelecimento_id=req_data.estabelecimento_id,
+        nome_usuario=req_data.nome_usuario,
+        email_usuario=req_data.email_usuario,
+        categoria=req_data.categoria,
+        mensagem=req_data.mensagem
+    )
+    db.add(nova_denuncia)
+    db.commit()
+    db.refresh(nova_denuncia)
+    return nova_denuncia
+
+@app.get("/api/admin/denuncias", response_model=List[schemas.DenunciaResponse])
+def get_all_denuncias(request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    denuncias = db.query(models.Denuncia).order_by(models.Denuncia.created_at.desc()).all()
+    for d in denuncias:
+        if d.estabelecimento_id:
+            estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == d.estabelecimento_id).first()
+            d.estabelecimento_nome = estab.nome if estab else None
+    return denuncias
+
+@app.put("/api/admin/denuncias/{id}/status", response_model=schemas.DenunciaResponse)
+def update_denuncia_status(id: int, req_data: schemas.DenunciaUpdate, request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    denuncia = db.query(models.Denuncia).filter(models.Denuncia.id == id).first()
+    if not denuncia:
+        raise HTTPException(status_code=404, detail="Denúncia não encontrada")
+    denuncia.status = req_data.status
+    db.commit()
+    db.refresh(denuncia)
+    if denuncia.estabelecimento_id:
+        estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == denuncia.estabelecimento_id).first()
+        denuncia.estabelecimento_nome = estab.nome if estab else None
+    return denuncia
