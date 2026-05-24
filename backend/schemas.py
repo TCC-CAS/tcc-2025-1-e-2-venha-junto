@@ -22,6 +22,9 @@ class UsuarioCreate(BaseModel):
             }
         }
 
+class AdminCreate(UsuarioCreate):
+    codigo_convite: str
+
 
 # ---------------------------------------------
 # DADOS DEVOLVIDOS PELA API AO FRONTEND

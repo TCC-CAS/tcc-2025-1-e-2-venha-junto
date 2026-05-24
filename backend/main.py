@@ -272,7 +272,23 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
     return novo_usuario
 
 @app.post("/api/admin/cadastro", response_model=schemas.UsuarioResponse, status_code=status.HTTP_201_CREATED)
-def criar_admin(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
+def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
+    # 1. Verifica Código de Convite (variável de ambiente ou fallback)
+    import os
+    codigo_correto = os.getenv("ADMIN_INVITE_CODE", "TCC2026ADMIN")
+    if usuario.codigo_convite != codigo_correto:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Acesso negado. Código administrativo inválido."
+        )
+
+    # 2. Valida Senha (já é feita no front, mas reforçamos no back por segurança)
+    if len(usuario.senha) < 8 or not any(c.isalpha() for c in usuario.senha) or not any(c.isdigit() for c in usuario.senha):
+         raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A senha deve ter no mínimo 8 caracteres, contendo pelo menos 1 letra e 1 número."
+        )
+
     usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == usuario.email.lower()).first()
     
     if usuario_existente:
