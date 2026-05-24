@@ -2164,6 +2164,92 @@ def admin_confirmar_exclusao(id: int, request: Request, db: Session = Depends(ge
     db.delete(db_estab)
     db.commit()
     return {"message": f"Estabelecimento '{nome_estab}' (#{id}) foi excluído permanentemente do sistema."}
+
+# =============================================
+# NOVAS ROTAS DE MODERAÇÃO E LOGS
+# =============================================
+
+def log_admin_action(db: Session, admin_id: int, admin_nome: str, action: str, target_type: str, target_id: int, reason: str = None, observation: str = None):
+    new_log = models.AuditLog(
+        admin_id=admin_id,
+        admin_nome=admin_nome,
+        action=action,
+        target_type=target_type,
+        target_id=target_id,
+        reason=reason,
+        observation=observation
+    )
+    db.add(new_log)
+    db.commit()
+
+@app.get("/api/admin/audit-logs", response_model=List[schemas.AuditLogResponse])
+def get_audit_logs(request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    return db.query(models.AuditLog).order_by(models.AuditLog.created_at.desc()).all()
+
+@app.put("/api/admin/parceiros/{id}/suspend")
+def suspend_parceiro(id: int, req_data: schemas.SuspendRequest, request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == id).first()
+    if not parceiro:
+        raise HTTPException(status_code=404, detail="Parceiro não encontrado.")
+    
+    parceiro.status = "SUSPENSO"
+    parceiro.is_active = False
+    
+    # Oculta todos os estabelecimentos do parceiro
+    estabelecimentos = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == id).all()
+    for estab in estabelecimentos:
+        if estab.status == "APPROVED":
+            estab.status = "SUSPENDED"
+    
+    db.commit()
+    log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_PARCEIRO", "Parceiro", parceiro.id, req_data.reason, req_data.observation)
+    return {"message": "Parceiro suspenso com sucesso."}
+
+@app.put("/api/admin/parceiros/{id}/reactivate")
+def reactivate_parceiro(id: int, request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    parceiro = db.query(models.Parceiro).filter(models.Parceiro.id == id).first()
+    if not parceiro:
+        raise HTTPException(status_code=404, detail="Parceiro não encontrado.")
+    
+    parceiro.status = "ATIVO"
+    parceiro.is_active = True
+    
+    # Restaura locais suspensos automaticamente
+    estabelecimentos = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == id, models.Estabelecimento.status == "SUSPENDED").all()
+    for estab in estabelecimentos:
+        estab.status = "APPROVED"
+        
+    db.commit()
+    log_admin_action(db, admin_user.id, admin_user.nome, "REATIVAR_PARCEIRO", "Parceiro", parceiro.id, "Reativação", "")
+    return {"message": "Parceiro reativado com sucesso."}
+
+@app.put("/api/admin/estabelecimentos/{id}/suspend")
+def suspend_estabelecimento(id: int, req_data: schemas.SuspendRequest, request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == id).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado.")
+    
+    estab.status = "SUSPENDED"
+    db.commit()
+    log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_LOCAL", "Estabelecimento", estab.id, req_data.reason, req_data.observation)
+    return {"message": "Estabelecimento suspenso com sucesso."}
+
+@app.put("/api/admin/estabelecimentos/{id}/reactivate")
+def reactivate_estabelecimento(id: int, request: Request, db: Session = Depends(get_db)):
+    admin_user = get_current_admin(request, db)
+    estab = db.query(models.Estabelecimento).filter(models.Estabelecimento.id == id).first()
+    if not estab:
+        raise HTTPException(status_code=404, detail="Estabelecimento não encontrado.")
+    
+    estab.status = "APPROVED"
+    db.commit()
+    log_admin_action(db, admin_user.id, admin_user.nome, "REATIVAR_LOCAL", "Estabelecimento", estab.id, "Reativação", "")
+    return {"message": "Estabelecimento reativado com sucesso."}
+
 # =============================================
 # ROTAS DE AVALIAÇÕES (PUBLIC)
 # =============================================

@@ -184,3 +184,18 @@ class MetricaDiaria(Base):
     )
 
     estabelecimento = relationship("Estabelecimento", backref="metricas_diarias")
+
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    admin_id = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
+    admin_nome = Column(String(100), nullable=False)
+    action = Column(String(100), nullable=False)
+    target_type = Column(String(50), nullable=False) # 'Parceiro', 'Estabelecimento'
+    target_id = Column(Integer, nullable=False)
+    reason = Column(String(255), nullable=True)
+    observation = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    admin = relationship("Usuario")

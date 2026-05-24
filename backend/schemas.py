@@ -316,3 +316,20 @@ class AdminStatsResponse(BaseModel):
     pendentes_aprovacao: int
     pendentes_exclusao: int
     faturamento_estimado: float
+
+class SuspendRequest(BaseModel):
+    reason: str
+    observation: Optional[str] = None
+
+class AuditLogResponse(BaseModel):
+    id: int
+    admin_nome: str
+    action: str
+    target_type: str
+    target_id: int
+    reason: Optional[str] = None
+    observation: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
