@@ -2247,9 +2247,9 @@ def suspend_estabelecimento(id: int, req_data: schemas.SuspendRequest, request: 
     if not estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado.")
     
-    estab.status = "SUSPENDED"
+    estab.status = "SUSPENDED" # type: ignore
     db.commit()
-    log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_LOCAL", "Estabelecimento", estab.id, req_data.reason, req_data.observation)
+    log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_LOCAL", "Estabelecimento", estab.id, req_data.reason, req_data.observation) # type: ignore
     return {"message": "Estabelecimento suspenso com sucesso."}
 
 @app.put("/api/admin/estabelecimentos/{id}/reactivate")
@@ -2259,7 +2259,7 @@ def reactivate_estabelecimento(id: int, request: Request, db: Session = Depends(
     if not estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado.")
     
-    estab.status = "APPROVED"
+    estab.status = "APPROVED" # type: ignore
     db.commit()
     log_admin_action(db, admin_user.id, admin_user.nome, "REATIVAR_LOCAL", "Estabelecimento", estab.id, "Reativação", "")
     return {"message": "Estabelecimento reativado com sucesso."}
