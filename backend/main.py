@@ -137,6 +137,7 @@ SMTP_PORT     = int(os.getenv("SMTP_PORT", 587))
 SMTP_USER     = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 FRONTEND_URL  = os.getenv("FRONTEND_URL", "https://venhajunto.vercel.app")
+IS_PRODUCTION = FRONTEND_URL.startswith("https")
 
 def send_reset_email(to_email: str, token: str):
     reset_link = f"{FRONTEND_URL}/html/usuario-recuperar-senha.html?token={token}"
@@ -345,8 +346,8 @@ def login(usuario: schemas.UsuarioLogin, response: Response, db: Session = Depen
         key="vj_access_token",
         value=access_token,
         httponly=True,
-        samesite="lax",
-        secure=False, # HTTP local, depois em PROD muda p/ True (HTTPS)
+        samesite="none" if IS_PRODUCTION else "lax",
+        secure=IS_PRODUCTION,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
     
@@ -552,8 +553,8 @@ def auth_login(usuario: schemas.UsuarioLogin, response: Response, db: Session = 
         key="vj_access_token",
         value=access_token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite="none" if IS_PRODUCTION else "lax",
+        secure=IS_PRODUCTION,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
     
@@ -758,8 +759,8 @@ def login_parceiro(parceiro: schemas.ParceiroLogin, response: Response, db: Sess
         key="vj_partner_token",
         value=access_token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite="none" if IS_PRODUCTION else "lax",
+        secure=IS_PRODUCTION,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
     )
     return {"message": "Login de parceiro realizado com sucesso", "nome": db_parceiro.nome}
