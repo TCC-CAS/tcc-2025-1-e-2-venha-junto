@@ -2169,6 +2169,20 @@ def admin_confirmar_exclusao(id: int, request: Request, db: Session = Depends(ge
 # NOVAS ROTAS DE MODERAÇÃO E LOGS
 # =============================================
 
+def get_current_admin(request: Request, db: Session):
+    token = request.cookies.get("vj_access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Não autenticado")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Sessão inválida")
+    db_user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not db_user or db_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Acesso negado: apenas administradores.")
+    return db_user
+
 def log_admin_action(db: Session, admin_id: int, admin_nome: str, action: str, target_type: str, target_id: int, reason: str = None, observation: str = None):
     new_log = models.AuditLog(
         admin_id=admin_id,
