@@ -16,23 +16,31 @@
   --admin-font: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+html {
+  background-color: var(--admin-bg-dark);
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: var(--admin-bg-gradient);
+  background-color: var(--admin-bg-dark);
+  background-image: var(--admin-bg-gradient);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
   font-family: var(--admin-font);
   color: var(--admin-text);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  position: relative;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Background animated glow effects */
 .ambient-glow {
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
   filter: blur(100px);
   z-index: 0;
@@ -66,9 +74,11 @@ body {
 .admin-auth-wrap {
   width: 100%;
   max-width: 460px;
-  padding: 24px;
+  padding: 40px 24px;
+  margin: auto; /* Vertically and horizontally centers */
   position: relative;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .admin-card {
@@ -276,3 +286,69 @@ body {
   border-radius: 4px;
   color: #fff;
 }
+
+/* Warning Box */
+.admin-warning-box {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #fca5a5;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Password Wrapper & Eye Icon */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.btn-toggle-pwd {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 16px;
+  padding: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.btn-toggle-pwd:hover {
+  opacity: 1;
+}
+
+/* Password Strength Meter */
+.pwd-strength-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: -2px;
+}
+.pwd-strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.pwd-bar {
+  height: 4px;
+  flex: 1;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+.pwd-strength-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* Strength Colors */
+.pwd-weak .pwd-bar:nth-child(1) { background: #ef4444; }
+.pwd-medium .pwd-bar:nth-child(1), .pwd-medium .pwd-bar:nth-child(2) { background: #f59e0b; }
+.pwd-strong .pwd-bar { background: #10b981; }

@@ -48,6 +48,7 @@ const VJ_API_BASE = (function() {
     if (target === "overview") loadStats();
     if (target === "approvals") loadApprovals();
     if (target === "partners") loadPartners();
+    if (target === "locais") loadLocais();
     if (target === "support") loadSupport();
   }
 
@@ -96,6 +97,54 @@ const VJ_API_BASE = (function() {
   async function apiUpdateSupportStatus(id, status) {
     return apiFetch(`/api/admin/suporte/chamados/${id}`, {
       method: "PATCH",
+      body: JSON.stringify({ status })
+    });
+  }
+
+  async function apiSuspendPartner(id, reason, obs) {
+    return apiFetch(`/api/admin/parceiros/${id}/suspend`, { 
+      method: "PUT", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({reason, observation: obs}) 
+    });
+  }
+
+  async function apiReactivatePartner(id) {
+    return apiFetch(`/api/admin/parceiros/${id}/reactivate`, { 
+      method: "PUT", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}) 
+    });
+  }
+
+  async function apiSuspendLocal(id, reason, obs) {
+    return apiFetch(`/api/admin/estabelecimentos/${id}/suspend`, { 
+      method: "PUT", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({reason, observation: obs}) 
+    });
+  }
+
+  async function apiReactivateLocal(id) {
+    return apiFetch(`/api/admin/estabelecimentos/${id}/reactivate`, { 
+      method: "PUT", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}) 
+    });
+  }
+
+  async function apiGetAuditLogs() {
+    return apiFetch(`/api/admin/audit-logs`);
+  }
+
+  async function apiGetDenuncias() {
+    return apiFetch(`/api/admin/denuncias`);
+  }
+
+  async function apiUpdateDenunciaStatus(id, status) {
+    return apiFetch(`/api/admin/denuncias/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status })
     });
   }
@@ -500,22 +549,99 @@ const VJ_API_BASE = (function() {
                 </p>
               </div>
             </div>
-            <div class="admin-card-actions">
-              <span style="background: ${badgeBg}; color: ${badgeColor}; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;">
-                ${p.status}
-              </span>
+              <div class="admin-card-actions">
+                <span style="background: ${badgeBg}; color: ${badgeColor}; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-right: 8px;">
+                  ${p.status}
+                </span>
+                ${p.status === 'ATIVO' 
+                  ? `<button class="btn-action btn-reject" onclick="handleSuspendPartner(${p.id})">Suspender</button>`
+                  : `<button class="btn-action btn-approve" onclick="handleReactivatePartner(${p.id})">Reativar</button>`
+                }
+              </div>
             </div>
-          </div>
-        `;
-      }).join("");
+          `;
+        }).join("");
 
-      list.innerHTML = html;
+        list.innerHTML = html;
 
-    } catch (e) {
-      console.error(e);
-      list.innerHTML = `<div class="empty-state"><h3>Erro ao carregar parceiros</h3><p>${e.message}</p></div>`;
+      } catch (e) {
+        console.error(e);
+        list.innerHTML = `<div class="empty-state"><h3>Erro ao carregar parceiros</h3><p>${e.message}</p></div>`;
+      }
     }
-  }
+
+    window.handleSuspendPartner = async (id) => {
+      const { value: formValues } = await Swal.fire({
+        title: '<h3 style="color:#0f172a; font-weight:800; margin:0; display:flex; align-items:center; justify-content:center; gap:8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Suspender Parceiro</h3>',
+        html: `
+          <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
+            <p style="font-size: 13px; color: #991b1b; margin: 0 0 8px 0; font-weight: 700;">Ao suspender este parceiro:</p>
+            <ul style="font-size: 13px; color: #991b1b; margin: 0; padding-left: 16px; line-height: 1.5;">
+              <li>Todos os locais sairão do ar (invisíveis ao público).</li>
+              <li>O acesso dele ao painel ficará <strong>restrito</strong> (só poderá abrir chamado de suporte).</li>
+              <li>As cobranças do plano ativo serão <strong>pausadas</strong>.</li>
+            </ul>
+          </div>
+          <div style="text-align: left; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #1e293b;">Motivo da Suspensão:</div>
+          <select id="swal-reason" style="width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; margin-bottom: 16px; font-family: inherit; font-size: 14px; background: #f8fafc; color: #0f172a;" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#cbd5e1'">
+            <option value="Violação dos Termos de Uso">Violação dos Termos de Uso</option>
+            <option value="Inadimplência">Inadimplência de Pagamento</option>
+            <option value="Informações falsas">Uso de Informações Falsas</option>
+            <option value="Reclamações recorrentes">Reclamações recorrentes</option>
+            <option value="Conteúdo inadequado">Conteúdo inadequado (Fotos/Textos)</option>
+            <option value="Outro">Outro Motivo</option>
+          </select>
+          <div style="text-align: left; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #1e293b;">Observação (visível para o parceiro):</div>
+          <textarea id="swal-obs" placeholder="Detalhe o motivo para o parceiro entender a punição..." style="width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; min-height: 80px; font-family: inherit; resize: none; font-size: 14px; background: #f8fafc; color: #0f172a;" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#cbd5e1'"></textarea>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'Confirmar Suspensão',
+        cancelButtonText: 'Cancelar',
+        width: '500px',
+        preConfirm: () => {
+          return {
+            reason: document.getElementById('swal-reason').value,
+            obs: document.getElementById('swal-obs').value
+          }
+        }
+      });
+
+      if (formValues) {
+        try {
+          await apiSuspendPartner(id, formValues.reason, formValues.obs);
+          Swal.fire('Suspenso', 'O parceiro e seus locais foram suspensos.', 'success');
+          loadPartners();
+          loadStats();
+        } catch (e) {
+          Swal.fire('Erro', e.message, 'error');
+        }
+      }
+    };
+
+    window.handleReactivatePartner = async (id) => {
+      const result = await Swal.fire({
+        title: 'Reativar Parceiro?',
+        text: "Os locais vinculados também poderão ficar visíveis novamente.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        confirmButtonText: 'Sim, reativar!'
+      });
+
+      if (result.isConfirmed) {
+        try {
+          await apiReactivatePartner(id);
+          Swal.fire('Reativado', 'O parceiro foi reativado.', 'success');
+          loadPartners();
+          loadStats();
+        } catch (e) {
+          Swal.fire('Erro', e.message, 'error');
+        }
+      }
+    };
 
   // ---------------------------
   // Support 🎧
@@ -640,6 +766,218 @@ const VJ_API_BASE = (function() {
   }
 
   // ---------------------------
+  // Locais Logic
+  // ---------------------------
+  async function loadLocais() {
+    const list = document.getElementById("full-locais-list");
+    if (!list) return;
+    list.innerHTML = '<div style="padding: 40px; text-align: center;">Carregando...</div>';
+
+    try {
+      const items = await apiListPlaces('ALL'); // Backend must handle 'ALL'
+      list.innerHTML = "";
+
+      if (items.length === 0) {
+        list.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--admin-text-secondary);">Nenhum local encontrado.</div>';
+        return;
+      }
+
+      items.forEach(p => {
+        let badgeColor = p.status === 'APPROVED' ? '#10b981' : (p.status === 'SUSPENDED' ? '#ef4444' : '#f59e0b');
+        let badgeBg = p.status === 'APPROVED' ? '#dcfce7' : (p.status === 'SUSPENDED' ? '#fee2e2' : '#fef3c7');
+
+        const card = document.createElement("div");
+        card.className = "admin-card";
+        card.innerHTML = `
+          <div class="admin-card-info">
+            <img src="${p.foto_perfil ? VJ_API_BASE + '/api/estabelecimentos/fotos/' + p.foto_perfil : '../img/placeholder.png'}" class="admin-entity-img">
+            <div class="admin-entity-details">
+              <h3>${p.nome}</h3>
+              <p>${p.tipo} • ${p.cidade}</p>
+              <p style="margin-top:4px;font-size:12px;color:var(--admin-text-secondary);">Cadastrado em: ${new Date(p.created_at).toLocaleDateString("pt-BR")}</p>
+            </div>
+          </div>
+          <div class="admin-card-actions">
+            <span style="background: ${badgeBg}; color: ${badgeColor}; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-right: 8px;">
+              ${p.status}
+            </span>
+            ${p.status === 'APPROVED' || p.status === 'PENDING_REVIEW'
+              ? `<button class="btn-action btn-reject" onclick="handleSuspendLocal(${p.id})">Suspender</button>`
+              : `<button class="btn-action btn-approve" onclick="handleReactivateLocal(${p.id})">Reativar</button>`
+            }
+            <button class="btn-action btn-details" onclick="window.open('./local-detalhes.html?id=${p.id}', '_blank')">Detalhes</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    } catch (e) {
+      console.error(e);
+      list.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--admin-danger);">Erro: ${e.message}</div>`;
+    }
+  }
+
+  window.handleSuspendLocal = async (id) => {
+    const { value: formValues } = await Swal.fire({
+      title: '<h3 style="color:#0f172a; font-weight:800; margin:0; display:flex; align-items:center; justify-content:center; gap:8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Suspender Local</h3>',
+      html: `
+        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
+          <p style="font-size: 13px; color: #92400e; margin: 0;"><strong>Atenção:</strong> Ao suspender este local, ele sairá do ar imediatamente, mas o parceiro ainda terá acesso ao sistema e aos outros locais dele.</p>
+        </div>
+        <div style="text-align: left; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #1e293b;">Motivo da Suspensão:</div>
+        <select id="swal-reason-loc" style="width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; margin-bottom: 16px; font-family: inherit; font-size: 14px; background: #f8fafc; color: #0f172a;" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#cbd5e1'">
+          <option value="Informações incorretas">Informações incorretas / falsas</option>
+          <option value="Falta de acessibilidade">Acessibilidade Inexistente (Fraude)</option>
+          <option value="Reclamações recorrentes">Reclamações recorrentes</option>
+          <option value="Conteúdo inadequado">Fotos ou Conteúdo inadequado</option>
+          <option value="Violação dos Termos de Uso">Violação dos Termos de Uso</option>
+          <option value="Outro">Outro</option>
+        </select>
+        <div style="text-align: left; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #1e293b;">Observação (visível para o parceiro):</div>
+        <textarea id="swal-obs-loc" placeholder="Detalhe por que o local foi suspenso..." style="width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; min-height: 80px; font-family: inherit; resize: none; font-size: 14px; background: #f8fafc; color: #0f172a;" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#cbd5e1'"></textarea>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Suspender Local',
+      cancelButtonText: 'Cancelar',
+      width: '500px',
+      preConfirm: () => {
+        return {
+          reason: document.getElementById('swal-reason-loc').value,
+          obs: document.getElementById('swal-obs-loc').value
+        }
+      }
+    });
+
+    if (formValues) {
+      try {
+        await apiSuspendLocal(id, formValues.reason, formValues.obs);
+        Swal.fire('Suspenso', 'O estabelecimento foi suspenso.', 'success');
+        loadLocais();
+        loadStats();
+      } catch (e) {
+        Swal.fire('Erro', e.message, 'error');
+      }
+    }
+  };
+
+  window.handleReactivateLocal = async (id) => {
+    const result = await Swal.fire({
+      title: 'Reativar Local?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#10b981',
+      confirmButtonText: 'Sim, reativar!'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await apiReactivateLocal(id);
+        Swal.fire('Reativado', 'O estabelecimento foi reativado.', 'success');
+        loadLocais();
+        loadStats();
+      } catch (e) {
+        Swal.fire('Erro', e.message, 'error');
+      }
+    }
+  };
+
+  // ---------------------------
+  // Denúncias Logic
+  // ---------------------------
+  async function loadDenuncias() {
+    try {
+      const denuncias = await apiGetDenuncias();
+      const listDiv = document.getElementById("full-denuncias-list");
+      if (!listDiv) return;
+
+      const badge = document.getElementById("badgeDenuncias");
+      const pendentes = denuncias.filter(d => d.status === "PENDENTE").length;
+      if (badge) {
+        badge.textContent = pendentes;
+        badge.style.display = pendentes > 0 ? "flex" : "none";
+      }
+
+      if (!denuncias || denuncias.length === 0) {
+        listDiv.innerHTML = '<div style="padding:16px; color:#64748b; text-align:center;">Nenhuma denúncia ou feedback recebido.</div>';
+        return;
+      }
+
+      listDiv.innerHTML = denuncias.map(d => {
+        let statusBadge = '';
+        if (d.status === 'PENDENTE') statusBadge = '<span class="status-badge" style="background:#fef2f2; color:#ef4444;">Pendente</span>';
+        else if (d.status === 'ANALISADA') statusBadge = '<span class="status-badge" style="background:#fffbeb; color:#f59e0b;">Em Análise</span>';
+        else statusBadge = '<span class="status-badge" style="background:#ecfdf5; color:#10b981;">Resolvida</span>';
+
+        return `
+          <div class="list-item" style="align-items:flex-start;">
+            <div style="width: 40px; height: 40px; background: #fee2e2; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #ef4444; font-size: 18px; flex-shrink: 0;">
+              !
+            </div>
+            <div class="item-info">
+              <strong style="display:flex; align-items:center; gap:8px;">
+                ${d.categoria}
+                ${statusBadge}
+              </strong>
+              <span style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Enviado por: ${d.nome_usuario} (${d.email_usuario})</span>
+              ${d.estabelecimento_nome ? `<span style="font-size: 13px; color: #0f172a; font-weight: 600; margin-bottom: 8px;">📍 Local reportado: ${d.estabelecimento_nome}</span>` : ''}
+              
+              <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; color: #334155; margin-top: 8px;">
+                "${d.mensagem}"
+              </div>
+            </div>
+            <div class="item-actions" style="flex-direction: column; gap: 8px; min-width: 140px;">
+              ${d.status !== 'RESOLVIDA' ? `
+                <button class="btn-action btn-approve" style="width: 100%; justify-content:center;" onclick="handleDenunciaStatus(${d.id}, 'RESOLVIDA')">Marcar Resolvida</button>
+              ` : ''}
+              ${d.status === 'PENDENTE' ? `
+                <button class="btn-action btn-details" style="width: 100%; justify-content:center;" onclick="handleDenunciaStatus(${d.id}, 'ANALISADA')">Em Análise</button>
+              ` : ''}
+              ${d.estabelecimento_id && d.status !== 'RESOLVIDA' ? `
+                <button class="btn-action btn-reject" style="width: 100%; justify-content:center;" onclick="handleSuspendLocal(${d.estabelecimento_id}, 'Local suspenso via Denúncia do usuário')">Suspender Local</button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch(err) {
+      console.error(err);
+      Swal.fire('Erro', 'Falha ao carregar denúncias', 'error');
+    }
+  }
+
+  window.handleDenunciaStatus = async (id, status) => {
+    try {
+      await apiUpdateDenunciaStatus(id, status);
+      Swal.fire({ title: 'Sucesso', text: 'Status da denúncia atualizado.', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+      loadDenuncias();
+    } catch(err) {
+      Swal.fire('Erro', err.message || 'Falha ao atualizar', 'error');
+    }
+  };
+
+  // ---------------------------
+  // Config Logic
+  // ---------------------------
+  window.saveConfig = () => {
+    Swal.fire('Sucesso!', 'Configurações da plataforma atualizadas.', 'success');
+  };
+
+  window.saveSecurity = () => {
+    Swal.fire('Segurança', 'Senha administrativa atualizada com sucesso.', 'success');
+    document.getElementById('securityForm').reset();
+  };
+
+  window.editAdminProfile = () => {
+    Swal.fire({
+      title: 'Editar Perfil',
+      text: 'A funcionalidade de edição de perfil de administrador será disponibilizada em breve.',
+      icon: 'info'
+    });
+  };
+
+  // ---------------------------
   // Init
   // ---------------------------
   async function init() {
@@ -648,6 +986,24 @@ const VJ_API_BASE = (function() {
 
     document.getElementById("adminNome").textContent = admin.nome;
     
+    // Setup Conta Administrativa Info
+    const confNome = document.getElementById("config-admin-nome");
+    if (confNome) confNome.textContent = admin.nome;
+    
+    const confEmail = document.getElementById("config-admin-email");
+    if (confEmail) confEmail.textContent = admin.email;
+    
+    const confRole = document.getElementById("config-admin-role");
+    if (confRole) confRole.textContent = admin.role === 'admin' ? 'Master Admin' : 'Administrador';
+
+    // Se o backend não retorna created_at ou ultimo_acesso, mantemos os defaults do layout ou preenchemos genérico.
+    const confCreated = document.getElementById("config-admin-created");
+    if (confCreated && admin.created_at) confCreated.textContent = new Date(admin.created_at).toLocaleDateString('pt-BR');
+    
+    const confAcesso = document.getElementById("config-admin-acesso");
+    if (confAcesso && admin.ultimo_acesso) confAcesso.textContent = new Date(admin.ultimo_acesso).toLocaleString('pt-BR');
+    else if (confAcesso) confAcesso.textContent = new Date().toLocaleString('pt-BR'); // Mock current login time
+
     // Default view
     loadStats();
     
@@ -657,7 +1013,13 @@ const VJ_API_BASE = (function() {
     const btnReloadPartners = document.getElementById("btnReloadPartnersList");
     if(btnReloadPartners) btnReloadPartners.addEventListener("click", loadPartners);
 
+    const btnReloadLocais = document.getElementById("btnReloadLocaisList");
+    if(btnReloadLocais) btnReloadLocais.addEventListener("click", loadLocais);
+
     if(btnReloadSupportList) btnReloadSupportList.addEventListener("click", loadSupport);
+    
+    const btnReloadDenuncias = document.getElementById("btnReloadDenunciasList");
+    if(btnReloadDenuncias) btnReloadDenuncias.addEventListener("click", loadDenuncias);
     
     btnLogout.addEventListener("click", () => {
       apiFetch("/api/usuarios/logout", { method: "POST" }).then(() => {

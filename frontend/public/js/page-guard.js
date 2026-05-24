@@ -53,19 +53,7 @@
     // Pegamos o usuário logado
     const me = await getMeSafe();
 
-    // 1. SEGURANÇA TOTAL: Se um ADMIN tentar entrar em uma página de USUÁRIO (Perfil, Favoritos, etc)
-    // nós bloqueamos ele e mandamos para o Dashboard Administrativo.
-    if (me && (me.role === "admin" || me.role === "master")) {
-       // Se a página atual não for pública (ex: perfil.html), redireciona
-       const isUserOnlyPage = window.location.pathname.includes("perfil.html") || 
-                              window.location.pathname.includes("favoritos.html");
-       
-       if (isUserOnlyPage || required) {
-          console.warn("[Guard] Admin tentando acessar área restrita de usuário. Redirecionando...");
-          window.location.replace("./admin-dashboard.html");
-          return;
-       }
-    }
+    // Admin redirection removed so admins can freely browse the public site and test features
 
     // 2. Se for página protegida e não estiver logado, manda pro login
     if (required && !me) {

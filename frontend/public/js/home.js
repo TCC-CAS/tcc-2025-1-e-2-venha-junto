@@ -215,7 +215,7 @@
 
     let imageUrls = [];
     if (place.foto_perfil) {
-      imageUrls.push(`${API_BASE}/api/estabelecimentos/fotos/${place.foto_perfil}`);
+      imageUrls.push(`${API_BASE}/api/estabelecimentos/fotos/${place.foto_perfil}?v=${Date.now()}`);
     }
     if (place.fotos_galeria) {
       const extra = place.fotos_galeria.split(",").filter(v => v.trim());
@@ -507,7 +507,21 @@
 
     // Botão Buscar
     const btnBuscar = qs("btnBuscar");
-    if (btnBuscar) btnBuscar.addEventListener("click", aplicarFiltros);
+    if (btnBuscar) {
+      btnBuscar.addEventListener("click", () => {
+        aplicarFiltros();
+        // Rola a página até a lista de locais suavemente
+        const container = qs("listaLocais");
+        if (container) {
+          const section = container.closest(".section");
+          if (section) {
+            section.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            container.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      });
+    }
 
     // Aplica na hora que mudar os filtros
     const cidadeEl = qs("cidade");

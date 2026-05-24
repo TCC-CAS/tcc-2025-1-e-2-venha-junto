@@ -584,10 +584,29 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function logout() {
-  // Limpar tokens de parceiro ou alertar
-  if (confirm("Deseja realmente sair da área do parceiro?")) {
-    window.location.href = "./index.html";
-  }
+  Swal.fire({
+    title: 'Deseja sair?',
+    text: 'Você será desconectado da área do parceiro.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ea580c',
+    cancelButtonColor: '#94a3b8',
+    confirmButtonText: 'Sim, sair',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        // Chama o endpoint real de logout para limpar o cookie do parceiro
+        await fetch('/partner-auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+      } catch (e) {
+        console.warn('[Logout] Erro ao chamar endpoint:', e);
+      }
+      window.location.href = './parceiro-login.html';
+    }
+  });
 }
 
 // === MÉTODOS DO MODAL DE CUPOM ===

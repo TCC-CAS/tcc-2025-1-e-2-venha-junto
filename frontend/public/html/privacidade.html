@@ -17,12 +17,14 @@
 
     <!-- Topbar mobile (Design Premium) -->
     <header class="mobile-topbar" role="banner">
-      <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
-        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
-        <div class="brand-text mobile-brand-text">
-          <strong>Venha Junto</strong>
-          <span>Turismo Acessível</span>
-        </div>
+      <div class="mobile-left">
+        <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 32px;">
+          <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.1;">
+            <strong style="color: #0f172a; font-size: 14px;">Venha Junto</strong>
+            <span style="color: #64748b; font-size: 11px;">Turismo Acessível</span>
+          </div>
+        </a>
       </div>
 
       <div class="mobile-right">
@@ -41,11 +43,13 @@
       <!-- Sidebar / Desktop Header -->
       <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
         <div class="brand">
-          <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
-          <div class="brand-text">
-            <strong>Venha Junto</strong>
-            <span>Turismo Acessível em São Paulo</span>
-          </div>
+          <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+            <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 40px;">
+            <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.2;">
+              <strong style="color: #0f172a; font-size: 16px;">Venha Junto</strong>
+              <span style="color: #64748b; font-size: 12px;">Turismo Acessível</span>
+            </div>
+          </a>
         </div>
 
         <nav class="menu">
@@ -71,155 +75,226 @@
           <div id="vj-translate-host"></div>
           <div class="user-info">
             <a href="./usuario-login.html" class="user-circle" style="background: #94a3b8; text-decoration: none;">👤</a>
-            <span>Entrar</span>
+            <span class="user-name">Entrar</span>
           </div>
         </div>
       </header>
 
       <!-- Conteúdo -->
-      
-<main id="conteudo" class="main-content legal-content" role="main">
-  <div class="legal-card">
+      <main id="conteudo" class="legal-content" role="main">
+      <!-- Header Hero com visual premium em Laranja -->
+      <header class="legal-header-hero">
+        <div class="legal-header-container">
+          <a href="./index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Voltar ao início
+          </a>
+          <h1 class="legal-hero-title">Documentos Legais</h1>
+          <p class="legal-hero-subtitle">Venha Junto – Turismo Acessível • Última atualização: 24/05/2026</p>
+        </div>
+      </header>
 
-        <h1>Política de Privacidade</h1>
-        <p class="updated">Última atualização: <strong>02/01/2026</strong></p>
+      <!-- Tabs para alternar entre documentos -->
+      <div class="legal-tabs">
+        <a href="./termos.html" class="legal-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Termos de Uso
+        </a>
+        <a href="./privacidade.html" class="legal-tab active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Política de Privacidade
+        </a>
+      </div>
 
-        <p>
-          Esta Política explica como o <strong>Venha Junto</strong> coleta, usa e protege dados
-          pessoais de visitantes/usuários e de parceiros (estabelecimentos), em conformidade
-          com a <strong>Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018)</strong>.
-        </p>
-
-        <div class="callout">
-          O Venha Junto é uma plataforma de <strong>divulgação e informação</strong>.
-          Não realizamos reservas nem intermediamos pagamentos. Quando você entra em contato com um
-          estabelecimento, essa relação ocorre diretamente entre você e o parceiro.
+      <div class="legal-card">
+        <div class="notice" role="note" aria-label="Aviso importante" style="border: 1px solid rgba(234, 88, 12, 0.15); background: rgba(234, 88, 12, 0.03); color: #ea580c; margin-top: 0;">
+          A <strong>Venha Junto – Turismo Acessível</strong> respeita e protege a privacidade dos seus usuários. Esta Política descreve como coletamos, usamos e protegemos seus dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018).
         </div>
 
-        <h2>1. Quem controla os dados</h2>
-        <p>
-          <strong>Controlador:</strong> Venha Junto (projeto acadêmico/TCC).
-          <span class="muted">
-            Ajuste depois com o nome do responsável e e-mail institucional do projeto.
-          </span>
-        </p>
-        <p class="muted" style="margin-top: 6px">
-          Contato (privacidade): <code>privacidade@venhajunto.com</code> (substitua pelo e-mail real)
-        </p>
+        <h2 class="section-title"><span class="section-number">1</span>Introdução</h2>
+        <p>O Venha Junto – Turismo Acessível respeita a privacidade e a proteção dos dados pessoais de seus usuários, parceiros comerciais e visitantes.</p>
+        <p>Esta Política de Privacidade descreve como os dados pessoais são coletados, utilizados, armazenados, compartilhados e protegidos durante a utilização da Plataforma, em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018).</p>
+        <p>Ao utilizar a Plataforma, o usuário declara estar ciente das práticas descritas nesta Política.</p>
 
-        <h2>2. Quais dados podemos coletar</h2>
-        <table class="table" aria-label="Tabela de dados coletados">
-          <thead>
-            <tr>
-              <th>Categoria</th>
-              <th>Exemplos</th>
-              <th>Para quê</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Dados de navegação</td>
-              <td>páginas visitadas, data/hora, tipo de dispositivo, logs</td>
-              <td>segurança, melhoria do site, métricas gerais</td>
-            </tr>
-            <tr>
-              <td>Dados de conta do parceiro</td>
-              <td>nome, e-mail, telefone, senha (armazenada com segurança no backend)</td>
-              <td>criar e gerenciar acesso à área do parceiro</td>
-            </tr>
-            <tr>
-              <td>Dados do estabelecimento</td>
-              <td>nome, categoria, endereço, descrição, fotos, recursos de acessibilidade</td>
-              <td>publicar e exibir o anúncio para visitantes</td>
-            </tr>
-            <tr>
-              <td>Favoritos do visitante</td>
-              <td>itens favoritados (quando essa função existir)</td>
-              <td>melhor experiência do usuário</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h2>3. Bases legais (LGPD)</h2>
+        <h2 class="section-title"><span class="section-number">2</span>Controlador dos Dados</h2>
+        <p>O controlador responsável pelo tratamento dos dados pessoais é a plataforma Venha Junto – Turismo Acessível.</p>
+        <p>Canal para contato:</p>
         <ul>
-          <li><strong>Execução de contrato/procedimentos preliminares:</strong> para permitir o cadastro e a gestão do anúncio do parceiro.</li>
-          <li><strong>Legítimo interesse:</strong> para segurança, prevenção a fraude e melhoria da experiência (sempre com avaliação de impacto).</li>
-          <li><strong>Consentimento:</strong> quando aplicável (ex.: comunicação específica, cookies não essenciais, se implementados).</li>
-          <li><strong>Cumprimento de obrigação legal/regulatória:</strong> quando necessário.</li>
+          <li>E-mail: <strong>contato@venhajunto.com.br</strong></li>
         </ul>
 
-        <h2>4. Como usamos os dados</h2>
+        <h2 class="section-title"><span class="section-number">3</span>Dados Pessoais Coletados</h2>
+        <p>Podemos coletar os seguintes dados pessoais:</p>
+        <h3>Dados de Cadastro</h3>
         <ul>
-          <li>Disponibilizar a Plataforma e suas funcionalidades.</li>
-          <li>Gerenciar conta do parceiro e cadastro do estabelecimento.</li>
-          <li>Exibir informações públicas do anúncio (ex.: nome do local, descrição, endereço, contato, recursos de acessibilidade).</li>
-          <li>Manter segurança, prevenir abusos e melhorar desempenho.</li>
-          <li>Responder solicitações e comunicações relacionadas ao projeto.</li>
+          <li>Nome completo;</li>
+          <li>Endereço de e-mail;</li>
+          <li>Número de telefone;</li>
+          <li>Senha criptografada para autenticação.</li>
+        </ul>
+        <h3>Dados de Parceiros Comerciais</h3>
+        <ul>
+          <li>Nome comercial;</li>
+          <li>Razão social;</li>
+          <li>CPF ou CNPJ;</li>
+          <li>Endereço do estabelecimento;</li>
+          <li>Informações de contato;</li>
+          <li>Nome do responsável legal.</li>
+        </ul>
+        <h3>Conteúdo Publicado</h3>
+        <ul>
+          <li>Fotografias;</li>
+          <li>Descrições;</li>
+          <li>Comentários;</li>
+          <li>Avaliações;</li>
+          <li>Informações sobre acessibilidade.</li>
+        </ul>
+        <h3>Dados de Navegação</h3>
+        <ul>
+          <li>Endereço IP;</li>
+          <li>Tipo de dispositivo;</li>
+          <li>Navegador utilizado;</li>
+          <li>Sistema operacional;</li>
+          <li>Páginas acessadas;</li>
+          <li>Data e horário de acesso;</li>
+          <li>Tempo de permanência na Plataforma.</li>
+        </ul>
+        <h3>Comunicações</h3>
+        <ul>
+          <li>Mensagens enviadas por formulários;</li>
+          <li>Solicitações de suporte;</li>
+          <li>Reclamações;</li>
+          <li>Sugestões e feedbacks.</li>
         </ul>
 
-        <h2>5. Compartilhamento de dados</h2>
-        <p>
-          O Venha Junto pode compartilhar dados apenas quando necessário para operar a Plataforma,
-          por exemplo com provedores de hospedagem/infraestrutura e ferramentas técnicas (analytics),
-          sempre respeitando a LGPD e princípios de minimização.
-        </p>
-        <p class="muted">
-          Dados públicos do estabelecimento (anúncio) são exibidos na Plataforma conforme o parceiro cadastrar.
-        </p>
-
-        <h2>6. Cookies e tecnologias semelhantes</h2>
-        <p>
-          Podemos utilizar cookies e armazenamento local (ex.: <code>localStorage</code>) para funcionamento
-          do site (ex.: manter sessão simulada no protótipo, preferências, favoritos). Se você implementar
-          cookies não essenciais, recomendamos incluir um banner de consentimento.
-        </p>
-
-        <h2>7. Segurança da informação</h2>
-        <p>
-          Adotamos medidas de segurança adequadas ao contexto do projeto, como controle de acesso,
-          boas práticas de desenvolvimento e proteção contra acessos não autorizados. Ainda assim,
-          nenhum sistema é 100% inviolável.
-        </p>
-
-        <h2>8. Retenção e exclusão</h2>
-        <p>
-          Mantemos dados pelo tempo necessário para cumprir as finalidades descritas nesta Política,
-          atender requisitos legais e garantir segurança. O parceiro pode solicitar atualização ou exclusão
-          de dados conforme aplicável.
-        </p>
-
-        <h2>9. Direitos do titular (LGPD)</h2>
-        <p>Você pode solicitar:</p>
+        <h2 class="section-title"><span class="section-number">4</span>Finalidades do Tratamento dos Dados</h2>
+        <p>Os dados pessoais poderão ser utilizados para:</p>
         <ul>
-          <li>confirmação de tratamento e acesso aos dados;</li>
-          <li>correção de dados incompletos, inexatos ou desatualizados;</li>
-          <li>anonimização, bloqueio ou eliminação (quando aplicável);</li>
-          <li>informações sobre compartilhamento;</li>
-          <li>revogação de consentimento (quando a base legal for consentimento).</li>
+          <li>Criar e gerenciar contas de usuários;</li>
+          <li>Autenticar acessos à Plataforma;</li>
+          <li>Permitir o cadastro e gerenciamento de estabelecimentos;</li>
+          <li>Exibir avaliações e recursos de acessibilidade;</li>
+          <li>Processar solicitações de suporte;</li>
+          <li>Melhorar funcionalidades e desempenho da Plataforma;</li>
+          <li>Garantir a segurança dos sistemas;</li>
+          <li>Prevenir fraudes e usos indevidos;</li>
+          <li>Cumprir obrigações legais e regulatórias;</li>
+          <li>Enviar comunicações relacionadas aos serviços da Plataforma;</li>
+          <li>Produzir estatísticas e relatórios internos.</li>
         </ul>
 
-        <h2>10. Crianças e adolescentes</h2>
-        <p>
-          A Plataforma não é direcionada para coleta intencional de dados de crianças sem consentimento legal
-          aplicável. Se você identificar cadastro indevido, entre em contato para remoção.
-        </p>
+        <h2 class="section-title"><span class="section-number">5</span>Bases Legais para o Tratamento</h2>
+        <p>O tratamento de dados pessoais é realizado com fundamento nas bases legais previstas pela LGPD, incluindo:</p>
+        <h3>Execução de Contrato</h3>
+        <p>Quando necessário para fornecer os serviços disponibilizados pela Plataforma.</p>
+        <h3>Legítimo Interesse</h3>
+        <p>Para melhoria contínua dos serviços, prevenção de fraudes, monitoramento de segurança e aprimoramento da experiência do usuário.</p>
+        <h3>Consentimento</h3>
+        <p>Quando exigido pela legislação, especialmente para comunicações promocionais ou utilização de determinados cookies.</p>
+        <h3>Cumprimento de Obrigação Legal</h3>
+        <p>Quando necessário para atender exigências legais, regulatórias ou determinações de autoridades competentes.</p>
 
-        <h2>11. Alterações desta Política</h2>
-        <p>
-          Esta Política pode ser atualizada para refletir melhorias ou requisitos legais. A data de atualização
-          será informada no topo desta página.
-        </p>
+        <h2 class="section-title"><span class="section-number">6</span>Compartilhamento de Dados</h2>
+        <p>O Venha Junto não vende dados pessoais.</p>
+        <p>Os dados poderão ser compartilhados apenas nas seguintes situações:</p>
+        <ul>
+          <li>Prestadores de serviços tecnológicos responsáveis pela hospedagem, infraestrutura e operação da Plataforma;</li>
+          <li>Autoridades públicas, órgãos reguladores ou judiciais quando houver obrigação legal;</li>
+          <li>Empresas responsáveis por serviços de segurança, monitoramento e prevenção de fraudes;</li>
+          <li>Parceiros comerciais, exclusivamente quando necessário para execução dos serviços solicitados pelo usuário ou mediante autorização.</li>
+        </ul>
+        <p>Todos os terceiros envolvidos deverão adotar medidas adequadas de proteção dos dados pessoais.</p>
 
-        <div class="divider"></div>
+        <h2 class="section-title"><span class="section-number">7</span>Armazenamento e Retenção dos Dados</h2>
+        <p>Os dados pessoais serão armazenados em ambientes seguros e protegidos por medidas técnicas e administrativas adequadas.</p>
+        <p>Os dados permanecerão armazenados:</p>
+        <ul>
+          <li>Enquanto a conta do usuário permanecer ativa;</li>
+          <li>Pelo período necessário para cumprimento das finalidades descritas nesta Política;</li>
+          <li>Pelo prazo exigido por obrigações legais ou regulatórias;</li>
+          <li>Até eventual solicitação de exclusão, quando legalmente possível.</li>
+        </ul>
+        <p>Após o encerramento da finalidade do tratamento, os dados poderão ser eliminados, anonimizados ou mantidos apenas para cumprimento de obrigações legais.</p>
 
-        <h2>12. Contato</h2>
-        <p>
-          Para exercer direitos ou tirar dúvidas sobre privacidade, contate:
-          <span class="muted"><code>privacidade@venhajunto.com</code></span> (substitua pelo e-mail real do projeto).
-        </p>
-      
-  </div>
-</main>
+        <h2 class="section-title"><span class="section-number">8</span>Segurança da Informação</h2>
+        <p>O Venha Junto adota medidas de segurança para proteger os dados pessoais contra:</p>
+        <ul>
+          <li>Acesso não autorizado;</li>
+          <li>Alteração indevida;</li>
+          <li>Divulgação não autorizada;</li>
+          <li>Perda acidental;</li>
+          <li>Destruição ou vazamento de informações.</li>
+        </ul>
+        <p>Entre as medidas adotadas poderão estar:</p>
+        <ul>
+          <li>Controle de acesso aos sistemas;</li>
+          <li>Criptografia de senhas;</li>
+          <li>Monitoramento de atividades suspeitas;</li>
+          <li>Atualizações de segurança;</li>
+          <li>Procedimentos internos de proteção de dados.</li>
+        </ul>
+        <p>Apesar dos esforços empregados, nenhum ambiente digital é totalmente livre de riscos.</p>
+
+        <h2 class="section-title"><span class="section-number">9</span>Direitos dos Titulares dos Dados</h2>
+        <p>Nos termos da LGPD, o usuário poderá solicitar:</p>
+        <ul>
+          <li>Confirmação da existência de tratamento de dados;</li>
+          <li>Acesso aos seus dados pessoais;</li>
+          <li>Correção de informações incompletas, inexatas ou desatualizadas;</li>
+          <li>Anonimização, bloqueio ou eliminação de dados desnecessários;</li>
+          <li>Portabilidade dos dados;</li>
+          <li>Informações sobre compartilhamento de dados;</li>
+          <li>Revogação do consentimento;</li>
+          <li>Oposição ao tratamento realizado em desacordo com a legislação;</li>
+          <li>Exclusão de dados tratados com base no consentimento, quando aplicável.</li>
+        </ul>
+        <p>As solicitações poderão ser realizadas pelo e-mail:</p>
+        <ul>
+          <li><strong>contato@venhajunto.com.br</strong></li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">10</span>Cookies e Tecnologias Semelhantes</h2>
+        <p>A Plataforma poderá utilizar cookies e tecnologias semelhantes para:</p>
+        <ul>
+          <li>Garantir o funcionamento adequado do sistema;</li>
+          <li>Melhorar a experiência de navegação;</li>
+          <li>Lembrar preferências do usuário;</li>
+          <li>Realizar análises estatísticas de uso;</li>
+          <li>Aprimorar funcionalidades.</li>
+        </ul>
+        <p>O usuário poderá gerenciar ou desabilitar cookies diretamente nas configurações do navegador.</p>
+        <p>A desativação de determinados cookies poderá limitar algumas funcionalidades da Plataforma.</p>
+
+        <h2 class="section-title"><span class="section-number">11</span>Dados de Menores de Idade</h2>
+        <p>A Plataforma não é destinada a menores de 18 anos.</p>
+        <p>Não realizamos intencionalmente a coleta de dados pessoais de menores de idade.</p>
+        <p>Caso seja identificada a coleta indevida de dados de menores, as informações serão removidas ou tratadas conforme exigido pela legislação aplicável.</p>
+
+        <h2 class="section-title"><span class="section-number">12</span>Transferência Internacional de Dados</h2>
+        <p>Alguns serviços tecnológicos utilizados pela Plataforma poderão envolver armazenamento ou processamento de dados fora do território brasileiro.</p>
+        <p>Nessas situações, serão adotadas medidas para garantir nível adequado de proteção dos dados pessoais, observando os requisitos previstos na LGPD.</p>
+
+        <h2 class="section-title"><span class="section-number">13</span>Alterações desta Política</h2>
+        <p>Esta Política poderá ser atualizada periodicamente para refletir alterações legais, regulatórias, operacionais ou tecnológicas.</p>
+        <p>A versão atualizada será disponibilizada na Plataforma com indicação da data de atualização.</p>
+        <p>A continuidade da utilização dos serviços após a publicação das alterações será considerada como ciência da nova versão da Política.</p>
+
+        <h2 class="section-title"><span class="section-number">14</span>Contato e Privacidade</h2>
+        <p>Para dúvidas, solicitações relacionadas à privacidade, exercício de direitos previstos na LGPD ou assuntos relacionados ao tratamento de dados pessoais, entre em contato pelos canais oficiais:</p>
+        <ul>
+          <li>E-mail: <strong>contato@venhajunto.com.br</strong></li>
+          <li>Plataforma: Venha Junto – Turismo Acessível</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">15</span>Foro e Legislação Aplicável</h2>
+        <p>Esta Política será interpretada de acordo com a legislação brasileira, especialmente a Lei Geral de Proteção de Dados Pessoais (LGPD) e demais normas aplicáveis.</p>
+        <p>Eventuais controvérsias serão submetidas ao foro competente da legislação brasileira.</p>
+
+        <div class="legal-footer-info">
+          © 2026 Venha Junto – Turismo Acessível. Todos os direitos reservados.
+        </div>
+      </div>
+    </main>
 
     </div>
 
@@ -362,7 +437,7 @@
             vlibras.style.setProperty('bottom', '100px', 'important');
           }
         }
-      })();
+      )();
     </script>
     <!-- ✅ Tradução & Idiomas -->
     <script src="../js/i18n.js" defer></script>

@@ -193,7 +193,7 @@ const API_BASE = isLocal ? "http://127.0.0.1:8000" : "";
         
         let imageUrls = [];
         if (place.foto_perfil) {
-          imageUrls.push(`${API_BASE}/api/estabelecimentos/fotos/${place.foto_perfil}`);
+          imageUrls.push(`${API_BASE}/api/estabelecimentos/fotos/${place.foto_perfil}?v=${Date.now()}`);
         }
         if (place.fotos_galeria) {
           const extra = place.fotos_galeria.split(",").filter(v => v.trim());

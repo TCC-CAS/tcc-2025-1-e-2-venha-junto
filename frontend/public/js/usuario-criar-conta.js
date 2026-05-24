@@ -58,9 +58,14 @@
     if (!aceite)
       return showMessage("Você precisa aceitar os Termos e a Política de Privacidade.", "error");
 
+    const recaptchaToken = typeof grecaptcha !== "undefined" ? grecaptcha.getResponse() : "";
+    if (!recaptchaToken) {
+      return showMessage("Por favor, valide o reCAPTCHA de segurança.", "error");
+    }
+
     try {
       // chama backend para registrar
-      await window.apiRegister({ nome, email, telefone, senha });
+      await window.apiRegister({ nome, email, telefone, senha, recaptcha_token: recaptchaToken });
       // login automático após cadastro
       await window.apiLogin({ email, senha });
 

@@ -21,14 +21,18 @@ body {
 
 /* Left Hero Section (Orange) */
 .vj-split-left {
-  flex: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
   background: linear-gradient(135deg, #F5892A, #E6730E);
   color: #fff;
-  position: relative;
   display: flex;
   flex-direction: column;
   padding: 40px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .vj-back-btn {
@@ -90,7 +94,8 @@ body {
 
 /* Right Form Section (White) */
 .vj-split-right {
-  flex: 1;
+  margin-left: 50%;
+  width: 50%;
   background: #fdfdfd;
   display: flex;
   align-items: center;
@@ -300,8 +305,24 @@ body {
   }
 
   .vj-split-left {
+    position: relative;
+    width: 100%;
+    height: auto;
     flex: none;
     padding: 20px 20px 16px;
+  }
+
+  .vj-back-btn {
+    position: relative;
+    top: auto;
+    margin-bottom: 16px;
+  }
+
+  .vj-split-left-content {
+    position: relative;
+    top: auto;
+    transform: none;
+    margin: 0;
   }
 
   .vj-split-left-content h1 {
@@ -318,6 +339,8 @@ body {
   }
 
   .vj-split-right {
+    margin-left: 0;
+    width: 100%;
     padding: 20px 20px 16px;
     align-items: flex-start;
   }

@@ -180,6 +180,12 @@
       return;
     }
 
+    const recaptchaToken = typeof grecaptcha !== "undefined" ? grecaptcha.getResponse() : "";
+    if (!recaptchaToken) {
+      showMainError("Por favor, valide o reCAPTCHA de segurança.");
+      return;
+    }
+
     if (hasError) return;
 
     const btn = form.querySelector('button[type="submit"]');
@@ -192,7 +198,7 @@
       }
       if (btn) { btn.disabled = true; btn.textContent = "Aguarde..."; }
 
-      await window.apiPartnerRegister({ nome, email, telefone, senha });
+      await window.apiPartnerRegister({ nome, email, telefone, senha, recaptcha_token: recaptchaToken });
 
       if (errEls.mainText) {
         errEls.mainText.textContent = "Conta criada com sucesso! Redirecionando...";

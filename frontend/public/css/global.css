@@ -559,27 +559,25 @@ select:focus-visible {
   }
 }
 
-/* ♿ ACESSIBILIDADE - LADO ESQUERDO (Para não tampar o perfil/menu) */
+/* ♿ ACESSIBILIDADE - VOLTANDO AO QUE ESTAVA (COMENTADO) */
+/* 
 [vw], .enabled, div[id^="userway"], #userwayAccessibilityWidget, .uway {
   position: fixed !important;
-  left: 10px !important; /* Move para a esquerda */
+  left: 10px !important;
   right: auto !important;
   z-index: 2147483647 !important;
 }
 
-/* VLibras */
 [vw] {
   bottom: 100px !important;
   transform: scale(0.7) !important;
   transform-origin: left bottom !important;
 }
+*/
 
-/* Userway (Em cima do VLibras ou no meio da lateral) */
+/* Apenas afasta o UserWay do botão Entrar no topo direito */
 div[id^="userway"], #userwayAccessibilityWidget, .uway {
-  bottom: 180px !important; /* Fica acima do VLibras */
-  top: auto !important;
-  transform: scale(0.8) !important;
-  transform-origin: left bottom !important;
+  margin-top: 100px !important;
 }
 
 

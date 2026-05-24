@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Accessibility</title>
+    <script src="https://cdn.jsdelivr.net/npm/accessibility/dist/accessibility.min.js"></script>
+    <script>window.addEventListener('load', function() { 
+        new Accessibility({
+            icon: {
+                position: {
+                    bottom: { size: 20, units: 'px' },
+                    right: { size: 20, units: 'px' },
+                    type: 'fixed'
+                },
+                dimensions: {
+                    width: { size: 55, units: 'px' },
+                    height: { size: 55, units: 'px' }
+                },
+                zIndex: '99999',
+                backgroundColor: '#2563EB',
+                color: '#FFFFFF',
+                circular: true
+            }
+        }); 
+    }, false);</script>
+</head>
+<body>
+    <h1>Hello World</h1>
+</body>
+</html>

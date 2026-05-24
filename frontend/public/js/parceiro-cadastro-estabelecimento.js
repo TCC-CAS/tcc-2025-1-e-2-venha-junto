@@ -12,17 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentStepDesc = document.getElementById("currentStepDesc");
 
   const stepInfo = {
-    1: {
-      title: "Responsável",
-      desc: "Conte-nos sobre o responsável pelo estabelecimento",
-    },
-    2: { title: "Estabelecimento", desc: "Informações detalhadas do local" },
-    3: {
+    
+    1: { title: "Estabelecimento", desc: "Informações detalhadas do local" },
+    2: {
       title: "Fotos & Acesso",
       desc: "Fotos e recursos de acessibilidade disponíveis",
     },
-    4: { title: "Plano", desc: "Visibilidade do seu estabelecimento" },
-    5: { title: "Concluído", desc: "Seu cadastro foi enviado com sucesso" },
+    3: { title: "Plano", desc: "Visibilidade do seu estabelecimento" },
+    4: { title: "Concluído", desc: "Seu cadastro foi enviado com sucesso" },
   };
 
   // ==========================================
@@ -72,9 +69,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  applyCnpjCpfMask(document.getElementById("cnpj_cpf"));
+  const cnpjInput = document.getElementById("cnpj_cpf");
+  applyCnpjCpfMask(cnpjInput);
+
+  if (cnpjInput) {
+    cnpjInput.addEventListener("blur", async (e) => {
+      const val = e.target.value.replace(/\D/g, "");
+      if (val.length === 14) {
+        try {
+          const res = await fetch(`${API_BASE}/api/validar-cnpj/${val}`);
+          if (!res.ok) {
+            const err = await res.json();
+            showVjToast("Erro no CNPJ", err.detail || "CNPJ inválido ou não encontrado.");
+            e.target.style.borderColor = "#ef4444";
+            e.target.dataset.validApi = "false";
+            return;
+          }
+          const data = await res.json();
+          e.target.style.borderColor = "#22c55e"; // Sucesso
+          e.target.dataset.validApi = "true";
+          showVjToast("CNPJ Válido", `Empresa: ${data.nome_fantasia || data.razao_social}`);
+          
+          // Preenche os campos se estiverem vazios
+          const nomeInput = document.getElementById("nomeEstabelecimento");
+          if (nomeInput && !nomeInput.value) {
+            nomeInput.value = data.nome_fantasia || data.razao_social || "";
+          }
+          
+          const cepInput = document.getElementById("cep");
+          if (cepInput && !cepInput.value && data.cep) {
+            cepInput.value = data.cep;
+            cepInput.dispatchEvent(new Event("blur")); // Para disparar a busca de CEP já existente
+          }
+        } catch (error) {
+          console.error("Erro ao validar CNPJ:", error);
+          showVjToast("Aviso", "Não foi possível verificar o CNPJ no momento.");
+        }
+      }
+    });
+  }
 
   let currentStep = 1;
+
 
   // ==========================================
   // Fetch Auth & Update Sidebar
@@ -117,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkPartnerAuth();
 
   function goToStep(stepNumber) {
-    if (stepNumber < 1 || stepNumber > 5) return;
+    if (stepNumber < 1 || stepNumber > 4) return;
     currentStep = stepNumber;
 
     // Atualiza Paineis (Esconde todos e mostra o ativo com fade in)
@@ -150,9 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Atualiza Header e Progress Bar
-    const progressPercent = Math.min((stepNumber / 4) * 100, 100);
+    const progressPercent = Math.min((stepNumber / 3) * 100, 100);
     progressBar.style.width = `${progressPercent}%`;
-    if (currentStepNum) currentStepNum.innerText = Math.min(stepNumber, 4);
+    if (currentStepNum) currentStepNum.innerText = Math.min(stepNumber, 3);
     if (currentStepTitle && stepInfo[stepNumber])
       currentStepTitle.innerText = stepInfo[stepNumber].title;
     if (currentStepDesc && stepInfo[stepNumber])
@@ -161,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Oculta Cabeçalho se for Passo 5 (Sucesso)
     const stepHeader = document.querySelector(".step-header");
     if (stepHeader) {
-      if (stepNumber === 5) {
+      if (stepNumber === 3) {
         stepHeader.style.display = "none";
         // Ajusta a sidebar também
         const parentSidebar = document.querySelector(".cadastro-sidebar");
@@ -179,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Força reajuste dos mapas se entrar no passo 2
-    if (stepNumber === 2) {
+    if (stepNumber === 1) {
       setTimeout(() => {
         if (typeof mapSearch !== "undefined" && mapSearch) mapSearch.resize();
         if (typeof mapPreview !== "undefined" && mapPreview)
@@ -188,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Auto-seleção de plano se for passo 4
-    if (stepNumber === 4) {
+    if (stepNumber === 3) {
       const planMap = { "Básico": "basico", "Pro": "pro", "Pro Plus": "pro_plus" };
       const targetId = planMap[partnerActivePlan] || "basico";
       const radio = document.querySelector(`input[name="plano_escolhido"][value="${targetId}"]`);
@@ -236,7 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!currentPanel) return true;
 
     let isValid = true;
-    const inputs = currentPanel.querySelectorAll("input[required], textarea[required], select[required], #especifiqueTipo");
+    let firstErrorField = null;
+
+    // Seleciona apenas os campos que realmente têm atributo required no HTML
+    const inputs = currentPanel.querySelectorAll("input[required], textarea[required], select[required]");
 
     inputs.forEach(input => {
       const fieldGroup = input.closest(".field-group");
@@ -267,14 +306,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const cleanVal = input.value.replace(/\D/g, "");
         if (cleanVal.length < 11) {
           fieldValid = false;
-        }
-      }
-
-      // Validação de Especifique
-      if (input.id === "especifiqueTipo") {
-        const tipoSelect = document.getElementById("tipoEstabelecimento");
-        if (tipoSelect && tipoSelect.value === "Outro" && (!input.value || input.value.trim() === "")) {
+        } else if (cleanVal.length === 14 && input.dataset.validApi === "false") {
           fieldValid = false;
+          showVjToast("Aviso", "O CNPJ informado não é válido ou não foi encontrado.");
         }
       }
       
@@ -285,6 +319,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!fieldValid) {
         isValid = false;
+        if (!firstErrorField) firstErrorField = input;
+
         if (fieldGroup) {
           fieldGroup.classList.add("has-error");
           // Adiciona mensagem de erro se não existir
@@ -299,16 +335,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    // Caso especial: Tipo "Outro" (manual)
+    const tipoSelect = document.getElementById("tipoEstabelecimento");
+    const especifiqueInput = document.getElementById("especifiqueTipo");
+    if (step === 1 && tipoSelect && tipoSelect.value === "Outro") {
+      if (!especifiqueInput || !especifiqueInput.value || especifiqueInput.value.trim() === "") {
+        isValid = false;
+        if (!firstErrorField) firstErrorField = especifiqueInput;
+        const fg = especifiqueInput.closest(".field-group");
+        if (fg) fg.classList.add("has-error");
+      }
+    }
+
     // Caso especial: Passo 2 - Endereço
-    if (step === 2) {
+    if (step === 1) {
       const addressSearchView = document.getElementById("addressSearchView");
       if (addressSearchView && addressSearchView.style.display !== "none") {
         isValid = false;
-        showVjToast("Localização Necessária", "Por favor, selecione seu endereço no mapa antes de continuar por segurança.");
+        showVjToast("Localização Necessária", "Por favor, selecione seu endereço no mapa antes de continuar.");
         const fakeSearch = document.getElementById("fakeSearchMap");
         if (fakeSearch) {
           const wrapper = fakeSearch.closest(".floating-search-bar");
           if (wrapper) wrapper.style.borderColor = "#ef4444";
+          if (!firstErrorField) firstErrorField = fakeSearch;
         }
         return false;
       }
@@ -316,16 +365,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Caso especial: Custom Select do Tipo de Estabelecimento
     const nativeSelect = document.getElementById("tipoEstabelecimento");
-    if (step === 2 && nativeSelect && !nativeSelect.value) {
+    if (step === 1 && nativeSelect && !nativeSelect.value) {
        const customSelect = document.getElementById("customTipoSelect");
        if (customSelect) {
          customSelect.style.borderColor = "#ef4444";
          isValid = false;
+         if (!firstErrorField) firstErrorField = customSelect;
        }
     }
 
     if (!isValid) {
       showVjToast("Campos Obrigatórios", "Existem campos pendentes ou incorretos. Verifique os destaques em vermelho.");
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
+        firstErrorField.focus({ preventScroll: true });
+      }
     }
 
     return isValid;
@@ -465,34 +519,63 @@ document.addEventListener("DOMContentLoaded", () => {
       fotoUpload.click();
     });
 
-    fotoUpload.addEventListener("change", (e) => {
+    fotoUpload.addEventListener("change", async (e) => {
       const newFiles = Array.from(e.target.files);
+      if (newFiles.length === 0) return;
 
-      // Calculate total files if we append the new ones
-      const totalFiles = selectedFiles.length + newFiles.length;
+      // Mostra um estado de "validando" ou similar
+      uploadArea.style.opacity = "0.5";
+      uploadArea.style.pointerEvents = "none";
+      const originalText = uploadArea.querySelector("p") ? uploadArea.querySelector("p").innerText : "";
+      if (uploadArea.querySelector("p")) uploadArea.querySelector("p").innerText = "Validando imagens com IA...";
 
-      if (totalFiles > 3) {
-        // Show Warning
-        limitWarning.style.display = "block";
-
-        // Take only up to 3 files
-        const allowedSpace = 3 - selectedFiles.length;
-        if (allowedSpace > 0) {
-          selectedFiles = [
-            ...selectedFiles,
-            ...newFiles.slice(0, allowedSpace),
-          ];
+      try {
+        const approvedFiles = [];
+        for (const file of newFiles) {
+           try {
+              // Chama a moderação instantânea do backend (AWS Rekognition)
+              await window.apiModerateImage(file);
+              approvedFiles.push(file);
+           } catch (modError) {
+              console.error("[MODERATION] Imagem bloqueada:", file.name, modError);
+              showVjToast("Segurança: Imagem Bloqueada", `A foto "${file.name}" contém conteúdo inadequado e foi removida por segurança.`);
+           }
         }
-      } else {
-        // Hide warning and add all
-        limitWarning.style.display = "none";
-        selectedFiles = [...selectedFiles, ...newFiles];
+
+        if (approvedFiles.length === 0) {
+           e.target.value = "";
+           return;
+        }
+
+        // Calculate total files if we append the new ones
+        const totalFiles = selectedFiles.length + approvedFiles.length;
+
+        if (totalFiles > 3) {
+          // Show Warning
+          limitWarning.style.display = "block";
+
+          // Take only up to 3 files
+          const allowedSpace = 3 - selectedFiles.length;
+          if (allowedSpace > 0) {
+            selectedFiles = [
+              ...selectedFiles,
+              ...approvedFiles.slice(0, allowedSpace),
+            ];
+          }
+        } else {
+          // Hide warning and add all
+          limitWarning.style.display = "none";
+          selectedFiles = [...selectedFiles, ...approvedFiles];
+        }
+
+        renderPreviews();
+      } finally {
+        uploadArea.style.opacity = "1";
+        uploadArea.style.pointerEvents = "auto";
+        if (uploadArea.querySelector("p")) uploadArea.querySelector("p").innerText = originalText;
+        // Reset input so the same files can trigger logic again if needed
+        e.target.value = "";
       }
-
-      renderPreviews();
-
-      // Reset input so the same files can trigger logic again if needed
-      e.target.value = "";
     });
 
     function renderPreviews() {
@@ -626,9 +709,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Constrói o Payload para API
         const payload = {
-          nome_responsavel: document.getElementById("nomeResponsavel").value,
-          email_responsavel: document.getElementById("emailResponsavel").value,
-          telefone_responsavel: document.getElementById("telefoneResponsavel").value,
           nome: document.getElementById("nomeEstabelecimento").value,
           cnpj_cpf: document.getElementById("cnpj_cpf").value,
           tipo: document.getElementById("tipoEstabelecimento").value,
@@ -705,7 +785,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const elPlanoNome = document.getElementById("successPlanoNome");
         if (elPlanoNome) elPlanoNome.textContent = planoNome;
         console.log("Cadastro finalizado com sucesso!");
-        goToStep(5);
+        goToStep(4);
         
         let contagem = 4;
         const btnDash = form.querySelector("#stepSuccess .btn");

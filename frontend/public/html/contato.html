@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fale Conosco | Venha Junto</title>
+    
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/auth.css" />
+
+    <style>
+      .contact-container {
+        max-width: 600px;
+        margin: 60px auto;
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      }
+      .contact-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 8px;
+      }
+      .contact-subtitle {
+        color: #64748b;
+        margin-bottom: 32px;
+      }
+      .vj-form-group {
+        margin-bottom: 20px;
+      }
+      .vj-form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1e293b;
+      }
+      .vj-form-group input, .vj-form-group select, .vj-form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        outline: none;
+        font-size: 15px;
+        color: #0f172a;
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+      .vj-form-group input:focus, .vj-form-group select:focus, .vj-form-group textarea:focus {
+        border-color: #f97316;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+      }
+      .vj-btn-submit {
+        background: #f97316;
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        width: 100%;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .vj-btn-submit:hover {
+        background: #ea580c;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER SIMPLIFICADO -->
+    <header class="site-header">
+      <div class="logo">
+        <a href="./index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:8px;">
+          <img src="../img/logo-vj.png" alt="" style="width:32px; height:32px; object-fit:cover; border-radius:50%;" />
+          <span style="font-weight:800; font-size:20px; color:#f97316;">Venha Junto</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="contact-container">
+      <h1 class="contact-title">Fale Conosco</h1>
+      <p class="contact-subtitle">Encontrou algum problema ou tem uma sugestão? Envie para nós!</p>
+
+      <form id="contatoForm">
+        <div class="vj-form-group">
+          <label>Nome Completo</label>
+          <input type="text" id="nome" required placeholder="Seu nome" />
+        </div>
+
+        <div class="vj-form-group">
+          <label>E-mail</label>
+          <input type="email" id="email" required placeholder="seu@email.com" />
+        </div>
+
+        <div class="vj-form-group">
+          <label>Motivo / Categoria</label>
+          <select id="categoria" required>
+            <option value="" disabled selected>Selecione um motivo...</option>
+            <option value="Informação incorreta">Informação incorreta</option>
+            <option value="Problema de acessibilidade">Problema de acessibilidade</option>
+            <option value="Estabelecimento fechado">Estabelecimento fechado</option>
+            <option value="Conteúdo inadequado">Conteúdo inadequado</option>
+            <option value="Sugestão">Sugestão</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="vj-form-group">
+          <label>Mensagem</label>
+          <textarea id="mensagem" rows="5" required placeholder="Detalhe o seu problema ou sugestão..."></textarea>
+        </div>
+
+        <button type="submit" class="vj-btn-submit" id="btnSubmit">Enviar Mensagem</button>
+      </form>
+    </div>
+
+    <!-- SWEETALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script type="module">
+      import { apiFetch } from "../js/auth.js";
+
+      document.getElementById("contatoForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("btnSubmit");
+        btn.textContent = "Enviando...";
+        btn.disabled = true;
+
+        const nome = document.getElementById("nome").value;
+        const email = document.getElementById("email").value;
+        const categoria = document.getElementById("categoria").value;
+        const mensagem = document.getElementById("mensagem").value;
+        
+        // Verifica se há estabelecimento_id na URL (caso venha do "Reportar Problema" do local)
+        const params = new URLSearchParams(window.location.search);
+        const estabelecimento_id = params.get('local') ? parseInt(params.get('local')) : null;
+
+        try {
+          await apiFetch("/api/public/denuncias", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              estabelecimento_id,
+              nome_usuario: nome,
+              email_usuario: email,
+              categoria,
+              mensagem
+            })
+          });
+
+          Swal.fire({
+            title: "Mensagem Enviada!",
+            text: "Agradecemos o seu contato. Nossa equipe avaliará sua mensagem em breve.",
+            icon: "success",
+            confirmButtonColor: "#f97316"
+          }).then(() => {
+            window.location.href = "./index.html";
+          });
+
+        } catch (err) {
+          Swal.fire("Erro", "Ocorreu um erro ao enviar a mensagem. Tente novamente.", "error");
+          btn.textContent = "Enviar Mensagem";
+          btn.disabled = false;
+        }
+      });
+
+      // Preenche categoria se vier por URL
+      window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const autoCat = params.get('cat');
+        if(autoCat) {
+          const select = document.getElementById("categoria");
+          for(let i=0; i<select.options.length; i++){
+            if(select.options[i].value === autoCat) {
+              select.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -93,8 +93,10 @@
         background: #22c55e;
       }
     </style>
-  <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  </head>
 
   <body>
     <!-- Split Layout Container -->
@@ -247,10 +249,12 @@
                   </svg>
                 </button>
               </div>
-              <div class="pwd-strength-meter" id="pwdStrengthMeter">
-                <div id="pwdStrengthBar"></div>
+              <div style="min-height: 32px; width: 100%;">
+                <div class="pwd-strength-meter" id="pwdStrengthMeter">
+                  <div id="pwdStrengthBar"></div>
+                </div>
+                <div class="pwd-strength-text" id="pwdStrengthText"></div>
               </div>
-              <div class="pwd-strength-text" id="pwdStrengthText"></div>
               <small id="senhaError" class="vj-error-msg"></small>
             </div>
 
@@ -321,6 +325,9 @@
                 >.
               </span>
             </label>
+
+            <!-- RECAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="6Lcr5_osAAAAAJlNXzh1KUUjkEK2A90fhl0kNRIc" style="margin-top: 1rem; margin-bottom: 1rem;"></div>
 
             <!-- BOTAO -->
             <button class="vj-submit-btn" type="submit">

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../css/admin-auth.css" />
 
   <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -25,6 +26,9 @@
         <div class="admin-icon-wrapper">🛡️</div>
         <h1 class="admin-title">Novo Administrador</h1>
         <p class="admin-subtitle">Crie uma conta para gerenciar a plataforma.</p>
+        <div class="admin-warning-box">
+          ⚠️ Cadastro restrito a administradores autorizados da plataforma Venha Junto.
+        </div>
       </div>
 
       <form id="formAdminRegister" class="admin-form" novalidate>
@@ -34,14 +38,45 @@
         </div>
 
         <div class="admin-field">
-          <label for="email">E-mail Administrativo</label>
-          <input id="email" name="email" type="email" class="admin-input" placeholder="admin@venhajunto.com" required />
+          <label for="email">E-mail Administrativo Corporativo</label>
+          <input id="email" name="email" type="email" class="admin-input" placeholder="seu.nome@venhajunto.com.br" required />
         </div>
 
         <div class="admin-field">
           <label for="password">Senha</label>
-          <input id="password" name="password" type="password" class="admin-input" placeholder="••••••••" required />
+          <div class="password-wrapper">
+            <input id="password" name="password" type="password" class="admin-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle-pwd" tabindex="-1" aria-label="Mostrar senha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <!-- Medidor de Força -->
+          <div class="pwd-strength-container">
+            <div class="pwd-strength-bars">
+              <div class="pwd-bar"></div>
+              <div class="pwd-bar"></div>
+              <div class="pwd-bar"></div>
+            </div>
+            <span class="pwd-strength-text">Força da senha</span>
+          </div>
         </div>
+
+        <div class="admin-field">
+          <label for="passwordConfirm">Confirmar Senha</label>
+          <div class="password-wrapper">
+            <input id="passwordConfirm" name="passwordConfirm" type="password" class="admin-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle-pwd" tabindex="-1" aria-label="Mostrar senha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="inviteCode">Código de Convite Administrativo</label>
+          <input id="inviteCode" name="inviteCode" type="text" class="admin-input" placeholder="Insira o código de acesso" required />
+        </div>
+
+        <div class="g-recaptcha" data-sitekey="6Lcr5_osAAAAAJlNXzh1KUUjkEK2A90fhl0kNRIc" style="margin: 0 auto;"></div>
 
         <div class="admin-actions">
           <button id="btnRegister" class="admin-btn" type="submit">Criar Conta Admin</button>

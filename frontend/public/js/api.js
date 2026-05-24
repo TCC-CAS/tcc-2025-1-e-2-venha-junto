@@ -136,7 +136,7 @@ window.apiUserDeleteMe = () =>
    PARTNER AUTH (cookie vj_partner_token)
 ========================= */
 window.apiPartnerRegister = (payload) =>
-  request("/partner-auth/register", { method: "POST", body: payload });
+  request("/api/parceiro-auth/registro", { method: "POST", body: payload });
 
 window.apiPartnerLogin = (payload) =>
   request("/partner-auth/login", { method: "POST", body: payload });
@@ -190,4 +190,22 @@ window.apiPublicPlaces = ({
 
 window.apiPublicPlaceDetails = (placeId) =>
   request(`/public/places/${placeId}`, { method: "GET" });
+
+window.apiModerateImage = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  
+  const res = await fetch(`${API_BASE}/api/validar-imagem`, {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.detail || "Imagem imprópria detectada");
+  }
+
+  return await res.json();
+};
 

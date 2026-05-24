@@ -63,29 +63,21 @@
           <button class="step-link active" data-target="1" type="button">
             <div class="step-icon">1</div>
             <div class="step-text">
-              <strong>Responsável</strong>
-              <span>Seus dados</span>
+              <strong>Estabelecimento</strong>
+              <span>Dados do local</span>
             </div>
           </button>
 
           <button class="step-link" data-target="2" type="button" disabled>
             <div class="step-icon">2</div>
             <div class="step-text">
-              <strong>Estabelecimento</strong>
-              <span>Dados do local</span>
-            </div>
-          </button>
-
-          <button class="step-link" data-target="3" type="button" disabled>
-            <div class="step-icon">3</div>
-            <div class="step-text">
               <strong>Fotos & Acesso</strong>
               <span>Recursos e evidências</span>
             </div>
           </button>
 
-          <button class="step-link" data-target="4" type="button" disabled>
-            <div class="step-icon">4</div>
+          <button class="step-link" data-target="3" type="button" disabled>
+            <div class="step-icon">3</div>
             <div class="step-text">
               <strong>Plano</strong>
               <span>Visibilidade</span>
@@ -107,9 +99,9 @@
           <div class="step-title-area">
             <div class="step-number-large" id="currentStepNum">1</div>
             <div>
-              <h1 id="currentStepTitle">Responsável</h1>
+              <h1 id="currentStepTitle">Estabelecimento</h1>
               <p id="currentStepDesc">
-                Conte-nos sobre o responsável pelo estabelecimento
+                Informações detalhadas do local
               </p>
             </div>
           </div>
@@ -117,144 +109,16 @@
             <div
               class="progress-fill"
               id="progressBar"
-              style="width: 25%"
+              style="width: 33.33%"
             ></div>
           </div>
         </div>
 
         <form id="formCadastroParceiro" class="form-cadastro" novalidate>
           <!-- =======================
-             PASSO 1: RESPONSÁVEL
+             PASSO 1: ESTABELECIMENTO
              ======================= -->
           <section class="form-panel active" data-step="1">
-            <div class="form-card">
-              <h2 class="card-title">
-                <span class="icon">
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                </span>
-                Dados do Responsável
-              </h2>
-
-              <div class="field-group">
-                <label for="nomeResponsavel"
-                  >Nome completo <span class="req">*</span></label
-                >
-                <div class="input-wrapper">
-                  <span class="input-icon">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#64748b"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
-                      ></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                  </span>
-                  <input
-                    type="text"
-                    id="nomeResponsavel"
-                    required
-                    placeholder="Seu nome completo"
-                  />
-                </div>
-              </div>
-
-              <div class="field-group">
-                <label for="emailResponsavel"
-                  >E-mail <span class="req">*</span></label
-                >
-                <div class="input-wrapper">
-                  <span class="input-icon">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#64748b"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                      <path
-                        d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
-                      ></path>
-                    </svg>
-                  </span>
-                  <input
-                    type="email"
-                    id="emailResponsavel"
-                    required
-                    placeholder="seuemail@exemplo.com"
-                  />
-                </div>
-                <small class="help-text"
-                  >Usaremos este e-mail para entrar em contato sobre a
-                  análise</small
-                >
-              </div>
-
-              <div class="field-group">
-                <label for="telefoneResponsavel">Telefone / WhatsApp</label>
-                <div class="input-wrapper">
-                  <span class="input-icon">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#64748b"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      ></path>
-                    </svg>
-                  </span>
-                  <input
-                    type="tel"
-                    id="telefoneResponsavel"
-                    placeholder="(11) 99999-9999"
-                    maxlength="15"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="panel-actions">
-              <div></div>
-              <!-- Spacer -->
-              <button type="button" class="btn-next" data-next="2">
-                Próximo ➔
-              </button>
-            </div>
-          </section>
-
-          <!-- =======================
-             PASSO 2: ESTABELECIMENTO
-             ======================= -->
-          <section class="form-panel" data-step="2">
             <div class="form-card">
               <h2 class="card-title">Sobre o Estabelecimento</h2>
 
@@ -1019,19 +883,17 @@
             </div>
 
             <div class="panel-actions">
-              <button type="button" class="btn-prev" data-prev="1">
-                ⬅ Voltar
-              </button>
-              <button type="button" class="btn-next" data-next="3">
+              <div></div>
+              <button type="button" class="btn-next" data-next="2">
                 Próximo ➔
               </button>
             </div>
           </section>
 
           <!-- =======================
-             PASSO 3: FOTOS & ACESSO
+             PASSO 2: FOTOS & ACESSO
              ======================= -->
-          <section class="form-panel" data-step="3">
+          <section class="form-panel" data-step="2">
             <div class="form-card">
               <h2 class="card-title">
                 <span class="icon">
@@ -1243,19 +1105,19 @@
             </div>
 
             <div class="panel-actions">
-              <button type="button" class="btn-prev" data-prev="2">
+              <button type="button" class="btn-prev" data-prev="1">
                 &lt; Voltar
               </button>
-              <button type="button" class="btn-next" data-next="4">
+              <button type="button" class="btn-next" data-next="3">
                 Próximo &rarr;
               </button>
             </div>
           </section>
 
           <!-- =======================
-             PASSO 4: PLANO
+             PASSO 3: PLANO
              ======================= -->
-          <section class="form-panel" data-step="4">
+          <section class="form-panel" data-step="3">
             <div class="form-card">
               <h2 class="card-title">
                 <span class="icon">🚀</span> Escolha seu Plano
@@ -1494,7 +1356,7 @@
             </div>
 
             <div class="panel-actions">
-              <button type="button" class="btn-prev" data-prev="3">
+              <button type="button" class="btn-prev" data-prev="2">
                 ⬅ Voltar
               </button>
               <div></div>
@@ -1502,9 +1364,9 @@
           </section>
 
           <!-- =======================
-             PASSO 5: SUCESSO
+             PASSO 4: SUCESSO
              ======================= -->
-          <section class="form-panel" data-step="5" id="stepSuccess">
+          <section class="form-panel" data-step="4" id="stepSuccess">
             <div
               style="
                 background: white;
