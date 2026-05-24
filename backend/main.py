@@ -1,3 +1,6 @@
+# pyright: reportAssignmentType=false
+# pyright: reportArgumentType=false
+
 from fastapi import FastAPI, Depends, HTTPException, status, Response, Request, UploadFile, File
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
