@@ -50,6 +50,7 @@ const VJ_API_BASE = (function() {
     if (target === "partners") loadPartners();
     if (target === "locais") loadLocais();
     if (target === "support") loadSupport();
+    if (target === "denuncias") loadDenuncias();
   }
 
   navItems.forEach(item => {
