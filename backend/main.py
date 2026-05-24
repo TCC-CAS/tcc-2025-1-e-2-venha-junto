@@ -2183,7 +2183,7 @@ def get_current_admin(request: Request, db: Session):
         raise HTTPException(status_code=403, detail="Acesso negado: apenas administradores.")
     return db_user
 
-def log_admin_action(db: Session, admin_id: int, admin_nome: str, action: str, target_type: str, target_id: int, reason: str = None, observation: str = None):
+def log_admin_action(db: Session, admin_id: int, admin_nome: str, action: str, target_type: str, target_id: int, reason: Optional[str] = None, observation: Optional[str] = None):
     new_log = models.AuditLog(
         admin_id=admin_id,
         admin_nome=admin_nome,
@@ -2208,14 +2208,14 @@ def suspend_parceiro(id: int, req_data: schemas.SuspendRequest, request: Request
     if not parceiro:
         raise HTTPException(status_code=404, detail="Parceiro não encontrado.")
     
-    parceiro.status = "SUSPENSO"
-    parceiro.is_active = False
+    parceiro.status = "SUSPENSO" # type: ignore
+    parceiro.is_active = False # type: ignore
     
     # Oculta todos os estabelecimentos do parceiro
     estabelecimentos = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == id).all()
     for estab in estabelecimentos:
         if estab.status == "APPROVED":
-            estab.status = "SUSPENDED"
+            estab.status = "SUSPENDED" # type: ignore
     
     db.commit()
     log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_PARCEIRO", "Parceiro", parceiro.id, req_data.reason, req_data.observation)
@@ -2228,8 +2228,8 @@ def reactivate_parceiro(id: int, request: Request, db: Session = Depends(get_db)
     if not parceiro:
         raise HTTPException(status_code=404, detail="Parceiro não encontrado.")
     
-    parceiro.status = "ATIVO"
-    parceiro.is_active = True
+    parceiro.status = "ATIVO" # type: ignore
+    parceiro.is_active = True # type: ignore
     
     # Restaura locais suspensos automaticamente
     estabelecimentos = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == id, models.Estabelecimento.status == "SUSPENDED").all()
