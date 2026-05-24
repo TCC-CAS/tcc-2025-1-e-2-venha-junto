@@ -296,6 +296,7 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
     check_rate_limit(email_lower)
 
     # 1. Validação de reCAPTCHA
+    # pyrefly: ignore [bad-argument-type]
     if not validar_recaptcha(usuario.recaptcha_token):
         register_failed_attempt(email_lower)
         raise HTTPException(
@@ -339,6 +340,7 @@ def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
     check_rate_limit(email_lower)
 
     # 0. Validação de reCAPTCHA
+    # pyrefly: ignore [bad-argument-type]
     if not validar_recaptcha(usuario.recaptcha_token):
         register_failed_attempt(email_lower)
         raise HTTPException(
@@ -844,6 +846,7 @@ def registrar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(g
     check_rate_limit(email_lower)
 
     # 1. Validação de reCAPTCHA
+    # pyrefly: ignore [bad-argument-type]
     if not validar_recaptcha(parceiro.recaptcha_token):
         register_failed_attempt(email_lower)
         raise HTTPException(
@@ -2221,6 +2224,7 @@ def suspend_parceiro(id: int, req_data: schemas.SuspendRequest, request: Request
             estab.status = "SUSPENDED" # type: ignore
     
     db.commit()
+    # pyrefly: ignore [bad-argument-type]
     log_admin_action(db, admin_user.id, admin_user.nome, "SUSPENDER_PARCEIRO", "Parceiro", parceiro.id, req_data.reason, req_data.observation)
     return {"message": "Parceiro suspenso com sucesso."}
 
@@ -2237,9 +2241,11 @@ def reactivate_parceiro(id: int, request: Request, db: Session = Depends(get_db)
     # Restaura locais suspensos automaticamente
     estabelecimentos = db.query(models.Estabelecimento).filter(models.Estabelecimento.parceiro_id == id, models.Estabelecimento.status == "SUSPENDED").all()
     for estab in estabelecimentos:
+        # pyrefly: ignore [bad-assignment]
         estab.status = "APPROVED"
         
     db.commit()
+    # pyrefly: ignore [bad-argument-type]
     log_admin_action(db, admin_user.id, admin_user.nome, "REATIVAR_PARCEIRO", "Parceiro", parceiro.id, "Reativação", "")
     return {"message": "Parceiro reativado com sucesso."}
 
@@ -2264,6 +2270,7 @@ def reactivate_estabelecimento(id: int, request: Request, db: Session = Depends(
     
     estab.status = "APPROVED" # type: ignore
     db.commit()
+    # pyrefly: ignore [bad-argument-type]
     log_admin_action(db, admin_user.id, admin_user.nome, "REATIVAR_LOCAL", "Estabelecimento", estab.id, "Reativação", "")
     return {"message": "Estabelecimento reativado com sucesso."}
 
@@ -2466,6 +2473,7 @@ def update_denuncia_status(id: int, req_data: schemas.DenunciaUpdate, request: R
     denuncia = db.query(models.Denuncia).filter(models.Denuncia.id == id).first()
     if not denuncia:
         raise HTTPException(status_code=404, detail="Denúncia não encontrada")
+    # pyrefly: ignore [bad-assignment]
     denuncia.status = req_data.status
     db.commit()
     db.refresh(denuncia)
