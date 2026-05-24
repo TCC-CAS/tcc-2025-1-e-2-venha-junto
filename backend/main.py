@@ -17,7 +17,24 @@ from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
 import requests
+import urllib.request
+import urllib.parse
+import json
 
+# reCAPTCHA Validator Helper
+def validar_recaptcha(token: str) -> bool:
+    if not token:
+        return False
+    secret = os.getenv("RECAPTCHA_SECRET_KEY", "6Lcr5_osAAAAAB4GJjSRKbB4szhycegppaTQEpTG")
+    url = "https://www.google.com/recaptcha/api/siteverify"
+    data = urllib.parse.urlencode({"secret": secret, "response": token}).encode("utf-8")
+    req = urllib.request.Request(url, data=data)
+    try:
+        with urllib.request.urlopen(req) as response:
+            result = json.loads(response.read().decode())
+            return result.get("success", False)
+    except Exception:
+        return False
 import backend.models as models
 import backend.schemas as schemas
 from backend.database import engine, get_db
@@ -244,6 +261,13 @@ def get_partner_capacity(partner_id: int, db: Session, intended_plan: Optional[s
 
 @app.post("/api/usuarios/cadastro", response_model=schemas.UsuarioResponse, status_code=status.HTTP_201_CREATED)
 def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
+    # 1. Validação de reCAPTCHA
+    if not validar_recaptcha(usuario.recaptcha_token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Validação de segurança (reCAPTCHA) falhou."
+        )
+
     usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == usuario.email).first()
     
     if usuario_existente:
@@ -273,6 +297,13 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
 
 @app.post("/api/admin/cadastro", response_model=schemas.UsuarioResponse, status_code=status.HTTP_201_CREATED)
 def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
+    # 0. Validação de reCAPTCHA
+    if not validar_recaptcha(usuario.recaptcha_token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Validação de segurança (reCAPTCHA) falhou."
+        )
+
     # 1. Verifica Código de Convite (variável de ambiente ou fallback)
     import os
     codigo_correto = os.getenv("ADMIN_INVITE_CODE", "TCC2026ADMIN")
@@ -754,9 +785,20 @@ def listar_reviews_publico(id: int, db: Session = Depends(get_db)):
 # ROTAS DA API - PARCEIROS
 # =============================================
 
-@app.post("/partner-auth/register", response_model=schemas.ParceiroResponse, status_code=status.HTTP_201_CREATED)
-def criar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(get_db)):
-    parceiro_existente = db.query(models.Parceiro).filter(models.Parceiro.email == parceiro.email).first()
+@app.post("/api/parceiro-auth/registro", response_model=schemas.ParceiroResponse, status_code=status.HTTP_201_CREATED)
+def registrar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(get_db)):
+    # 1. Validação de reCAPTCHA
+    if not validar_recaptcha(parceiro.recaptcha_token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Validação de segurança (reCAPTCHA) falhou."
+        )
+
+    parceiro_existente = db.query(models.Usuario).filter(
+        models.Usuario.email == parceiro.email.lower(),
+        models.Usuario.role.in_(["parceiro", "admin", "master"])
+    ).first()
+
     if parceiro_existente:
         raise HTTPException(status_code=400, detail="Esse e-mail já está cadastrado como parceiro.")
 

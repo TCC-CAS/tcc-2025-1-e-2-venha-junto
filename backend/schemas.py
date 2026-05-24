@@ -10,6 +10,7 @@ class UsuarioCreate(BaseModel):
     telefone: Optional[str] = None
     email: EmailStr  # Exige que seja um formato válido de E-mail
     senha: str
+    recaptcha_token: Optional[str] = None
     
     class Config:
         # Exemplo que aparece na documentação do Swagger
@@ -63,6 +64,7 @@ class ParceiroCreate(BaseModel):
     telefone: Optional[str] = None
     email: EmailStr
     senha: str
+    recaptcha_token: Optional[str] = None
 
 class ParceiroResponse(BaseModel):
     id: int
