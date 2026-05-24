@@ -16,6 +16,7 @@ from typing import List, Optional, Dict
 from dotenv import load_dotenv
 import boto3
 from botocore.exceptions import ClientError
+import requests
 
 import backend.models as models
 import backend.schemas as schemas
@@ -92,6 +93,32 @@ app.add_middleware(
 @app.get("/ping")
 def ping():
     return {"status": "ok", "message": "Backend is reachable!"}
+
+@app.get("/api/validar-cnpj/{cnpj}")
+def validar_cnpj(cnpj: str):
+    cnpj_limpo = ''.join(filter(str.isdigit, cnpj))
+    if len(cnpj_limpo) != 14:
+        raise HTTPException(status_code=400, detail="CNPJ inválido")
+        
+    url = f"https://brasilapi.com.br/api/cnpj/v1/{cnpj_limpo}"
+    try:
+        resposta = requests.get(url, timeout=5)
+        if resposta.status_code != 200:
+            raise HTTPException(status_code=404, detail="CNPJ não encontrado ou inválido.")
+            
+        dados = resposta.json()
+        return {
+            "valido": True,
+            "cnpj": cnpj_limpo,
+            "razao_social": dados.get("razao_social"),
+            "nome_fantasia": dados.get("nome_fantasia"),
+            "situacao": dados.get("descricao_situacao_cadastral"),
+            "municipio": dados.get("municipio"),
+            "uf": dados.get("uf"),
+            "cep": dados.get("cep")
+        }
+    except requests.exceptions.RequestException:
+        raise HTTPException(status_code=503, detail="Não foi possível validar o CNPJ no momento. Tente novamente mais tarde.")
 
 # ---------------------------------------------
 # SEGURANÇA: SENHAS E TOKENS JWT
