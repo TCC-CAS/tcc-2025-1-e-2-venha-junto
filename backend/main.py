@@ -288,8 +288,20 @@ def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="A senha deve ter no mínimo 8 caracteres, contendo pelo menos 1 letra e 1 número."
         )
+    
+    # 3. Validação de E-mail Corporativo
+    allowed_domains = ["@venhajunto.com.br", "@fatec.sp.gov.br"]
+    email_lower = usuario.email.lower()
+    is_special_admin = (email_lower == "admin@gmail.com")
+    is_corporate = any(email_lower.endswith(domain) for domain in allowed_domains)
+    
+    if not is_corporate and not is_special_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Utilize um e-mail corporativo autorizado (ex: @venhajunto.com.br)."
+        )
 
-    usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == usuario.email.lower()).first()
+    usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == email_lower).first()
     
     if usuario_existente:
         raise HTTPException(
