@@ -35,6 +35,34 @@ def validar_recaptcha(token: str) -> bool:
             return result.get("success", False)
     except Exception:
         return False
+
+# Rate Limiting (Bloqueio de Tentativas)
+failed_login_attempts = {}
+MAX_ATTEMPTS = 5
+LOCK_DURATION_MINUTES = 5
+
+def check_rate_limit(identifier: str):
+    record = failed_login_attempts.get(identifier)
+    if record:
+        if record["lock_until"] and datetime.now(timezone.utc) < record["lock_until"]:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Muitas tentativas falhas. Conta bloqueada temporariamente. Tente novamente em alguns minutos."
+            )
+        elif record["lock_until"] and datetime.now(timezone.utc) >= record["lock_until"]:
+            failed_login_attempts[identifier] = {"count": 0, "lock_until": None}
+
+def register_failed_attempt(identifier: str):
+    record = failed_login_attempts.get(identifier, {"count": 0, "lock_until": None})
+    record["count"] += 1
+    if record["count"] >= MAX_ATTEMPTS:
+        record["lock_until"] = datetime.now(timezone.utc) + timedelta(minutes=LOCK_DURATION_MINUTES)
+    failed_login_attempts[identifier] = record
+
+def reset_failed_attempts(identifier: str):
+    if identifier in failed_login_attempts:
+        del failed_login_attempts[identifier]
+
 import backend.models as models
 import backend.schemas as schemas
 from backend.database import engine, get_db
@@ -261,20 +289,27 @@ def get_partner_capacity(partner_id: int, db: Session, intended_plan: Optional[s
 
 @app.post("/api/usuarios/cadastro", response_model=schemas.UsuarioResponse, status_code=status.HTTP_201_CREATED)
 def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
+    email_lower = usuario.email.lower()
+    check_rate_limit(email_lower)
+
     # 1. Validação de reCAPTCHA
     if not validar_recaptcha(usuario.recaptcha_token):
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Validação de segurança (reCAPTCHA) falhou."
         )
 
-    usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == usuario.email).first()
+    usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == email_lower).first()
     
     if usuario_existente:
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Esse e-mail já está cadastrado em nosso sistema."
         )
+
+    reset_failed_attempts(email_lower)
 
     # DEBUG: Verificar o que está chegando na senha
     print(f"DEBUG: Recebendo senha para cadastro. Tipo: {type(usuario.senha)}, Tamanho: {len(usuario.senha)}")
@@ -297,8 +332,12 @@ def criar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db))
 
 @app.post("/api/admin/cadastro", response_model=schemas.UsuarioResponse, status_code=status.HTTP_201_CREATED)
 def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
+    email_lower = usuario.email.lower()
+    check_rate_limit(email_lower)
+
     # 0. Validação de reCAPTCHA
     if not validar_recaptcha(usuario.recaptcha_token):
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Validação de segurança (reCAPTCHA) falhou."
@@ -308,6 +347,7 @@ def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
     import os
     codigo_correto = os.getenv("ADMIN_INVITE_CODE", "TCC2026ADMIN")
     if usuario.codigo_convite != codigo_correto:
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Acesso negado. Código administrativo inválido."
@@ -327,6 +367,7 @@ def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
     is_corporate = any(email_lower.endswith(domain) for domain in allowed_domains)
     
     if not is_corporate and not is_special_admin:
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Utilize um e-mail corporativo autorizado (ex: @venhajunto.com.br)."
@@ -335,10 +376,13 @@ def criar_admin(usuario: schemas.AdminCreate, db: Session = Depends(get_db)):
     usuario_existente = db.query(models.Usuario).filter(models.Usuario.email == email_lower).first()
     
     if usuario_existente:
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Esse e-mail já está cadastrado."
         )
+
+    reset_failed_attempts(email_lower)
 
     senha_segura = get_password_hash(usuario.senha)
 
@@ -389,13 +433,19 @@ def get_partner_from_token(request: Request, db: Session):
 # ---------------------------------------------
 @app.post("/api/usuarios/login")
 def login(usuario: schemas.UsuarioLogin, response: Response, db: Session = Depends(get_db)):
-    db_user = db.query(models.Usuario).filter(models.Usuario.email == usuario.email.lower()).first()
+    email_lower = usuario.email.lower()
+    check_rate_limit(email_lower)
+
+    db_user = db.query(models.Usuario).filter(models.Usuario.email == email_lower).first()
     
     if not db_user or not verify_password(usuario.senha, db_user.senha_hash):  # type: ignore
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha inválidos."
         )
+    
+    reset_failed_attempts(email_lower)
     
     # Criar o Token
     access_token = create_access_token(data={"sub": str(db_user.id)})
@@ -787,20 +837,27 @@ def listar_reviews_publico(id: int, db: Session = Depends(get_db)):
 
 @app.post("/api/parceiro-auth/registro", response_model=schemas.ParceiroResponse, status_code=status.HTTP_201_CREATED)
 def registrar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(get_db)):
+    email_lower = parceiro.email.lower()
+    check_rate_limit(email_lower)
+
     # 1. Validação de reCAPTCHA
     if not validar_recaptcha(parceiro.recaptcha_token):
+        register_failed_attempt(email_lower)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Validação de segurança (reCAPTCHA) falhou."
         )
 
     parceiro_existente = db.query(models.Usuario).filter(
-        models.Usuario.email == parceiro.email.lower(),
+        models.Usuario.email == email_lower,
         models.Usuario.role.in_(["parceiro", "admin", "master"])
     ).first()
 
     if parceiro_existente:
+        register_failed_attempt(email_lower)
         raise HTTPException(status_code=400, detail="Esse e-mail já está cadastrado como parceiro.")
+
+    reset_failed_attempts(email_lower)
 
     senha_segura = get_password_hash(parceiro.senha)
     novo_parceiro = models.Parceiro(
@@ -817,9 +874,15 @@ def registrar_parceiro(parceiro: schemas.ParceiroCreate, db: Session = Depends(g
 
 @app.post("/partner-auth/login")
 def login_parceiro(parceiro: schemas.ParceiroLogin, response: Response, db: Session = Depends(get_db)):
-    db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.email == parceiro.email.lower()).first()
+    email_lower = parceiro.email.lower()
+    check_rate_limit(email_lower)
+
+    db_parceiro = db.query(models.Parceiro).filter(models.Parceiro.email == email_lower).first()
     if not db_parceiro or not verify_password(parceiro.senha, db_parceiro.senha_hash):  # type: ignore
+        register_failed_attempt(email_lower)
         raise HTTPException(status_code=401, detail="E-mail ou senha inválidos.")
+    
+    reset_failed_attempts(email_lower)
     
     if db_parceiro.status == "ENCERRADO":
         raise HTTPException(status_code=403, detail="Esta conta foi encerrada e não pode mais ser acessada.")
