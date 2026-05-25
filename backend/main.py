@@ -2476,6 +2476,7 @@ def update_denuncia_status(id: int, req_data: schemas.DenunciaUpdate, request: R
     # pyrefly: ignore [bad-assignment]
     denuncia.status = req_data.status
     if req_data.resposta_admin is not None:
+        # pyrefly: ignore [bad-assignment]
         denuncia.resposta_admin = req_data.resposta_admin
     db.commit()
     db.refresh(denuncia)
