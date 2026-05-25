@@ -159,12 +159,14 @@
           });
 
           Swal.fire({
-            title: "Mensagem Enviada!",
-            text: "Agradecemos o seu contato. Nossa equipe avaliará sua mensagem em breve.",
+            title: "Sucesso!",
+            text: "Mensagem enviada com sucesso! Sua solicitação foi registrada e será analisada pela equipe do Venha Junto.",
             icon: "success",
             confirmButtonColor: "#f97316"
           }).then(() => {
-            window.location.href = "./index.html";
+            document.getElementById("contatoForm").reset();
+            btn.textContent = "Enviar Mensagem";
+            btn.disabled = false;
           });
 
         } catch (err) {

@@ -58,7 +58,8 @@ class Denuncia(Base):
     email_usuario = Column(String(100), nullable=False)
     categoria = Column(String(50), nullable=False)
     mensagem = Column(Text, nullable=False)
-    status = Column(String(50), default="PENDENTE") # PENDENTE, ANALISADA, RESOLVIDA
+    status = Column(String(50), default="ABERTO") # ABERTO, EM ANÁLISE, RESOLVIDO
+    resposta_admin = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     estabelecimento = relationship("Estabelecimento")

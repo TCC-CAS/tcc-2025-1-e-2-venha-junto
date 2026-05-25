@@ -2475,6 +2475,8 @@ def update_denuncia_status(id: int, req_data: schemas.DenunciaUpdate, request: R
         raise HTTPException(status_code=404, detail="Denúncia não encontrada")
     # pyrefly: ignore [bad-assignment]
     denuncia.status = req_data.status
+    if req_data.resposta_admin is not None:
+        denuncia.resposta_admin = req_data.resposta_admin
     db.commit()
     db.refresh(denuncia)
     if denuncia.estabelecimento_id:

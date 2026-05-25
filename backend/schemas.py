@@ -344,6 +344,7 @@ class DenunciaCreate(BaseModel):
 
 class DenunciaUpdate(BaseModel):
     status: str
+    resposta_admin: Optional[str] = None
 
 class DenunciaResponse(BaseModel):
     id: int
@@ -353,6 +354,7 @@ class DenunciaResponse(BaseModel):
     categoria: str
     mensagem: str
     status: str
+    resposta_admin: Optional[str] = None
     created_at: datetime
     estabelecimento_nome: Optional[str] = None
 

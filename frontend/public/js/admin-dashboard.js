@@ -142,11 +142,13 @@ const VJ_API_BASE = (function() {
     return apiFetch(`/api/admin/denuncias`);
   }
 
-  async function apiUpdateDenunciaStatus(id, status) {
+  async function apiUpdateDenunciaStatus(id, status, resposta_admin) {
+    const body = { status };
+    if (resposta_admin !== undefined) body.resposta_admin = resposta_admin;
     return apiFetch(`/api/admin/denuncias/${id}/status`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status })
+      body: JSON.stringify(body)
     });
   }
 
@@ -894,7 +896,7 @@ const VJ_API_BASE = (function() {
       if (!listDiv) return;
 
       const badge = document.getElementById("badgeDenuncias");
-      const pendentes = denuncias.filter(d => d.status === "PENDENTE").length;
+      const pendentes = denuncias.filter(d => d.status === "ABERTO").length;
       if (badge) {
         badge.textContent = pendentes;
         badge.style.display = pendentes > 0 ? "flex" : "none";
@@ -907,9 +909,9 @@ const VJ_API_BASE = (function() {
 
       listDiv.innerHTML = denuncias.map(d => {
         let statusBadge = '';
-        if (d.status === 'PENDENTE') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fee2e2; color:#ef4444; font-weight: 700;">🚨 Pendente</span>';
-        else if (d.status === 'ANALISADA') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fef3c7; color:#d97706; font-weight: 700;">⏳ Em Análise</span>';
-        else statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#dcfce7; color:#16a34a; font-weight: 700;">✅ Resolvida</span>';
+        if (d.status === 'ABERTO') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fee2e2; color:#ef4444; font-weight: 700;">🚨 Aberto</span>';
+        else if (d.status === 'EM ANÁLISE') statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#fef3c7; color:#d97706; font-weight: 700;">⏳ Em Análise</span>';
+        else statusBadge = '<span style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background:#dcfce7; color:#16a34a; font-weight: 700;">✅ Resolvido</span>';
 
         return `
           <div class="admin-card">
@@ -923,22 +925,30 @@ const VJ_API_BASE = (function() {
                   ${statusBadge}
                 </h3>
                 <p style="margin-top: 4px;">Enviado por: <strong>${d.nome_usuario}</strong> (${d.email_usuario})</p>
+                <p style="margin-top: 2px; font-size: 12px; color: #94a3b8;">Em: ${new Date(d.created_at).toLocaleString('pt-BR')}</p>
                 ${d.estabelecimento_nome ? `<p style="color: #ea580c; font-weight: 600; margin-top: 4px;">📍 Local: ${d.estabelecimento_nome}</p>` : ''}
                 
                 <div style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 14px; color: #334155; line-height: 1.5; border-left: 4px solid #cbd5e1;">
                   "${d.mensagem}"
                 </div>
+                
+                ${d.resposta_admin ? `
+                <div style="background: #fffbeb; padding: 14px; border-radius: 8px; margin-top: 12px; font-size: 14px; color: #92400e; line-height: 1.5; border: 1px solid #fde68a;">
+                  <strong>Resposta do Administrador:</strong><br>
+                  ${d.resposta_admin}
+                </div>
+                ` : ''}
               </div>
             </div>
 
             <div class="admin-card-actions">
-              ${d.status !== 'RESOLVIDA' ? `
-                <button class="btn-action btn-approve" onclick="handleDenunciaStatus(${d.id}, 'RESOLVIDA')">✅ Marcar Resolvida</button>
+              ${d.status !== 'RESOLVIDO' ? `
+                <button class="btn-action btn-approve" onclick="handleDenunciaStatus(${d.id}, 'RESOLVIDO')">✅ Marcar Resolvido</button>
               ` : ''}
-              ${d.status === 'PENDENTE' ? `
-                <button class="btn-action btn-details" onclick="handleDenunciaStatus(${d.id}, 'ANALISADA')">⏳ Pôr em Análise</button>
+              ${d.status === 'ABERTO' ? `
+                <button class="btn-action btn-details" onclick="handleDenunciaStatus(${d.id}, 'EM ANÁLISE')">⏳ Em Análise</button>
               ` : ''}
-              ${d.estabelecimento_id && d.status !== 'RESOLVIDA' ? `
+              ${d.estabelecimento_id && d.status !== 'RESOLVIDO' ? `
                 <button class="btn-action btn-reject" onclick="handleSuspendLocal(${d.estabelecimento_id}, 'Local suspenso via Denúncia do usuário')">🚫 Suspender Local</button>
               ` : ''}
             </div>
@@ -947,15 +957,27 @@ const VJ_API_BASE = (function() {
       }).join('');
     } catch(err) {
       console.error(err);
-      Swal.fire('Erro', 'Falha ao carregar denúncias', 'error');
+      Swal.fire('Erro', 'Falha ao carregar chamados de contato', 'error');
     }
   }
 
   window.handleDenunciaStatus = async (id, status) => {
     try {
-      await apiUpdateDenunciaStatus(id, status);
-      Swal.fire({ title: 'Sucesso', text: 'Status da denúncia atualizado.', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-      loadDenuncias();
+      const { value: resposta } = await Swal.fire({
+        title: 'Atualizar Status',
+        input: 'textarea',
+        inputLabel: 'Resposta do Administrador (opcional)',
+        inputPlaceholder: 'Digite uma nota de resolução ou registro interno...',
+        showCancelButton: true,
+        confirmButtonText: 'Atualizar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (resposta !== undefined) {
+        await apiUpdateDenunciaStatus(id, status, resposta);
+        Swal.fire({ title: 'Sucesso', text: 'Status atualizado com sucesso.', icon: 'success', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+        loadDenuncias();
+      }
     } catch(err) {
       Swal.fire('Erro', err.message || 'Falha ao atualizar', 'error');
     }
