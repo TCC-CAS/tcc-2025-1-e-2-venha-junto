@@ -660,6 +660,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Form Submit handler
   const form = document.getElementById("formCadastroParceiro");
   if (form) {
+    // Evita submit acidental ao pressionar Enter nos inputs
+    form.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const target = e.target;
+        if (target.tagName === "TEXTAREA" || target.tagName === "BUTTON") {
+          return;
+        }
+        e.preventDefault();
+      }
+    });
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
