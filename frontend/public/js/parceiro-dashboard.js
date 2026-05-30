@@ -87,6 +87,31 @@ document.addEventListener("DOMContentLoaded", () => {
           return pl.includes('pro') || pl.includes('premium') || pl.includes('plus');
       });
 
+      // Atualizar Badge de Plano na Sidebar
+      const userPlanBadge = document.querySelector(".dash-user-info .badge-premium");
+      if (userPlanBadge) {
+          let highestTier = "basico";
+          const tierMap = {"basico": 1, "pro": 2, "pro_plus": 3, "premium": 3};
+          locais.forEach(loc => {
+              let pl = loc.plano_escolhido ? loc.plano_escolhido.toLowerCase() : "basico";
+              if (tierMap[pl] > tierMap[highestTier]) highestTier = pl;
+          });
+
+          if (highestTier === "pro_plus" || highestTier === "premium") {
+              userPlanBadge.innerHTML = `💎 Pro Plus`;
+              userPlanBadge.style.background = "#fffbeb";
+              userPlanBadge.style.color = "#d97706";
+          } else if (highestTier === "pro") {
+              userPlanBadge.innerHTML = `⭐ Pro`;
+              userPlanBadge.style.background = "#f0fdf4";
+              userPlanBadge.style.color = "#15803d";
+          } else {
+              userPlanBadge.innerHTML = `📋 Básico`;
+              userPlanBadge.style.background = "rgba(255, 255, 255, 0.2)";
+              userPlanBadge.style.color = "white";
+          }
+      }
+
       // Aplica Paywall na Aba de Métricas (Padrão de Mercado) se for gratuito
       if (window.partnerCanCreateCoupon === false) {
           const secMetricas = document.getElementById("section-metricas");
@@ -94,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
              secMetricas.style.position = "relative";
              secMetricas.style.overflow = "hidden";
              const overlay = document.createElement("div");
+             const editLink = locais.length > 0 ? `parceiro-editar-estabelecimento.html?id=${locais[0].id}` : `parceiro-cadastro-estabelecimento.html`;
              overlay.innerHTML = `
                 <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); z-index: 50; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; text-align:center; padding-top: 150px;">
                    <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 440px; border: 1px solid #f1f5f9;">
@@ -104,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                      <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
                         A aba de métricas detalhadas é exclusiva para parceiros Pro ou Premium. Descubra os dias de maior fluxo, o perfil dos cliques e converta mais turistas habilitando o plano completo!
                      </p>
-                     <a href="parceiro-cadastro-estabelecimento.html" onclick="alert('Funcionalidade de Upgrade Direto será implementada')" class="btn-orange" style="display:inline-block; text-decoration:none; padding: 14px 28px; width: 100%;">Quero Desbloquear</a>
+                     <a href="${editLink}" class="btn-orange" style="display:inline-block; text-decoration:none; padding: 14px 28px; width: 100%;">Quero Desbloquear</a>
                    </div>
                 </div>
              `;
@@ -189,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window._totalLocais = locais.length;
       window._capacidadeLocais = 1; // Default Básico
       if (locais.length > 0) {
-        const tierMap = {"Basico": 1, "Pro": 3, "Pro Plus": 100};
+        const tierMap = {"Basico": 1, "Pro": 5, "Pro Plus": 100};
         const melhorPlano = locais.reduce((prev, curr) => {
            const p1 = prev.plano_escolhido || "Basico";
            const p2 = curr.plano_escolhido || "Basico";
@@ -242,27 +268,92 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderizarCardPlano(loc) {
     const planTextEl = document.querySelector(".plan-text strong");
     const planPriceEl = document.querySelector(".plan-text span");
-    const planBtn = document.querySelector(".style-button-plan");
+    const planBtn = document.getElementById("btnAlterarPlanoConfig");
+    const cancelBtn = document.getElementById("btnCancelarPlanoConfig");
     
     if (planTextEl && loc) {
         let pName = loc.plano_escolhido || "basico";
         // Formatação amigável
         let displayTitle = "Plano Básico";
         let displayPrice = "Grátis";
+        let showCancel = false;
         
         if (pName.toLowerCase().includes("premium") || pName.toLowerCase().includes("plus")) {
-            displayTitle = "Plano Premium";
+            displayTitle = "Plano Pro Plus";
             displayPrice = "R$79/mês";
+            showCancel = true;
         } else if (pName.toLowerCase().includes("pro")) {
             displayTitle = "Plano Pro";
             displayPrice = "R$39/mês";
+            showCancel = true;
         }
 
         planTextEl.textContent = displayTitle;
         if (planPriceEl) planPriceEl.textContent = displayPrice;
         if (planBtn) planBtn.href = `./planos.html?estabId=${loc.id}`;
+        
+        if (cancelBtn) {
+            cancelBtn.style.display = showCancel ? "inline-flex" : "none";
+            cancelBtn.dataset.estabid = loc.id;
+        }
     }
   }
+
+  window.cancelarPlanoAtual = async function() {
+    const cancelBtn = document.getElementById("btnCancelarPlanoConfig");
+    const estabId = cancelBtn ? cancelBtn.dataset.estabid : window._primeiroEstabId;
+    if (!estabId) return;
+
+    const result = await Swal.fire({
+      title: 'Cancelar Assinatura?',
+      html: `
+        <div style="text-align: left; font-size: 14px; color: #475569;">
+            <p style="margin-bottom: 12px; color: #0f172a; font-weight: 500;">Sua assinatura será cancelada, mas nenhum dado será perdido.</p>
+            <ul style="padding-left: 20px; line-height: 1.5; margin-bottom: 0;">
+                <li>Seus benefícios atuais permanecerão ativos por 30 dias.</li>
+                <li>Após esse período, sua conta será migrada para o Plano Básico.</li>
+                <li>Estabelecimentos que excederem o limite do plano serão ocultados, mas continuarão cadastrados.</li>
+                <li>Você poderá reativar sua assinatura a qualquer momento.</li>
+            </ul>
+        </div>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#94a3b8',
+      confirmButtonText: 'Sim, cancelar assinatura',
+      cancelButtonText: 'Manter plano'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        Swal.fire({ title: 'Processando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+        
+        // Simulação de cancelamento real: faz PATCH para basico
+        const response = await fetch(`/api/estabelecimentos/${estabId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plano_escolhido: "basico" }),
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          await Swal.fire({
+            icon: 'success',
+            title: 'Assinatura Cancelada',
+            text: 'Sua assinatura foi cancelada. Seus dados permanecem salvos e poderão ser reativados ao renovar um plano futuro.',
+            confirmButtonColor: '#10b981'
+          });
+          window.location.reload();
+        } else {
+          const errData = await response.json();
+          Swal.fire('Erro', errData.detail || "Erro desconhecido", 'error');
+        }
+      } catch (err) {
+        Swal.fire('Erro', 'Falha ao conectar com o servidor.', 'error');
+      }
+    }
+  };
 
   function getBotaoVisibilidade(loc) {
     const v = loc.visibilidade || "ATIVO";

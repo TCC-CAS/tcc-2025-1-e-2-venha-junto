@@ -374,6 +374,20 @@ document.addEventListener("DOMContentLoaded", () => {
        }
     }
 
+    // Caso especial: Passo 2 - Fotos obrigatórias
+    if (step === 2) {
+      if (selectedFiles.length === 0) {
+        isValid = false;
+        showVjToast("Foto Obrigatória", "Por favor, envie pelo menos 1 foto do seu estabelecimento.");
+        const uploadArea = document.querySelector(".upload-area");
+        if (uploadArea) {
+          uploadArea.style.borderColor = "#ef4444";
+          uploadArea.style.background = "#fef2f2";
+          if (!firstErrorField) firstErrorField = uploadArea;
+        }
+      }
+    }
+
     if (!isValid) {
       showVjToast("Campos Obrigatórios", "Existem campos pendentes ou incorretos. Verifique os destaques em vermelho.");
       if (firstErrorField) {
@@ -515,8 +529,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedFiles = [];
 
   if (fotoUpload && uploadArea && previewContainer && limitWarning) {
-    uploadArea.addEventListener("click", () => {
-      fotoUpload.click();
+    uploadArea.addEventListener("click", (e) => {
+      if (e.target !== fotoUpload) {
+        fotoUpload.click();
+      }
     });
 
     fotoUpload.addEventListener("change", async (e) => {
@@ -581,6 +597,15 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderPreviews() {
       previewContainer.innerHTML = "";
 
+      // Limpa estilo de erro se tiver pelo menos 1 foto
+      if (selectedFiles.length > 0) {
+        const uploadArea = document.querySelector(".upload-area");
+        if (uploadArea) {
+          uploadArea.style.borderColor = "";
+          uploadArea.style.background = "";
+        }
+      }
+
       selectedFiles.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -637,6 +662,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      if (selectedFiles.length === 0) {
+        showVjToast("Foto Obrigatória", "Por favor, envie pelo menos 1 foto do seu estabelecimento.");
+        goToStep(2);
+        return;
+      }
 
       // Coleta dados dos Cupons (Se ativo)
       const cupomAtivo = document.getElementById("cupom_ativo");

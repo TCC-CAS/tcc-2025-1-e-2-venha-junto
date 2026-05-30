@@ -12,11 +12,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const currentStepDesc = document.getElementById("currentStepDesc");
 
   const stepInfo = {
-    1: { title: "Responsável", desc: "Conte-nos sobre o responsável pelo estabelecimento" },
-    2: { title: "Estabelecimento", desc: "Informações detalhadas do local" },
-    3: { title: "Fotos & Acesso", desc: "Fotos e recursos de acessibilidade disponíveis" },
-    4: { title: "Plano", desc: "Visibilidade do seu estabelecimento" },
-    5: { title: "Concluído", desc: "Seu cadastro foi enviado com sucesso" },
+    1: { title: "Estabelecimento", desc: "Informações detalhadas do local" },
+    2: { title: "Fotos & Acesso", desc: "Fotos e recursos de acessibilidade disponíveis" },
+    3: { title: "Plano", desc: "Visibilidade do seu estabelecimento" },
+    4: { title: "Concluído", desc: "Seu cadastro foi enviado com sucesso" },
   };
 
   let currentStep = 1;
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       e.target.value = x.replace(/-$/, "");
     });
   }
-  applyPhoneMask(document.getElementById("telefoneResponsavel"));
+  // applyPhoneMask(document.getElementById("telefoneResponsavel"));
   applyPhoneMask(document.getElementById("telLocal"));
   applyPhoneMask(document.getElementById("zapLocal"));
 
@@ -56,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Navegação do Wizard
   // ==========================================
   function goToStep(stepNumber) {
-    if (stepNumber < 1 || stepNumber > 5) return;
+    if (stepNumber < 1 || stepNumber > 4) return;
     currentStep = stepNumber;
 
     panels.forEach((p) => p.classList.remove("active"));
@@ -82,9 +81,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    const progressPercent = Math.min((stepNumber / 4) * 100, 100);
+    const progressPercent = Math.min((stepNumber / 3) * 100, 100);
     if (progressBar) progressBar.style.width = `${progressPercent}%`;
-    if (currentStepNum) currentStepNum.innerText = Math.min(stepNumber, 4);
+    if (currentStepNum) currentStepNum.innerText = Math.min(stepNumber, 3);
     if (currentStepTitle && stepInfo[stepNumber]) currentStepTitle.innerText = stepInfo[stepNumber].title;
     if (currentStepDesc && stepInfo[stepNumber]) currentStepDesc.innerText = stepInfo[stepNumber].desc;
 
@@ -93,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const parentSidebar = document.querySelector(".cadastro-sidebar");
     const mainPanel = document.querySelector(".cadastro-main");
 
-    if (stepNumber === 5) {
+    if (stepNumber === 4) {
       if (stepHeader) stepHeader.style.display = "none";
       if (parentSidebar) parentSidebar.style.display = "none";
       if (mainPanel) mainPanel.style.maxWidth = "100%";
@@ -103,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (mainPanel) mainPanel.style.maxWidth = "800px";
     }
 
-    if (stepNumber === 2) {
+    if (stepNumber === 1) {
       setTimeout(() => {
         if (typeof mapSearch !== "undefined" && mapSearch) mapSearch.resize();
         if (typeof mapPreview !== "undefined" && mapPreview) mapPreview.resize();
@@ -155,40 +154,63 @@ document.addEventListener("DOMContentLoaded", async () => {
   const uploadArea = document.querySelector(".upload-area");
   const previewContainer = document.getElementById("photo-preview-container");
   const limitWarning = document.getElementById("photo-limit-warning");
+  let existingPhotos = [];
   let selectedFiles = [];
 
   if (fotoUpload && uploadArea) {
-    uploadArea.addEventListener("click", () => fotoUpload.click());
+    uploadArea.addEventListener("click", (e) => {
+      if (e.target !== fotoUpload) {
+        fotoUpload.click();
+      }
+    });
     fotoUpload.addEventListener("change", (e) => {
       const newFiles = Array.from(e.target.files);
-      if (selectedFiles.length + newFiles.length > 3) {
+      const totalCount = existingPhotos.length + selectedFiles.length + newFiles.length;
+      if (totalCount > 3) {
         if (limitWarning) limitWarning.style.display = "block";
-        const space = 3 - selectedFiles.length;
+        const space = 3 - (existingPhotos.length + selectedFiles.length);
         if (space > 0) selectedFiles = [...selectedFiles, ...newFiles.slice(0, space)];
       } else {
         if (limitWarning) limitWarning.style.display = "none";
         selectedFiles = [...selectedFiles, ...newFiles];
       }
-      renderPreviews();
+      window.renderPreviewsUI();
       e.target.value = "";
     });
 
-    function renderPreviews() {
+    window.renderPreviewsUI = function() {
       if (!previewContainer) return;
       previewContainer.innerHTML = "";
+      
+      // Renderizar fotos existentes
+      existingPhotos.forEach(url => {
+        const div = document.createElement("div");
+        div.className = "photo-preview-item";
+        div.style = "position:relative; padding-top:100%; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;";
+        const img = document.createElement("img");
+        const S3_BASE_URL = "https://venha-junto-images.s3.us-east-2.amazonaws.com/fotos/";
+        img.src = url.startsWith('http') ? url : (url.includes('/') ? url : S3_BASE_URL + url);
+        img.style = "position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity: 0.8;";
+        const label = document.createElement("div");
+        label.innerHTML = "Já salvo";
+        label.style = "position:absolute; bottom:4px; left:50%; transform: translateX(-50%); background:rgba(0,0,0,0.6); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px;";
+        div.appendChild(img); div.appendChild(label); previewContainer.appendChild(div);
+      });
+
+      // Renderizar novas fotos
       selectedFiles.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = (ev) => {
           const div = document.createElement("div");
-          div.className = "photo-preview-item"; // Usando classe ou style direto
-          div.style = "position:relative; padding-top:100%; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;";
+          div.className = "photo-preview-item";
+          div.style = "position:relative; padding-top:100%; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0; border-color: #ea580c;";
           const img = document.createElement("img");
           img.src = ev.target.result;
           img.style = "position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;";
           const rem = document.createElement("div");
           rem.innerHTML = "×";
           rem.style = "position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.5); color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;";
-          rem.onclick = () => { selectedFiles.splice(index, 1); renderPreviews(); };
+          rem.onclick = () => { selectedFiles.splice(index, 1); window.renderPreviewsUI(); };
           div.appendChild(img); div.appendChild(rem); previewContainer.appendChild(div);
         };
         reader.readAsDataURL(file);
@@ -210,12 +232,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const estab = await window.apiPartnerGetPlace(id);
       console.log("[Edit] Dados recebidos:", estab);
 
-      // Passo 1: Responsável
-      if (estab.nome_responsavel) document.getElementById("nomeResponsavel").value = estab.nome_responsavel;
-      if (estab.email_responsavel) document.getElementById("emailResponsavel").value = estab.email_responsavel;
-      if (estab.telefone_responsavel) document.getElementById("telefoneResponsavel").value = estab.telefone_responsavel;
-
-      // Passo 2: Estabelecimento
+      // Passo 1: Responsável removido
+      
+      // Passo 1 (agora Estabelecimento)
       if (estab.nome) document.getElementById("nomeEstabelecimento").value = estab.nome;
       if (estab.cnpj_cpf) document.getElementById("cnpj_cpf").value = estab.cnpj_cpf;
       if (estab.descricao) document.getElementById("descEstabelecimento").value = estab.descricao;
@@ -259,6 +278,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (estab.facebook_local && document.getElementById("faceLocal")) document.getElementById("faceLocal").value = estab.facebook_local;
       if (estab.horario_funcionamento) document.getElementById("horarioLocal").value = estab.horario_funcionamento;
 
+      // Fotos já salvas
+      if (estab.foto_perfil || estab.fotos_galeria) {
+        if (estab.foto_perfil) existingPhotos.push(estab.foto_perfil);
+        if (estab.fotos_galeria) existingPhotos = existingPhotos.concat(estab.fotos_galeria.split(',').map(u => u.trim()).filter(Boolean));
+        if (typeof window.renderPreviewsUI === "function") window.renderPreviewsUI();
+      }
+
       // Passo 3: Acessibilidade
       if (estab.recursos_acessibilidade) {
         const list = estab.recursos_acessibilidade.split(",");
@@ -269,6 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Passo 4: Plano
       if (estab.plano_escolhido) {
+        window._originalPlan = estab.plano_escolhido.toLowerCase();
         const radio = document.querySelector(`input[name="plano_escolhido"][value="${estab.plano_escolhido}"]`);
         if (radio) {
           radio.checked = true;
@@ -334,9 +361,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const planoEscolhido = selPlano ? selPlano.value : "basico";
 
       const payload = {
-        nome_responsavel: document.getElementById("nomeResponsavel").value,
-        email_responsavel: document.getElementById("emailResponsavel").value,
-        telefone_responsavel: document.getElementById("telefoneResponsavel").value,
         nome: document.getElementById("nomeEstabelecimento").value,
         cnpj_cpf: document.getElementById("cnpj_cpf").value,
         tipo: document.getElementById("tipoEstabelecimento").value,
@@ -387,8 +411,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
 
-        // Finaliza
-        goToStep(5);
+        // Redirecionamento condicional (Upgrade de Plano -> Pagamento)
+        const changedToPaidPlan = planoEscolhido !== "basico" && planoEscolhido !== window._originalPlan;
+        
+        if (changedToPaidPlan) {
+          if (btnSubmit) btnSubmit.textContent = "Redirecionando para o Pagamento...";
+          // Como o plano foi atualizado no PATCH, vamos simular a etapa de pagamento
+          window.location.href = `./pagamento.html?plan=${planoEscolhido}&estab_id=${id}`;
+          return;
+        }
+
+        // Finaliza (Fluxo Normal)
+        goToStep(4);
         document.getElementById("successPlanoNome").textContent = planoEscolhido.toUpperCase();
         
         let count = 3;

@@ -1129,7 +1129,10 @@
                     <span>R$99/mês</span>
                   </div>
                 </div>
-                <a href="./planos.html" class="style-button-plan" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">Alterar plano</a>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <a href="./planos.html" class="style-button-plan" id="btnAlterarPlanoConfig" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">Alterar plano</a>
+                  <button type="button" id="btnCancelarPlanoConfig" style="display: none; padding: 10px 16px; border: 1px solid #fee2e2; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; background: #fff; color: #ef4444; transition: all 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='#fff'" onclick="cancelarPlanoAtual()">Cancelar Assinatura</button>
+                </div>
               </div>
             </div>
 

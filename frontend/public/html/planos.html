@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Planos para Estabelecimentos • Venha Junto</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     :root {
       --bg: #f8fafc;
@@ -408,50 +409,94 @@
       // Se houver um estabId na URL, o comportamento muda para "Atualização de Plano"
       if (estabId) {
         // --- NOVO: Buscar plano atual para detectar Downgrade ---
-        let currentPlanName = "Basico";
+        let currentPlanName = "basico";
         fetch(`/api/estabelecimentos`, {credentials: 'include'})
           .then(r => r.json())
           .then(locais => {
              const loc = locais.find(l => l.id == estabId);
-             if (loc) currentPlanName = loc.plano_escolhido || "Basico";
+             if (loc && loc.plano_escolhido) {
+                 currentPlanName = loc.plano_escolhido.toLowerCase();
+             }
           });
 
         document.querySelectorAll("[data-plan]").forEach(btn => {
           // Alterar visual para indicar "Selecionar"
-          btn.innerHTML = btn.getAttribute("data-plan") === "Basico" ? "Mudar para Básico" : "Selecionar Plano";
+          btn.innerHTML = btn.getAttribute("data-plan").toLowerCase() === "basico" ? "Mudar para Básico" : "Selecionar Plano";
           
           btn.addEventListener("click", async (e) => {
             e.preventDefault();
-            const newPlan = btn.getAttribute("data-plan");
-            const tierMap = {"Basico": 0, "Pro": 1, "Pro Plus": 2};
+            const newPlanRaw = btn.getAttribute("data-plan"); // Ex: "Basico", "Pro", "Pro_Plus"
+            const newPlan = newPlanRaw.toLowerCase(); 
+            const tierMap = {"basico": 0, "pro": 1, "pro_plus": 2};
             
-            // Lógica de Alertas Dinâmicos (Upgrade vs Downgrade)
-            let confirmMsg = `Deseja realmente alterar seu plano para ${newPlan}?`;
-            if (tierMap[newPlan] < tierMap[currentPlanName]) {
-                confirmMsg = `⚠️ AO ALTERAR PARA O PLANO ${newPlan.toUpperCase()}, ALGUNS BENEFÍCIOS SERÃO LIMITADOS.\n\nSeus dados serão mantidos, mas parte dos recursos (como fotos extras) poderá ficar indisponível para o público.\n\nDeseja prosseguir com o Downgrade?`;
+            const currentTier = tierMap[currentPlanName] !== undefined ? tierMap[currentPlanName] : 0;
+            const newTier = tierMap[newPlan] !== undefined ? tierMap[newPlan] : 0;
+
+            // Já está no plano
+            if (newTier === currentTier) {
+              Swal.fire({
+                icon: 'info',
+                title: 'Atenção',
+                text: 'Você já está utilizando este plano no seu estabelecimento!',
+                confirmButtonColor: '#f97316'
+              });
+              return;
             }
 
-            if (confirm(confirmMsg)) {
-              try {
-                const response = await fetch(`/api/estabelecimentos/${estabId}`, {
-                  method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ plano_escolhido: newPlan }),
-                  credentials: 'include'
-                });
+            // Upgrade -> Redireciona na hora para a tela de Pagamento
+            if (newTier > currentTier) {
+              Swal.fire({
+                title: 'Redirecionando...',
+                text: 'Preparando seu novo plano...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading() }
+              });
+              setTimeout(() => {
+                window.location.href = `./pagamento.html?plan=${newPlan}&estab_id=${estabId}`;
+              }, 600);
+              return;
+            }
 
-                if (response.ok) {
-                  alert("Plano atualizado com sucesso! Seu dashboard será atualizado.");
-                  window.location.href = "./parceiro-dashboard.html";
-                } else {
-                  const errData = await response.json();
-                  alert("Erro ao atualizar plano: " + (errData.detail || "Erro desconhecido"));
+            // Downgrade -> Pergunta antes com Modal Profissional
+            Swal.fire({
+              icon: 'warning',
+              title: 'Aviso de Downgrade',
+              text: `Ao alterar para o plano ${newPlanRaw.replace('_',' ')}, alguns benefícios como fotos extras poderão ficar ocultos para o público. Deseja prosseguir?`,
+              showCancelButton: true,
+              confirmButtonColor: '#ef4444',
+              cancelButtonColor: '#94a3b8',
+              confirmButtonText: 'Sim, reduzir plano',
+              cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                try {
+                  Swal.fire({ title: 'Atualizando...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+                  const response = await fetch(`/api/estabelecimentos/${estabId}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plano_escolhido: newPlan }),
+                    credentials: 'include'
+                  });
+
+                  if (response.ok) {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Plano atualizado!',
+                      text: 'Seu plano foi alterado com sucesso.',
+                      confirmButtonColor: '#10b981'
+                    }).then(() => {
+                      window.location.href = "./parceiro-dashboard.html";
+                    });
+                  } else {
+                    const errData = await response.json();
+                    Swal.fire('Erro', errData.detail || "Erro desconhecido", 'error');
+                  }
+                } catch (err) {
+                  console.error("Erro na requisição:", err);
+                  Swal.fire('Erro', 'Falha ao conectar com o servidor.', 'error');
                 }
-              } catch (err) {
-                console.error("Erro na requisição:", err);
-                alert("Erro ao conectar com o servidor.");
               }
-            }
+            });
           });
         });
       } else {
