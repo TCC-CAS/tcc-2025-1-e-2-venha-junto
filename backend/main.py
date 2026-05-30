@@ -1623,9 +1623,9 @@ def listar_locais_publicos(
         
     # Lógica de Ordenação de Planos: 1° Pro Plus, 2° Pro, 3° Básico/Demais
     ordem_planos = case(
-        (models.Estabelecimento.plano_escolhido == "Pro Plus", 1),
-        (models.Estabelecimento.plano_escolhido == "Pro", 2),
-        (models.Estabelecimento.plano_escolhido == "Básico", 3),
+        (models.Estabelecimento.plano_escolhido.in_(["Pro Plus", "pro_plus", "pro-plus"]), 1),
+        (models.Estabelecimento.plano_escolhido.in_(["Pro", "pro"]), 2),
+        (models.Estabelecimento.plano_escolhido.in_(["Básico", "basico"]), 3),
         else_=4
     )
     query = query.order_by(ordem_planos)
@@ -1649,9 +1649,15 @@ def listar_locais_publicos(
             # ---------------------------------------------------------
             # Regra de Ocultação Dinâmica de Fotos (Downgrade Seguro)
             # ---------------------------------------------------------
-            plano = estab.plano_escolhido or "Básico"
-            if plano in PLAN_LIMITS:
-                limite_fotos = PLAN_LIMITS[plano]["max_photos"]
+            plano_raw = (estab.plano_escolhido or "Básico").lower()
+            plano_norm = "Básico"
+            if plano_raw in ["pro_plus", "pro-plus", "pro plus"]:
+                plano_norm = "Pro Plus"
+            elif plano_raw in ["pro"]:
+                plano_norm = "Pro"
+                
+            if plano_norm in PLAN_LIMITS:
+                limite_fotos = PLAN_LIMITS[plano_norm]["max_photos"]
                 if item.fotos_galeria:
                     lista_fotos = item.fotos_galeria.split(",")
                     if len(lista_fotos) > limite_fotos:
@@ -1704,9 +1710,15 @@ def obter_local_publico(id: int, db: Session = Depends(get_db)):
     # ---------------------------------------------------------
     # Regra de Ocultação Dinâmica de Fotos (Downgrade Seguro)
     # ---------------------------------------------------------
-    plano = estab.plano_escolhido or "Básico"
-    if plano in PLAN_LIMITS:
-        limite_fotos = PLAN_LIMITS[plano]["max_photos"]
+    plano_raw = (estab.plano_escolhido or "Básico").lower()
+    plano_norm = "Básico"
+    if plano_raw in ["pro_plus", "pro-plus", "pro plus"]:
+        plano_norm = "Pro Plus"
+    elif plano_raw in ["pro"]:
+        plano_norm = "Pro"
+        
+    if plano_norm in PLAN_LIMITS:
+        limite_fotos = PLAN_LIMITS[plano_norm]["max_photos"]
         if res.fotos_galeria:
             lista_fotos = res.fotos_galeria.split(",")
             if len(lista_fotos) > limite_fotos:
@@ -1921,10 +1933,11 @@ def admin_listar_parceiros(request: Request, db: Session = Depends(get_db)):
         qtde = len(estabs)
         plano_str = "Básico"
         for pl in estabs:
-            if pl.plano_escolhido == "Pro Plus":
+            pl_chosen = (pl.plano_escolhido or "").lower()
+            if pl_chosen in ["pro_plus", "pro-plus", "pro plus"]:
                 plano_str = "Pro Plus"
                 break
-            elif pl.plano_escolhido == "Pro":
+            elif pl_chosen in ["pro"]:
                 plano_str = "Pro"
                 
         result.append({
