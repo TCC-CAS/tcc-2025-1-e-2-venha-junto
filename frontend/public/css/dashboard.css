@@ -452,8 +452,6 @@ body {
   padding: 40px;
   overflow-y: auto;
   flex: 1;
-  max-width: 1400px;
-  margin: 0 auto;
   width: 100%;
 }
 .dash-section {
@@ -1685,5 +1683,25 @@ body {
   color: #94a3b8;
   margin-top: 4px;
   display: block;
+}
+
+/* Estilização Premium do Filtro */
+.filter-wrapper {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-wrapper:hover {
+  background: rgba(249, 115, 22, 0.12) !important;
+  border-color: rgba(249, 115, 22, 0.35) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.08) !important;
+}
+.filter-wrapper select:focus {
+  color: #ea580c !important;
+}
+.filter-wrapper select option {
+  background-color: #ffffff;
+  color: #1e293b;
+  font-weight: 600;
+  padding: 8px;
 }
 
