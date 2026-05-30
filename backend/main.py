@@ -650,6 +650,31 @@ def redefinir_senha(body: dict, db: Session = Depends(get_db)):
     return {"message": "Senha redefinida com sucesso!"}
 
 # ---------------------------------------------
+# REDEFINIÇÃO DE SENHA DO PARCEIRO
+# ---------------------------------------------
+@app.post("/api/parceiros/redefinir-senha")
+def redefinir_senha_parceiro(body: dict, db: Session = Depends(get_db)):
+    email      = (body.get("email") or "").strip().lower()
+    nova_senha = (body.get("nova_senha") or "").strip()
+
+    if not email or not nova_senha:
+        raise HTTPException(status_code=400, detail="E-mail e nova senha são obrigatórios.")
+
+    if len(nova_senha) < 8:
+        raise HTTPException(status_code=400, detail="A senha deve ter no mínimo 8 caracteres.")
+
+    partner = db.query(models.Parceiro).filter(models.Parceiro.email == email).first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Nenhuma conta de parceiro encontrada com esse e-mail.")
+
+    # Atualiza a senha no banco de dados
+    partner.senha_hash = get_password_hash(nova_senha[:72])
+    db.commit()
+
+    return {"message": "Senha do parceiro redefinida com sucesso!"}
+
+
+# ---------------------------------------------
 # ROTAS DE AUTENTICAÇÃO (FRONTEND ADMIN COMPATÍVEL)
 # ---------------------------------------------
 
