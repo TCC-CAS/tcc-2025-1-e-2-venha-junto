@@ -433,8 +433,10 @@
       badges.appendChild(bAccess);
     }
 
-    // Badge Verificado
-    if (place.status === "APPROVED" || place.verified) {
+    // Badge Verificado (apenas para Pro e Pro Plus)
+    const plano = (place.plano_escolhido || "").toLowerCase();
+    const isPaidPlan = plano.includes("pro") || plano.includes("plus") || plano.includes("premium");
+    if (isPaidPlan && (place.status === "APPROVED" || place.verified)) {
       const bVerif = document.createElement("div");
       bVerif.className = "badge-item verificado";
       bVerif.innerHTML = `${getIcon('shield')} Verificado`;
@@ -532,7 +534,7 @@
     // Chips de Categoria (opcional, usando o tipo como exemplo)
     const catChips = document.createElement("div");
     catChips.className = "category-chips";
-    ["Família", "Acessível"].forEach(tag => {
+    ["Acessível"].forEach(tag => {
       const chip = document.createElement("span");
       chip.className = "cat-chip";
       chip.textContent = tag;
