@@ -145,7 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
               const resRev = await fetch(`/public/places/${loc.id}/reviews`);
               if (resRev.ok) {
                   const revs = await resRev.json();
-                  revs.forEach(r => r.local_nome = loc.nome); // Anexa o nome do local na review
+                  revs.forEach(r => {
+                      r.local_nome = loc.nome; // Anexa o nome do local na review
+                      r.local_id = loc.id;     // ID para filtro
+                  });
                   todasAvaliacoes.push(...revs);
               }
           } catch(e) { console.error(e); }
@@ -155,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
       todasAvaliacoes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       let metricas7DiasMap = {}; // data -> { views, clicks }
+      window.allMetricas7DiasByLocal = {};
       if (locais.length > 0) {
           try {
               // Buscar métricas de TODOS os locais e somar por data
@@ -162,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   const resMet = await fetch(`/api/estabelecimentos/${loc.id}/metricas-7dias`, {credentials: 'include'});
                   if (resMet.ok) {
                       const dados = await resMet.json();
+                      window.allMetricas7DiasByLocal[loc.id] = dados;
                       dados.forEach(m => {
                           if (!metricas7DiasMap[m.data]) metricas7DiasMap[m.data] = { views: 0, clicks: 0 };
                           metricas7DiasMap[m.data].views += m.views || 0;
@@ -178,6 +183,50 @@ document.addEventListener("DOMContentLoaded", () => {
           views: metricas7DiasMap[d].views,
           clicks: metricas7DiasMap[d].clicks
       }));
+
+      // Salva globalmente para o filtro
+      window.loadedLocais = locais;
+      window.loadedAvaliacoes = todasAvaliacoes;
+      window.loadedMetricas7DiasAgregadas = metricas7DiasAgregadas;
+
+      // Popula o select de filtro no cabeçalho
+      const selectFiltro = document.getElementById("filtroEstabelecimento");
+      if (selectFiltro) {
+        selectFiltro.innerHTML = '<option value="todos">📊 Todos os Locais</option>';
+        locais.forEach(loc => {
+          const opt = document.createElement("option");
+          opt.value = loc.id;
+          opt.textContent = `📍 ${loc.nome}`;
+          selectFiltro.appendChild(opt);
+        });
+
+        // Registra o evento de mudança se ainda não registrado
+        if (!selectFiltro.dataset.listenerRegistered) {
+          selectFiltro.dataset.listenerRegistered = "true";
+          selectFiltro.addEventListener("change", () => {
+            const selectedValue = selectFiltro.value;
+            
+            let locaisFiltrados = window.loadedLocais || [];
+            let avaliacoesFiltrados = window.loadedAvaliacoes || [];
+            let metricasFiltradas = [];
+
+            if (selectedValue === "todos") {
+              metricasFiltradas = window.loadedMetricas7DiasAgregadas || [];
+              window._primeiroEstabId = (window.loadedLocais && window.loadedLocais.length > 0) ? window.loadedLocais[0].id : null;
+            } else {
+              const selectedId = parseInt(selectedValue);
+              locaisFiltrados = (window.loadedLocais || []).filter(l => l.id === selectedId);
+              avaliacoesFiltrados = (window.loadedAvaliacoes || []).filter(r => r.local_id === selectedId);
+              metricasFiltradas = (window.allMetricas7DiasByLocal || {})[selectedId] || [];
+              window._primeiroEstabId = selectedId;
+            }
+
+            // Re-calcula e re-renderiza as estatísticas globais e avaliações baseadas no filtro!
+            calcularEstatisticasGlobais(locaisFiltrados, avaliacoesFiltrados, metricasFiltradas);
+            renderizarAvaliacoes(avaliacoesFiltrados);
+          });
+        }
+      }
 
       renderizarListas(locais);
       calcularEstatisticasGlobais(locais, todasAvaliacoes, metricas7DiasAgregadas);
