@@ -122,8 +122,18 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Dados do parceiro:", user);
 
         if (user && user.nome) {
-          partnerActivePlan = user.plano_ativo || "Básico";
-          console.log("Plano ativo do parceiro:", partnerActivePlan);
+          let activePlan = user.plano_ativo || "Básico";
+          const storedPlan = localStorage.getItem("vj_checkout_plan");
+          if (activePlan === "Básico" && storedPlan) {
+            if (storedPlan === "pro") {
+              activePlan = "Pro";
+            } else if (storedPlan === "pro_plus" || storedPlan === "pro-plus") {
+              activePlan = "Pro Plus";
+            }
+          }
+          partnerActivePlan = activePlan;
+          console.log("Plano ativo do parceiro (com override de checkout):", partnerActivePlan);
+          updatePlanLimitsUI();
           
           const nomeCurto = user.nome.split(" ")[0]; // Primeiro nome
           const avatarG = document.querySelector(
@@ -146,6 +156,50 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (e) {
       console.warn("Usuário não logado ou sessão expirada.", e);
       // window.location.href = "./parceiro-login.html";
+    }
+  }
+
+  function updatePlanLimitsUI() {
+    const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+    const alertInfo = document.querySelector(".alert-info");
+    const limitWarning = document.getElementById("photo-limit-warning");
+
+    let maxPhotos = 3;
+    let planDisplayName = "Gratuito";
+    
+    if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+      maxPhotos = 100;
+      planDisplayName = "Pro Plus";
+    } else if (planNorm.includes("pro")) {
+      maxPhotos = 10;
+      planDisplayName = "Pro";
+    }
+
+    if (alertInfo) {
+      if (planDisplayName === "Pro Plus") {
+        alertInfo.innerHTML = `
+          <span class="icon">✨</span>
+          Plano <strong>${planDisplayName}</strong>: Fotos ilimitadas inclusas.
+        `;
+      } else if (planDisplayName === "Pro") {
+        alertInfo.innerHTML = `
+          <span class="icon">⭐</span>
+          Plano <strong>${planDisplayName}</strong>: até 10 fotos inclusas.
+        `;
+      } else {
+        alertInfo.innerHTML = `
+          <span class="icon">📋</span>
+          Plano <strong>Gratuito</strong>: até 3 fotos. Atualize para mais fotos.
+        `;
+      }
+    }
+
+    if (limitWarning) {
+      limitWarning.innerHTML = `
+        <strong>Limite de ${maxPhotos} fotos atingido!</strong><br />
+        Seu plano atual (${planDisplayName}) permite até ${maxPhotos} fotos do local. 
+        Avance para o próximo passo se desejar fazer upgrade de plano para adicionar mais imagens.
+      `;
     }
   }
 
@@ -563,15 +617,24 @@ document.addEventListener("DOMContentLoaded", () => {
            return;
         }
 
+        // Determine dynamic limit based on plan
+        let maxPhotos = 3;
+        const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+        if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+          maxPhotos = 100;
+        } else if (planNorm.includes("pro")) {
+          maxPhotos = 10;
+        }
+
         // Calculate total files if we append the new ones
         const totalFiles = selectedFiles.length + approvedFiles.length;
 
-        if (totalFiles > 3) {
+        if (totalFiles > maxPhotos) {
           // Show Warning
           limitWarning.style.display = "block";
 
-          // Take only up to 3 files
-          const allowedSpace = 3 - selectedFiles.length;
+          // Take only up to maxPhotos files
+          const allowedSpace = maxPhotos - selectedFiles.length;
           if (allowedSpace > 0) {
             selectedFiles = [
               ...selectedFiles,
@@ -644,7 +707,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
           removeBtn.onclick = () => {
             selectedFiles.splice(index, 1);
-            if (selectedFiles.length <= 3) limitWarning.style.display = "none";
+            
+            // Determine dynamic limit based on plan
+            let maxPhotos = 3;
+            const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+            if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+              maxPhotos = 100;
+            } else if (planNorm.includes("pro")) {
+              maxPhotos = 10;
+            }
+
+            if (selectedFiles.length <= maxPhotos) limitWarning.style.display = "none";
             renderPreviews();
           };
 

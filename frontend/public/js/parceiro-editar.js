@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("[Edit] Inicializando fluxo de edição...");
+  let partnerActivePlan = "Básico";
 
   // Elementos de UI do Wizard
   const steps = document.querySelectorAll(".step-link");
@@ -165,10 +166,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     fotoUpload.addEventListener("change", (e) => {
       const newFiles = Array.from(e.target.files);
+      
+      let maxPhotos = 3;
+      const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+      if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+        maxPhotos = 100;
+      } else if (planNorm.includes("pro")) {
+        maxPhotos = 10;
+      }
+
       const totalCount = existingPhotos.length + selectedFiles.length + newFiles.length;
-      if (totalCount > 3) {
+      if (totalCount > maxPhotos) {
         if (limitWarning) limitWarning.style.display = "block";
-        const space = 3 - (existingPhotos.length + selectedFiles.length);
+        const space = maxPhotos - (existingPhotos.length + selectedFiles.length);
         if (space > 0) selectedFiles = [...selectedFiles, ...newFiles.slice(0, space)];
       } else {
         if (limitWarning) limitWarning.style.display = "none";
@@ -210,7 +220,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           const rem = document.createElement("div");
           rem.innerHTML = "×";
           rem.style = "position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.5); color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;";
-          rem.onclick = () => { selectedFiles.splice(index, 1); window.renderPreviewsUI(); };
+          rem.onclick = () => {
+            selectedFiles.splice(index, 1);
+            let maxPhotos = 3;
+            const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+            if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+              maxPhotos = 100;
+            } else if (planNorm.includes("pro")) {
+              maxPhotos = 10;
+            }
+            const totalCount = existingPhotos.length + selectedFiles.length;
+            if (totalCount <= maxPhotos) {
+              if (limitWarning) limitWarning.style.display = "none";
+            }
+            window.renderPreviewsUI();
+          };
           div.appendChild(img); div.appendChild(rem); previewContainer.appendChild(div);
         };
         reader.readAsDataURL(file);
@@ -318,6 +342,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (typeof window.apiPartnerMe === "function") {
         const user = await window.apiPartnerMe();
         if (user && user.nome) {
+          let activePlan = user.plano_ativo || "Básico";
+          const storedPlan = localStorage.getItem("vj_checkout_plan");
+          if (activePlan === "Básico" && storedPlan) {
+            if (storedPlan === "pro") {
+              activePlan = "Pro";
+            } else if (storedPlan === "pro_plus" || storedPlan === "pro-plus") {
+              activePlan = "Pro Plus";
+            }
+          }
+          partnerActivePlan = activePlan;
+          console.log("[Edit] Plano ativo do parceiro (com override de checkout):", partnerActivePlan);
+          updatePlanLimitsUI();
+
           const avatarG = document.querySelector(".cadastro-sidebar .user-info .avatar");
           const nomeG = document.querySelector(".cadastro-sidebar .user-info strong");
           if (avatarG) avatarG.textContent = user.nome.charAt(0).toUpperCase();
@@ -325,6 +362,50 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     } catch (e) { console.warn("Sessão de parceiro não encontrada."); }
+  }
+
+  function updatePlanLimitsUI() {
+    const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
+    const alertInfo = document.querySelector(".alert-info");
+    const limitWarning = document.getElementById("photo-limit-warning");
+
+    let maxPhotos = 3;
+    let planDisplayName = "Gratuito";
+    
+    if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+      maxPhotos = 100;
+      planDisplayName = "Pro Plus";
+    } else if (planNorm.includes("pro")) {
+      maxPhotos = 10;
+      planDisplayName = "Pro";
+    }
+
+    if (alertInfo) {
+      if (planDisplayName === "Pro Plus") {
+        alertInfo.innerHTML = `
+          <span class="icon">✨</span>
+          Plano <strong>${planDisplayName}</strong>: Fotos ilimitadas inclusas.
+        `;
+      } else if (planDisplayName === "Pro") {
+        alertInfo.innerHTML = `
+          <span class="icon">⭐</span>
+          Plano <strong>${planDisplayName}</strong>: até 10 fotos inclusas.
+        `;
+      } else {
+        alertInfo.innerHTML = `
+          <span class="icon">📋</span>
+          Plano <strong>Gratuito</strong>: até 3 fotos. Atualize para mais fotos.
+        `;
+      }
+    }
+
+    if (limitWarning) {
+      limitWarning.innerHTML = `
+        <strong>Limite de ${maxPhotos} fotos atingido!</strong><br />
+        Seu plano atual (${planDisplayName}) permite até ${maxPhotos} fotos do local. 
+        Avance para o próximo passo se desejar fazer upgrade de plano para adicionar mais imagens.
+      `;
+    }
   }
 
   // Execução inicial
