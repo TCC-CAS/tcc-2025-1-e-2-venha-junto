@@ -189,23 +189,31 @@ document.addEventListener("DOMContentLoaded", () => {
       window.loadedAvaliacoes = todasAvaliacoes;
       window.loadedMetricas7DiasAgregadas = metricas7DiasAgregadas;
 
-      // Popula o select de filtro no cabeçalho
-      const selectFiltro = document.getElementById("filtroEstabelecimento");
-      if (selectFiltro) {
-        selectFiltro.innerHTML = '<option value="todos">📊 Todos os Locais</option>';
+      // Popula os selects de filtro (Dashboard e Métricas)
+      const selectDashboard = document.getElementById("filtroEstabelecimentoDashboard");
+      const selectMetricas = document.getElementById("filtroEstabelecimentoMetricas");
+      const filterSelects = [selectDashboard, selectMetricas].filter(Boolean);
+
+      filterSelects.forEach(sel => {
+        sel.innerHTML = '<option value="todos">Todos os estabelecimentos</option>';
         locais.forEach(loc => {
           const opt = document.createElement("option");
           opt.value = loc.id;
-          opt.textContent = `📍 ${loc.nome}`;
-          selectFiltro.appendChild(opt);
+          opt.textContent = loc.nome;
+          sel.appendChild(opt);
         });
 
         // Registra o evento de mudança se ainda não registrado
-        if (!selectFiltro.dataset.listenerRegistered) {
-          selectFiltro.dataset.listenerRegistered = "true";
-          selectFiltro.addEventListener("change", () => {
-            const selectedValue = selectFiltro.value;
+        if (!sel.dataset.listenerRegistered) {
+          sel.dataset.listenerRegistered = "true";
+          sel.addEventListener("change", (e) => {
+            const selectedValue = e.target.value;
             
+            // Sincroniza o outro select
+            filterSelects.forEach(otherSel => {
+              if (otherSel !== sel) otherSel.value = selectedValue;
+            });
+
             let locaisFiltrados = window.loadedLocais || [];
             let avaliacoesFiltrados = window.loadedAvaliacoes || [];
             let metricasFiltradas = [];
@@ -226,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderizarAvaliacoes(avaliacoesFiltrados);
           });
         }
-      }
+      });
 
       renderizarListas(locais);
       calcularEstatisticasGlobais(locais, todasAvaliacoes, metricas7DiasAgregadas);
