@@ -178,6 +178,14 @@
     if (b === "restaurante") return a.includes("restaurante");
     if (b === "atracao") return a.includes("atracao");
     if (b === "passeio") return a.includes("passeio");
+    if (b === "outro") {
+      return (
+        !a.includes("hotel") &&
+        !a.includes("restaurante") &&
+        !a.includes("atracao") &&
+        !a.includes("passeio")
+      );
+    }
 
     return a === b;
   }
@@ -465,7 +473,7 @@
       // 1) tenta filtrado no backend
       let lista = await apiPublicPlaces({
         cidade: cidade || undefined,
-        tipo: tipoApi || undefined,
+        tipo: tipoApi === "Outro" ? undefined : tipoApi || undefined,
         verified_first,
       });
 
