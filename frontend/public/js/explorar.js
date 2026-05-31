@@ -361,7 +361,7 @@
 
     // 1. ÁREA DA IMAGEM
     const imgWrapper = document.createElement("div");
-    imgWrapper.className = "img-wrapper";
+    imgWrapper.className = "card-image";
     imgWrapper.style.position = "relative";
 
     let imageUrls = [];

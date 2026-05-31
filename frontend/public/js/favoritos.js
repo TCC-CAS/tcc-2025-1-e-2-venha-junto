@@ -134,7 +134,7 @@
 
     // 1. ÁREA DA IMAGEM
     const imgWrapper = document.createElement("div");
-    imgWrapper.className = "img-wrapper";
+    imgWrapper.className = "card-image";
 
     if (place.foto_perfil) {
       const img = document.createElement("img");
