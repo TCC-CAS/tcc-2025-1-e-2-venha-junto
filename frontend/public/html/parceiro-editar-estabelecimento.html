@@ -428,6 +428,24 @@
                         </svg>
                         <span>Passeio</span>
                       </div>
+                      <div class="custom-option" data-value="Outro">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="opt-icon"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="8" x2="12" y2="12"></line>
+                          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span>Outro</span>
+                      </div>
                     </div>
                   </div>
 
@@ -454,7 +472,19 @@
                     <option value="Parque">Parque</option>
                     <option value="Hotel">Hotel</option>
                     <option value="Passeio">Passeio</option>
+                    <option value="Outro">Outro</option>
                   </select>
+                </div>
+
+                <!-- Campo dinâmico para "Outro" -->
+                <div class="field-group" id="groupEspecifiqueTipo" style="display: none; margin-top: 10px;">
+                  <label for="especifiqueTipo">Especifique o tipo <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </span>
+                    <input type="text" id="especifiqueTipo" placeholder="Ex: Galeria de Arte, Coworking..." />
+                  </div>
                 </div>
               </div>
 
