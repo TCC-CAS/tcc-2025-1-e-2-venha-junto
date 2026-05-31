@@ -153,7 +153,7 @@
     const badges = document.createElement("div");
     badges.className = "card-badges";
     
-    if (place.plano_escolhido === "Pro Plus" || place.plano_escolhido === "Pro") {
+    if (place.plano_escolhido === "Premium" || place.plano_escolhido === "Pro") {
       const bPremium = document.createElement("div");
       bPremium.className = "badge-item premium";
       bPremium.innerHTML = `${getIcon('star')} Destaque`;
@@ -173,7 +173,7 @@
       badges.appendChild(bAccess);
     }
 
-    // Badge Verificado (apenas para Pro e Pro Plus)
+    // Badge Verificado (apenas para Pro e Premium)
     const plano = (place.plano_escolhido || "").toLowerCase();
     const isPaidPlan = plano.includes("pro") || plano.includes("plus") || plano.includes("premium");
     if (isPaidPlan && (place.status === "APPROVED" || place.verified)) {
@@ -213,7 +213,7 @@
     titleRow.appendChild(h3);
     
     // Distância GPS (Se tivermos localização e for plano PRO)
-    if (window.userCoords && (place.plano_escolhido === "Pro" || place.plano_escolhido === "Pro Plus")) {
+    if (window.userCoords && (place.plano_escolhido === "Pro" || place.plano_escolhido === "Premium")) {
         const dist = getDistance(window.userCoords.lat, window.userCoords.lng, place.latitude, place.longitude);
         if (dist) {
             const distSpan = document.createElement("span");

@@ -251,8 +251,8 @@
     const badges = document.createElement("div");
     badges.className = "card-badges";
     
-    // Badge Premium (Pro / Pro Plus)
-    if (place.plano_escolhido === "Pro Plus" || place.plano_escolhido === "Pro") {
+    // Badge Premium (Pro / Premium)
+    if (place.plano_escolhido === "Premium" || place.plano_escolhido === "Pro") {
       const bPremium = document.createElement("div");
       bPremium.className = "badge-item premium";
       bPremium.innerHTML = `${getIcon('star')} Destaque`;
@@ -261,7 +261,7 @@
       bPremium.style.border = "1px solid #fde68a";
       badges.appendChild(bPremium);
       
-      if (place.plano_escolhido === "Pro Plus") {
+      if (place.plano_escolhido === "Premium") {
         a.style.border = "2px solid #f59e0b";
         a.style.boxShadow = "0 4px 12px rgba(245, 158, 11, 0.15)";
       }
@@ -282,7 +282,7 @@
       badges.appendChild(bAccess);
     }
 
-    // Badge Verificado (apenas para Pro e Pro Plus)
+    // Badge Verificado (apenas para Pro e Premium)
     const plano = (place.plano_escolhido || "").toLowerCase();
     const isPaidPlan = plano.includes("pro") || plano.includes("plus") || plano.includes("premium");
     if (isPaidPlan && (place.status === "APPROVED" || place.verified)) {
@@ -308,8 +308,8 @@
     userIcon.innerHTML = getIcon("user", "#94a3b8", 20);
     titleRow.appendChild(h3);
     
-    // Distância GPS (Somente para planos Pro e Pro Plus)
-    const canShowDistance = (place.plano_escolhido === "Pro" || place.plano_escolhido === "Pro Plus");
+    // Distância GPS (Somente para planos Pro e Premium)
+    const canShowDistance = (place.plano_escolhido === "Pro" || place.plano_escolhido === "Premium");
     
     if (userCoords && place.latitude && place.longitude && canShowDistance) {
         const dist = calculateDistance(userCoords.lat, userCoords.lng, place.latitude, place.longitude);

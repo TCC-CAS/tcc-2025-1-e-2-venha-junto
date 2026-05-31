@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
           if (activePlan === "Básico" && storedPlan) {
             if (storedPlan === "pro") {
               activePlan = "Pro";
-            } else if (storedPlan === "pro_plus" || storedPlan === "pro-plus") {
-              activePlan = "Pro Plus";
+            } else if (storedPlan === "premium" || storedPlan === "premium") {
+              activePlan = "Premium";
             }
           }
           partnerActivePlan = activePlan;
@@ -167,16 +167,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let maxPhotos = 3;
     let planDisplayName = "Gratuito";
     
-    if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+    if (planNorm.includes("premium") || planNorm.includes("premium")) {
       maxPhotos = 100;
-      planDisplayName = "Pro Plus";
+      planDisplayName = "Premium";
     } else if (planNorm.includes("pro")) {
       maxPhotos = 10;
       planDisplayName = "Pro";
     }
 
     if (alertInfo) {
-      if (planDisplayName === "Pro Plus") {
+      if (planDisplayName === "Premium") {
         alertInfo.innerHTML = `
           <span class="icon">✨</span>
           Plano <strong>${planDisplayName}</strong>: Fotos ilimitadas inclusas.
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Auto-seleção de plano se for passo 4
     if (stepNumber === 3) {
-      const planMap = { "Básico": "basico", "Pro": "pro", "Pro Plus": "pro_plus" };
+      const planMap = { "Básico": "basico", "Pro": "pro", "Premium": "premium" };
       const targetId = planMap[partnerActivePlan] || "basico";
       const radio = document.querySelector(`input[name="plano_escolhido"][value="${targetId}"]`);
       if (radio && !document.querySelector('input[name="plano_escolhido"]:checked')) {
@@ -620,7 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Determine dynamic limit based on plan
         let maxPhotos = 3;
         const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
-        if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+        if (planNorm.includes("premium") || planNorm.includes("premium")) {
           maxPhotos = 100;
         } else if (planNorm.includes("pro")) {
           maxPhotos = 10;
@@ -711,7 +711,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Determine dynamic limit based on plan
             let maxPhotos = 3;
             const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
-            if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+            if (planNorm.includes("premium") || planNorm.includes("premium")) {
               maxPhotos = 100;
             } else if (planNorm.includes("pro")) {
               maxPhotos = 10;
@@ -813,7 +813,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (selPlano) {
         planoEscolhido = selPlano.value;
         if (selPlano.value === "pro") planoNome = "Pro";
-        if (selPlano.value === "pro_plus") planoNome = "Pro Plus";
+        if (selPlano.value === "premium") planoNome = "Premium";
       }
 
       // Recursos de acessibilidade selecionados
@@ -905,7 +905,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let contagem = 4;
         const btnDash = form.querySelector("#stepSuccess .btn");
         
-        const tierMap = { "Básico": 0, "Pro": 1, "Pro Plus": 2, "basico": 0, "pro": 1, "pro_plus": 2 };
+        const tierMap = { "Básico": 0, "Pro": 1, "Premium": 2, "basico": 0, "pro": 1, "premium": 2 };
         const isUpgrade = tierMap[planoEscolhido] > tierMap[partnerActivePlan];
 
         let destination = "./parceiro-dashboard.html";

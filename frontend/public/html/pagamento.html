@@ -458,9 +458,9 @@
     localStorage.setItem("vj_checkout_plan", plan);
     if(estabId) localStorage.setItem("vj_checkout_estab_id", estabId);
 
-    if (plan === 'pro-plus' || plan === 'pro_plus') {
+    if (plan === 'premium' || plan === 'premium') {
       document.getElementById('targetPlanIcon').innerText = "💎";
-      document.getElementById('targetPlanName').innerText = "Plano Pro Plus";
+      document.getElementById('targetPlanName').innerText = "Plano Premium";
       document.getElementById('targetPlanSub').innerText = "R$ 79.00";
       document.getElementById('targetPlanTotal').innerText = "R$ 79.00";
       

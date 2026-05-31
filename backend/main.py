@@ -240,7 +240,7 @@ PLAN_LIMITS = {
         "max_active_coupons": 5,
         "metrics_tier": "detailed"
     },
-    "Pro Plus": {
+    "Premium": {
         "max_establishments": 9999,
         "max_photos": 100,
         "max_active_coupons": 100,
@@ -257,17 +257,17 @@ def get_partner_capacity(partner_id: int, db: Session, intended_plan: Optional[s
         models.Estabelecimento.status != "ARCHIVED"
     ).all()
     
-    # Mapeamento para aceitar o que vem do frontend (basico, pro, pro_plus)
+    # Mapeamento para aceitar o que vem do frontend (basico, pro, premium)
     plan_mapping = {
         "basico": "Básico",
         "pro": "Pro",
-        "pro_plus": "Pro Plus",
+        "premium": "Premium",
         "Básico": "Básico",
         "Pro": "Pro",
-        "Pro Plus": "Pro Plus"
+        "Premium": "Premium"
     }
     
-    tier_map = {"Básico": 0, "Pro": 1, "Pro Plus": 2}
+    tier_map = {"Básico": 0, "Pro": 1, "Premium": 2}
     
     # Normaliza o plano pretendido
     normalized_intended = plan_mapping.get(intended_plan, "Básico")  # type: ignore
@@ -1105,7 +1105,7 @@ async def criar_estabelecimento(estab_data: schemas.EstabelecimentoCreate, reque
     if contagem_atual >= capacidade["max_establishments"]:
         raise HTTPException(
             status_code=403, 
-            detail=f"Limite atingido: Seu plano atual ({capacidade['max_establishments']} local/is) está lotado. Faça upgrade para o Pro ou Pro Plus para cadastrar mais."
+            detail=f"Limite atingido: Seu plano atual ({capacidade['max_establishments']} local/is) está lotado. Faça upgrade para o Pro ou Premium para cadastrar mais."
         )
     # -------------------------------------------
     novo_estab = models.Estabelecimento(
@@ -1621,9 +1621,9 @@ def listar_locais_publicos(
     if tipo:
         query = query.filter(models.Estabelecimento.tipo.ilike(f"%{tipo}%"))
         
-    # Lógica de Ordenação de Planos: 1° Pro Plus, 2° Pro, 3° Básico/Demais
+    # Lógica de Ordenação de Planos: 1° Premium, 2° Pro, 3° Básico/Demais
     ordem_planos = case(
-        (models.Estabelecimento.plano_escolhido.in_(["Pro Plus", "pro_plus", "pro-plus"]), 1),
+        (models.Estabelecimento.plano_escolhido.in_(["Premium", "premium", "premium"]), 1),
         (models.Estabelecimento.plano_escolhido.in_(["Pro", "pro"]), 2),
         (models.Estabelecimento.plano_escolhido.in_(["Básico", "basico"]), 3),
         else_=4
@@ -1651,8 +1651,8 @@ def listar_locais_publicos(
             # ---------------------------------------------------------
             plano_raw = (estab.plano_escolhido or "Básico").lower()
             plano_norm = "Básico"
-            if plano_raw in ["pro_plus", "pro-plus", "pro plus"]:
-                plano_norm = "Pro Plus"
+            if plano_raw in ["premium", "premium", "premium"]:
+                plano_norm = "Premium"
             elif plano_raw in ["pro"]:
                 plano_norm = "Pro"
                 
@@ -1712,8 +1712,8 @@ def obter_local_publico(id: int, db: Session = Depends(get_db)):
     # ---------------------------------------------------------
     plano_raw = (estab.plano_escolhido or "Básico").lower()
     plano_norm = "Básico"
-    if plano_raw in ["pro_plus", "pro-plus", "pro plus"]:
-        plano_norm = "Pro Plus"
+    if plano_raw in ["premium", "premium", "premium"]:
+        plano_norm = "Premium"
     elif plano_raw in ["pro"]:
         plano_norm = "Pro"
         
@@ -1817,9 +1817,9 @@ def upgrade_estabelecimento(id: int, payload: dict, request: Request, db: Sessio
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
         
     plano_alvo = payload.get("plano")
-    if plano_alvo in ["Básico", "Pro", "Pro Plus", "pro", "pro-plus"]:
+    if plano_alvo in ["Básico", "Pro", "Premium", "pro", "premium"]:
         if plano_alvo == "pro": plano_alvo = "Pro"
-        if plano_alvo == "pro-plus": plano_alvo = "Pro Plus"
+        if plano_alvo == "premium": plano_alvo = "Premium"
         estab.plano_escolhido = plano_alvo  # type: ignore
         db.commit()
         return {"message": f"Upgrade para {plano_alvo} realizado com sucesso!"}
@@ -1934,8 +1934,8 @@ def admin_listar_parceiros(request: Request, db: Session = Depends(get_db)):
         plano_str = "Básico"
         for pl in estabs:
             pl_chosen = (pl.plano_escolhido or "").lower()
-            if pl_chosen in ["pro_plus", "pro-plus", "pro plus"]:
-                plano_str = "Pro Plus"
+            if pl_chosen in ["premium", "premium", "premium"]:
+                plano_str = "Premium"
                 break
             elif pl_chosen in ["pro"]:
                 plano_str = "Pro"
@@ -2115,13 +2115,13 @@ async def admin_get_stats(request: Request, db: Session = Depends(get_db)):
     # Faturamento estimado e Distribuição de Planos reais
     estabs = db.query(models.Estabelecimento.plano_escolhido).all()
     faturamento = 0
-    planos_dist = {"basico": 0, "pro": 0, "pro_plus": 0}
+    planos_dist = {"basico": 0, "pro": 0, "premium": 0}
     
     for (plano,) in estabs:
         p = (plano or "Básico").lower()
-        if "premium" in p or "pro plus" in p or "pro-plus" in p: 
+        if "premium" in p or "premium" in p or "premium" in p: 
             faturamento += 79.90
-            planos_dist["pro_plus"] += 1
+            planos_dist["premium"] += 1
         elif "pro" in p: 
             faturamento += 39.90
             planos_dist["pro"] += 1

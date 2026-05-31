@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       let maxPhotos = 3;
       const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
-      if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+      if (planNorm.includes("premium") || planNorm.includes("premium")) {
         maxPhotos = 100;
       } else if (planNorm.includes("pro")) {
         maxPhotos = 10;
@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       previewContainer.innerHTML = "";
       
       // Renderizar fotos existentes
-      existingPhotos.forEach(url => {
+      existingPhotos.forEach((url, index) => {
         const div = document.createElement("div");
         div.className = "photo-preview-item";
         div.style = "position:relative; padding-top:100%; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;";
@@ -285,7 +285,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         const label = document.createElement("div");
         label.innerHTML = "Já salvo";
         label.style = "position:absolute; bottom:4px; left:50%; transform: translateX(-50%); background:rgba(0,0,0,0.6); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px;";
-        div.appendChild(img); div.appendChild(label); previewContainer.appendChild(div);
+        div.appendChild(img); div.appendChild(label); 
+        
+        // Botão de remover foto existente
+        const rem = document.createElement("div");
+        rem.innerHTML = "×";
+        rem.style = "position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.7); color:#fff; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;";
+        rem.onclick = async () => {
+          if (confirm("Deseja realmente excluir esta foto?")) {
+            const estabId = new URLSearchParams(window.location.search).get("id");
+            if (estabId) {
+              try {
+                // extrair nome do arquivo
+                const filename = url.split('/').pop();
+                const res = await fetch(`${window.API_BASE}/api/estabelecimentos/${estabId}/fotos/${filename}`, {
+                  method: 'DELETE',
+                  credentials: 'include'
+                });
+                if (!res.ok) throw new Error("Falha ao remover a foto");
+                existingPhotos.splice(index, 1);
+                window.renderPreviewsUI();
+              } catch (err) {
+                alert("Erro ao remover a foto: " + err.message);
+              }
+            }
+          }
+        };
+        div.appendChild(rem);
+        previewContainer.appendChild(div);
       });
 
       // Renderizar novas fotos
@@ -305,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             selectedFiles.splice(index, 1);
             let maxPhotos = 3;
             const planNorm = partnerActivePlan ? partnerActivePlan.toLowerCase() : "básico";
-            if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+            if (planNorm.includes("premium") || planNorm.includes("premium")) {
               maxPhotos = 100;
             } else if (planNorm.includes("pro")) {
               maxPhotos = 10;
@@ -454,8 +481,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (activePlan === "Básico" && storedPlan) {
             if (storedPlan === "pro") {
               activePlan = "Pro";
-            } else if (storedPlan === "pro_plus" || storedPlan === "pro-plus") {
-              activePlan = "Pro Plus";
+            } else if (storedPlan === "premium" || storedPlan === "premium") {
+              activePlan = "Premium";
             }
           }
           partnerActivePlan = activePlan;
@@ -479,16 +506,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     let maxPhotos = 3;
     let planDisplayName = "Gratuito";
     
-    if (planNorm.includes("pro plus") || planNorm.includes("premium")) {
+    if (planNorm.includes("premium") || planNorm.includes("premium")) {
       maxPhotos = 100;
-      planDisplayName = "Pro Plus";
+      planDisplayName = "Premium";
     } else if (planNorm.includes("pro")) {
       maxPhotos = 10;
       planDisplayName = "Pro";
     }
 
     if (alertInfo) {
-      if (planDisplayName === "Pro Plus") {
+      if (planDisplayName === "Premium") {
         alertInfo.innerHTML = `
           <span class="icon">✨</span>
           Plano <strong>${planDisplayName}</strong>: Fotos ilimitadas inclusas.

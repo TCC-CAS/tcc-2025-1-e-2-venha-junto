@@ -91,14 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const userPlanBadge = document.querySelector(".dash-user-info .badge-premium");
       if (userPlanBadge) {
           let highestTier = "basico";
-          const tierMap = {"basico": 1, "pro": 2, "pro_plus": 3, "premium": 3};
+          const tierMap = {"basico": 1, "pro": 2, "premium": 3, "premium": 3};
           locais.forEach(loc => {
               let pl = loc.plano_escolhido ? loc.plano_escolhido.toLowerCase() : "basico";
               if (tierMap[pl] > tierMap[highestTier]) highestTier = pl;
           });
 
-          if (highestTier === "pro_plus" || highestTier === "premium") {
-              userPlanBadge.innerHTML = `💎 Pro Plus`;
+          if (highestTier === "premium" || highestTier === "premium") {
+              userPlanBadge.innerHTML = `💎 Premium`;
               userPlanBadge.style.background = "#fffbeb";
               userPlanBadge.style.color = "#d97706";
           } else if (highestTier === "pro") {
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window._totalLocais = locais.length;
       window._capacidadeLocais = 1; // Default Básico
       if (locais.length > 0) {
-        const tierMap = {"Basico": 1, "Pro": 5, "Pro Plus": 100};
+        const tierMap = {"Basico": 1, "Pro": 5, "Premium": 100};
         const melhorPlano = locais.reduce((prev, curr) => {
            const p1 = prev.plano_escolhido || "Basico";
            const p2 = curr.plano_escolhido || "Basico";
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let showCancel = false;
         
         if (pName.toLowerCase().includes("premium") || pName.toLowerCase().includes("plus")) {
-            displayTitle = "Plano Pro Plus";
+            displayTitle = "Plano Premium";
             displayPrice = "R$79/mês";
             showCancel = true;
         } else if (pName.toLowerCase().includes("pro")) {

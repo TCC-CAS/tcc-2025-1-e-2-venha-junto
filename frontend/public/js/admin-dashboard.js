@@ -263,12 +263,12 @@ const VJ_API_BASE = (function() {
     planChart = new Chart(ctxPlan, {
       type: 'doughnut',
       data: {
-        labels: ['Básico', 'Pro', 'Pro Plus'],
+        labels: ['Básico', 'Pro', 'Premium'],
         datasets: [{
           data: [
             stats.planos_distribuicao ? stats.planos_distribuicao.basico : 0, 
             stats.planos_distribuicao ? stats.planos_distribuicao.pro : 0, 
-            stats.planos_distribuicao ? stats.planos_distribuicao.pro_plus : 0
+            stats.planos_distribuicao ? stats.planos_distribuicao.premium : 0
           ],
           backgroundColor: ['#e2e8f0', '#f97316', '#10b981'],
           borderWidth: 6,

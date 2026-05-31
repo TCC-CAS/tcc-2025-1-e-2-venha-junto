@@ -18,7 +18,7 @@
       
       --brand: #f97316; /* Laranja Pro */
       --brand-hover: #ea580c;
-      --green: #10b981; /* Verde Pro Plus */
+      --green: #10b981; /* Verde Premium */
       --dark: #1e293b;  /* Botão Básico */
       
       --font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -109,7 +109,7 @@
       box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.1);
     }
     
-    .plan.pro-plus {
+    .plan.premium {
       border: 2px solid var(--green);
     }
 
@@ -367,14 +367,14 @@
         </ul>
       </article>
 
-      <!-- PRO PLUS -->
-      <article class="plan pro-plus">
+      <!-- PREMIUM -->
+      <article class="plan premium">
         <div class="plan-icon">💎</div>
-        <h2>Pro Plus</h2>
+        <h2>Premium</h2>
         <p class="desc">Máxima visibilidade e recursos completos</p>
         <div class="price"><span class="currency">R$</span> 79 <span class="term">/mês</span></div>
 
-        <a class="btn btn-green" href="./pagamento.html?plan=pro_plus" data-plan="Pro_Plus">
+        <a class="btn btn-green" href="./pagamento.html?plan=premium" data-plan="Pro_Plus">
           Começar agora 
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -427,7 +427,7 @@
             e.preventDefault();
             const newPlanRaw = btn.getAttribute("data-plan"); // Ex: "Basico", "Pro", "Pro_Plus"
             const newPlan = newPlanRaw.toLowerCase(); 
-            const tierMap = {"basico": 0, "pro": 1, "pro_plus": 2};
+            const tierMap = {"basico": 0, "pro": 1, "premium": 2};
             
             const currentTier = tierMap[currentPlanName] !== undefined ? tierMap[currentPlanName] : 0;
             const newTier = tierMap[newPlan] !== undefined ? tierMap[newPlan] : 0;

@@ -178,7 +178,7 @@
       <div class="receipt-box">
         <div class="receipt-row">
           <span class="receipt-label">Plano</span>
-          <span class="receipt-value" id="valPlan">Pro Plus</span>
+          <span class="receipt-value" id="valPlan">Premium</span>
         </div>
         <div class="receipt-row">
           <span class="receipt-label">Valor</span>
@@ -218,7 +218,7 @@
 
     // Automação: Aplica o Upgrade no Backend via PATCH
     if (estabId) {
-        const planoAPI = storedPlan === 'pro-plus' ? 'pro_plus' : storedPlan;
+        const planoAPI = storedPlan === 'premium' ? 'premium' : storedPlan;
         fetch(`/api/estabelecimentos/${estabId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
