@@ -272,13 +272,15 @@ document.addEventListener("DOMContentLoaded", () => {
       window._totalLocais = locais.length;
       window._capacidadeLocais = 1; // Default Básico
       if (locais.length > 0) {
-        const tierMap = {"Basico": 1, "Pro": 5, "Premium": 100};
+        const tierMap = {"Basico": 1, "Básico": 1, "basico": 1, "Pro": 5, "pro": 5, "Premium": 100, "premium": 100};
         const melhorPlano = locais.reduce((prev, curr) => {
-           const p1 = prev.plano_escolhido || "Basico";
-           const p2 = curr.plano_escolhido || "Basico";
-           return (tierMap[p2] > tierMap[p1]) ? curr : prev;
+           const p1 = prev.plano_escolhido || "Básico";
+           const p2 = curr.plano_escolhido || "Básico";
+           const val1 = tierMap[p1] || 1;
+           const val2 = tierMap[p2] || 1;
+           return (val2 > val1) ? curr : prev;
         }, locais[0]);
-        window._capacidadeLocais = tierMap[melhorPlano.plano_escolhido || "Basico"];
+        window._capacidadeLocais = tierMap[melhorPlano.plano_escolhido] || 1;
       }
 
       const btnNovoLocal = document.querySelector(".btn-orange[href*='parceiro-cadastro-estabelecimento.html']");
