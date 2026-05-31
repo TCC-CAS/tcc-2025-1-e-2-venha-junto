@@ -2389,9 +2389,18 @@ def criar_cupom(estab_id: int, cupom: schemas.CupomCreate, request: Request, db:
     if not estab:
         raise HTTPException(status_code=404, detail="Estabelecimento não encontrado")
 
-    # Paywall: apenas planos pagos
-    plano = (estab.plano_escolhido or "").lower()
-    if not (plano.startswith("pro") or "premium" in plano or "plus" in plano):
+    # Paywall: verifica se o PARCEIRO tem pelo menos 1 local no plano Pro ou Premium
+    # (não apenas o estabelecimento específico, pois o parceiro pode vincular cupons entre locais)
+    todos_estabs_parceiro = db.query(models.Estabelecimento).filter(
+        models.Estabelecimento.parceiro_id == parceiro.id
+    ).all()
+    parceiro_tem_plano_pago = any(
+        (e.plano_escolhido or "").lower().startswith("pro") or
+        "premium" in (e.plano_escolhido or "").lower() or
+        "plus" in (e.plano_escolhido or "").lower()
+        for e in todos_estabs_parceiro
+    )
+    if not parceiro_tem_plano_pago:
         raise HTTPException(
             status_code=403,
             detail="Criação de cupons é exclusiva para planos Pro ou Premium."
