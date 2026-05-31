@@ -174,20 +174,28 @@
     const a = normalizeText(placeTipo);
     const b = normalizeText(selectedTipoApi);
 
-    if (b === "hotel") return a.includes("hotel");
-    if (b === "restaurante") return a.includes("restaurante");
-    if (b === "atracao") return a.includes("atracao");
-    if (b === "passeio") return a.includes("passeio");
-    if (b === "outro") {
-      return (
-        !a.includes("hotel") &&
-        !a.includes("restaurante") &&
-        !a.includes("atracao") &&
-        !a.includes("passeio")
-      );
+    const knownTypes = [
+      "hotel",
+      "restaurante",
+      "atracao",
+      "passeio",
+      "cafeteria",
+      "museu",
+      "centro cultural",
+      "teatro",
+      "cinema",
+      "parque"
+    ];
+
+    if (knownTypes.includes(b)) {
+      return a.includes(b);
     }
 
-    return a === b;
+    if (b === "outro") {
+      return !knownTypes.some((t) => a.includes(t));
+    }
+
+    return a.includes(b) || a === b;
   }
 
   /* =========================
