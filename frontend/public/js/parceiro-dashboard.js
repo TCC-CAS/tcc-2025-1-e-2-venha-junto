@@ -283,15 +283,15 @@ document.addEventListener("DOMContentLoaded", () => {
         window._capacidadeLocais = tierMap[melhorPlano.plano_escolhido] || 1;
       }
 
-      const btnNovoLocal = document.querySelector(".btn-orange[href*='parceiro-cadastro-estabelecimento.html']");
-      if (btnNovoLocal) {
-        btnNovoLocal.addEventListener("click", (e) => {
+      const btnsNovoLocal = document.querySelectorAll("a[href*='parceiro-cadastro-estabelecimento.html']");
+      btnsNovoLocal.forEach(btn => {
+        btn.addEventListener("click", (e) => {
              if (window._totalLocais >= window._capacidadeLocais) {
                  e.preventDefault();
                  alert(`Você atingiu o limite de locais (${window._capacidadeLocais}) para o seu plano atual. Faça um upgrade na aba Configurações para cadastrar mais estabelecimentos.`);
              }
         });
-      }
+      });
 
       // Carrega os chamados de suporte
       carregarChamados();
