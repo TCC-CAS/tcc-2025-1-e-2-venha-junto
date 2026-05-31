@@ -107,6 +107,16 @@
   // =========================
   const formLogin = qs("formLogin");
   if (formLogin) {
+    const rememberCheckbox = qs("relembrar");
+    const emailInput = qs("email");
+    if (rememberCheckbox && emailInput) {
+      const saved = localStorage.getItem("vj_user_email");
+      if (saved) {
+        emailInput.value = saved;
+        rememberCheckbox.checked = true;
+      }
+    }
+
     formLogin.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -144,6 +154,11 @@
       try {
         const user = await doLogin(email, senha);
         
+        if (rememberCheckbox) {
+          if (rememberCheckbox.checked) localStorage.setItem("vj_user_email", email);
+          else localStorage.removeItem("vj_user_email");
+        }
+
         // Identificação do papel (role)
         let role = 'usuario';
         if (user) {

@@ -24,6 +24,15 @@
     });
   }
 
+  const rememberCheckbox = document.getElementById("rememberEmail");
+  if (els.email && rememberCheckbox) {
+    const savedEmail = localStorage.getItem("vj_partner_email");
+    if (savedEmail) {
+      els.email.value = savedEmail;
+      rememberCheckbox.checked = true;
+    }
+  }
+
   if (!form) return;
 
   function clearErrors() {
@@ -88,6 +97,14 @@
 
       const loginRes = await window.apiPartnerLogin({ email, senha });
       console.log("[Login] Sucesso:", loginRes);
+
+      if (rememberCheckbox) {
+        if (rememberCheckbox.checked) {
+          localStorage.setItem("vj_partner_email", email);
+        } else {
+          localStorage.removeItem("vj_partner_email");
+        }
+      }
 
       // 2. Confere os dados do parceiro (Session check)
       const user = await window.apiPartnerMe();
