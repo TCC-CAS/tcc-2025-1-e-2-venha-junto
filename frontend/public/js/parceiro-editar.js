@@ -52,6 +52,72 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   applyCnpjCpfMask(document.getElementById("cnpj_cpf"));
 
+  function showVjToast(title, message) {
+    let toast = document.querySelector(".vj-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "vj-toast";
+      toast.innerHTML = `
+        <div class="toast-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="toast-content">
+          <strong>${title}</strong>
+          <span>${message}</span>
+        </div>
+      `;
+      document.body.appendChild(toast);
+    } else {
+      toast.querySelector("strong").innerText = title;
+      toast.querySelector("span").innerText = message;
+    }
+
+    toast.classList.remove("active");
+    void toast.offsetWidth; // trigger reflow
+    toast.classList.add("active");
+
+    setTimeout(() => {
+      toast.classList.remove("active");
+    }, 4000);
+  }
+
+  const cnpjInput = document.getElementById("cnpj_cpf");
+  if (cnpjInput) {
+    cnpjInput.addEventListener("blur", async (e) => {
+      const val = e.target.value.replace(/\D/g, "");
+      if (val.length === 14) {
+        try {
+          const res = await fetch(`${window.API_BASE}/api/validar-cnpj/${val}`);
+          if (!res.ok) {
+            const err = await res.json();
+            showVjToast("Erro no CNPJ", err.detail || "CNPJ inválido ou não encontrado.");
+            e.target.style.borderColor = "#ef4444";
+            e.target.dataset.validApi = "false";
+            return;
+          }
+          const data = await res.json();
+          e.target.style.borderColor = "#22c55e"; // Sucesso
+          e.target.dataset.validApi = "true";
+          showVjToast("CNPJ Válido", `Empresa: ${data.nome_fantasia || data.razao_social}`);
+          
+          // Preenche os campos se estiverem vazios
+          const nomeInput = document.getElementById("nomeEstabelecimento");
+          if (nomeInput && !nomeInput.value) {
+            nomeInput.value = data.nome_fantasia || data.razao_social || "";
+          }
+          
+          const cepInput = document.getElementById("cep");
+          if (cepInput && !cepInput.value && data.cep) {
+            cepInput.value = data.cep;
+          }
+        } catch (error) {
+          console.error("Erro ao validar CNPJ:", error);
+          showVjToast("Aviso", "Não foi possível verificar o CNPJ no momento.");
+        }
+      }
+    });
+  }
+
   // ==========================================
   // Navegação do Wizard
   // ==========================================
@@ -140,6 +206,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       opt.addEventListener("click", () => {
         const val = opt.getAttribute("data-value");
         if (customText) customText.innerHTML = opt.innerHTML;
+
+        // Lógica para Outro
+        const groupEspecifique = document.getElementById("groupEspecifiqueTipo");
+        const inputEspecifique = document.getElementById("especifiqueTipo");
+        if (val === "Outro") {
+          if (groupEspecifique) groupEspecifique.style.display = "block";
+          if (inputEspecifique) inputEspecifique.setAttribute("required", "true");
+        } else {
+          if (groupEspecifique) groupEspecifique.style.display = "none";
+          if (inputEspecifique) {
+            inputEspecifique.removeAttribute("required");
+            inputEspecifique.value = "";
+          }
+        }
+
         if (nativeSelect) { nativeSelect.value = val; nativeSelect.dispatchEvent(new Event("change")); }
         customOptions.forEach(o => o.classList.remove("selected"));
         opt.classList.add("selected");
@@ -265,13 +346,39 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       if (estab.tipo) {
         if (nativeSelect) {
-          nativeSelect.value = estab.tipo;
-          // Atualiza visual do custom select
-          const opt = Array.from(customOptions).find(o => o.getAttribute("data-value") === estab.tipo);
-          if (opt && customText) {
-            customText.innerHTML = opt.innerHTML;
-            customOptions.forEach(o => o.classList.remove("selected"));
-            opt.classList.add("selected");
+          const standardTypes = ["Restaurante", "Cafeteria", "Museu", "Centro Cultural", "Teatro", "Cinema", "Parque", "Hotel", "Passeio"];
+          const isStandard = standardTypes.includes(estab.tipo);
+          
+          if (isStandard) {
+            nativeSelect.value = estab.tipo;
+            const opt = Array.from(customOptions).find(o => o.getAttribute("data-value") === estab.tipo);
+            if (opt && customText) {
+              customText.innerHTML = opt.innerHTML;
+              customOptions.forEach(o => o.classList.remove("selected"));
+              opt.classList.add("selected");
+            }
+            const groupEspecifique = document.getElementById("groupEspecifiqueTipo");
+            const inputEspecifique = document.getElementById("especifiqueTipo");
+            if (groupEspecifique) groupEspecifique.style.display = "none";
+            if (inputEspecifique) {
+              inputEspecifique.removeAttribute("required");
+              inputEspecifique.value = "";
+            }
+          } else {
+            nativeSelect.value = "Outro";
+            const opt = Array.from(customOptions).find(o => o.getAttribute("data-value") === "Outro");
+            if (opt && customText) {
+              customText.innerHTML = opt.innerHTML;
+              customOptions.forEach(o => o.classList.remove("selected"));
+              opt.classList.add("selected");
+            }
+            const groupEspecifique = document.getElementById("groupEspecifiqueTipo");
+            const inputEspecifique = document.getElementById("especifiqueTipo");
+            if (groupEspecifique) groupEspecifique.style.display = "block";
+            if (inputEspecifique) {
+              inputEspecifique.setAttribute("required", "true");
+              inputEspecifique.value = estab.tipo;
+            }
           }
         }
       }
@@ -432,6 +539,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      // Validação caso seja "Outro"
+      const tipoVal = document.getElementById("tipoEstabelecimento").value;
+      const especifiqueInput = document.getElementById("especifiqueTipo");
+      if (tipoVal === "Outro" && (!especifiqueInput || !especifiqueInput.value || especifiqueInput.value.trim() === "")) {
+        showVjToast("Tipo de Estabelecimento", "Por favor, especifique o tipo do estabelecimento.");
+        if (especifiqueInput) {
+          especifiqueInput.focus();
+          const fg = especifiqueInput.closest(".field-group");
+          if (fg) fg.classList.add("has-error");
+        }
+        return;
+      }
+
       const cupomAtivo = document.getElementById("cupom_ativo");
       let cupomData = null;
       if (cupomAtivo && cupomAtivo.checked) {
@@ -455,7 +575,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const payload = {
         nome: document.getElementById("nomeEstabelecimento").value,
         cnpj_cpf: document.getElementById("cnpj_cpf").value,
-        tipo: document.getElementById("tipoEstabelecimento").value,
+        tipo: tipoVal === "Outro" ? especifiqueInput.value.trim() : tipoVal,
         descricao: document.getElementById("descEstabelecimento").value,
         cep: document.getElementById("cep").value,
         endereco: document.getElementById("endereco").value,
