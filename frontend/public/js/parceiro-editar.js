@@ -431,6 +431,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         srcView.style.display = "none";
         confView.style.display = "block";
       }
+      
+      const btnEditMap = document.getElementById("btnEditMap");
+      if (btnEditMap && confView && srcView) {
+        btnEditMap.addEventListener("click", () => {
+          confView.style.display = "none";
+          srcView.style.display = "block";
+          if (typeof mapPreview !== 'undefined' && mapPreview) {
+            setTimeout(() => { mapPreview.resize(); }, 300);
+          }
+        });
+      }
 
       // Salva coordenadas existentes
       window.selectedLat = estab.latitude || null;

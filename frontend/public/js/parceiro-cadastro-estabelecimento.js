@@ -1250,3 +1250,20 @@ function mudarParaFormulario() {
     }
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btnEditMap = document.getElementById("btnEditMap");
+  if (btnEditMap) {
+    btnEditMap.addEventListener("click", () => {
+      const viewMapSearch = document.getElementById("addressSearchView");
+      const viewAddressForm = document.getElementById("addressConfirmView");
+      if (viewMapSearch && viewAddressForm) {
+        viewAddressForm.style.display = "none";
+        viewMapSearch.style.display = "block";
+        if (typeof mapPreview !== 'undefined' && mapPreview) {
+          setTimeout(() => { mapPreview.resize(); }, 300);
+        }
+      }
+    });
+  }
+});
