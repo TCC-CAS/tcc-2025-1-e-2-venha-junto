@@ -201,6 +201,8 @@ class EstabelecimentoUpdate(BaseModel):
     # Fotos
     foto_perfil: Optional[str] = None
     fotos_galeria: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
 
 class EstabelecimentoCreate(EstabelecimentoBase):
     cupom: Optional[CupomCreate] = None  # Opcional, caso tenha ativado o cupom no fluxo
