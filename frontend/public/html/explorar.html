@@ -127,32 +127,45 @@
             <div class="filters-body">
               <!-- Perto de mim -->
               <div class="filter-section">
-                <label
+                <div
                   style="
                     display: flex;
                     align-items: center;
-                    gap: 8px;
-                    font-size: 13px;
-                    color: #ea580c;
-                    font-weight: 700;
+                    justify-content: space-between;
                     margin-bottom: 12px;
                   "
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      font-size: 13px;
+                      color: #ea580c;
+                      font-weight: 700;
+                      margin: 0;
+                    "
                   >
-                    <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
-                  </svg>
-                  Perto de mim
-                </label>
-                <div class="distance-filter" id="distanceFilter" style="display: block;">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+                    </svg>
+                    Perto de mim
+                  </div>
+                  <label class="vj-toggle" title="Ativar localização">
+                    <input type="checkbox" id="toggleLocation">
+                    <span class="vj-slider"></span>
+                  </label>
+                </div>
+                <div class="distance-filter" id="distanceFilter" style="display: block; opacity: 0.4; pointer-events: none; transition: all 0.2s;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <label for="raioBusca" style="font-size: 13px; color: #475569; font-weight: 600;">Distância máxima</label>
                     <span id="raioValor" style="font-size: 13px; font-weight: 700; color: #ea580c;">10 km</span>

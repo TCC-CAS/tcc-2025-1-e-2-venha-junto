@@ -292,36 +292,49 @@
   function bindLocationFilter() {
     const raioBusca = qs("raioBusca");
     const raioValor = qs("raioValor");
+    const toggleLoc = qs("toggleLocation");
+    const distFilter = qs("distanceFilter");
 
-    if (!raioBusca) return;
+    if (!raioBusca || !toggleLoc || !distFilter) return;
 
     raioBusca.addEventListener("input", (e) => {
       raioValor.textContent = `${e.target.value} km`;
     });
 
     raioBusca.addEventListener("change", () => {
-      if (!userLocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            userLocation = {
-              lat: pos.coords.latitude,
-              lng: pos.coords.longitude
-            };
-            aplicarFiltros();
-          },
-          (err) => {
-            console.warn("Localização bloqueada ou erro:", err);
-            console.info("Usando Praça da Sé (SP) como fallback para demonstração do TCC.");
-            // Fallback para Praça da Sé - São Paulo, SP
-            userLocation = {
-              lat: -23.550520,
-              lng: -46.633308
-            };
-            aplicarFiltros();
-          }
-        );
-      } else {
+      if (toggleLoc.checked) {
         aplicarFiltros();
+      }
+    });
+
+    toggleLoc.addEventListener("change", () => {
+      if (toggleLoc.checked) {
+        distFilter.style.opacity = "1";
+        distFilter.style.pointerEvents = "auto";
+        
+        if (!userLocation && navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              userLocation = {
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
+              };
+              aplicarFiltros();
+            },
+            (err) => {
+              console.warn("Localização bloqueada ou erro:", err);
+              // Fallback para Praça da Sé se der erro
+              userLocation = { lat: -23.550520, lng: -46.633308 };
+              aplicarFiltros();
+            }
+          );
+        } else {
+          aplicarFiltros();
+        }
+      } else {
+        distFilter.style.opacity = "0.4";
+        distFilter.style.pointerEvents = "none";
+        aplicarFiltros(); // Re-aplica filtros sem usar distância
       }
     });
   }
@@ -504,8 +517,9 @@
     
     // Distância GPS (Somente para planos Pro e Premium)
     const canShowDistance = (place.plano_escolhido === "Pro" || place.plano_escolhido === "premium" || place.plano_escolhido === "Premium");
+    const toggleLoc = qs("toggleLocation");
 
-    if (userLocation && place.latitude && place.longitude && canShowDistance) {
+    if (userLocation && place.latitude && place.longitude && canShowDistance && toggleLoc && toggleLoc.checked) {
         const dist = getDistance(userLocation.lat, userLocation.lng, place.latitude, place.longitude);
         if (dist !== null) {
             const distSpan = document.createElement("span");
@@ -621,10 +635,11 @@
     container.innerHTML = "";
     
     const maxDist = parseFloat(qs("raioBusca")?.value || 10);
+    const toggleLoc = qs("toggleLocation");
     let arrFiltrado = [];
 
-    // Se a localização estiver ativada, calculamos a distância
-    if (userLocation) {
+    // Se a localização estiver ativada e o toggle ligado, calculamos a distância
+    if (userLocation && toggleLoc && toggleLoc.checked) {
         listaFull.forEach(p => {
             let pLat = parseFloat(p.latitude);
             let pLng = parseFloat(p.longitude);
@@ -710,9 +725,20 @@
     // Reseta checkboxes de acessibilidade
     document.querySelectorAll('input[data-acc]').forEach(cb => cb.checked = false);
 
-    // Reseta slider e zera localização
+    // Reseta slider, toggle e zera localização
     if (qs("raioBusca")) qs("raioBusca").value = "10";
     if (qs("raioValor")) qs("raioValor").textContent = "10 km";
+    
+    const toggleLoc = qs("toggleLocation");
+    if (toggleLoc) {
+      toggleLoc.checked = false;
+      const distFilter = qs("distanceFilter");
+      if (distFilter) {
+        distFilter.style.opacity = "0.4";
+        distFilter.style.pointerEvents = "none";
+      }
+    }
+    
     userLocation = null;
     
     aplicarFiltros();
@@ -734,14 +760,7 @@
       });
     }
 
-    // Tentar pegar localização ao carregar
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            console.log("GPS Ativo (Explorar):", userLocation);
-            aplicarFiltros();
-        });
-    }
+    // Localização será solicitada apenas quando o toggle for ativado
 
     await aplicarFiltros();
 
