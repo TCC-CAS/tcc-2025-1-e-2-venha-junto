@@ -52,25 +52,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   applyCnpjCpfMask(document.getElementById("cnpj_cpf"));
 
-  function showVjToast(title, message) {
+  function showVjToast(title, message, type = "error") {
     let toast = document.querySelector(".vj-toast");
     if (!toast) {
       toast = document.createElement("div");
       toast.className = "vj-toast";
-      toast.innerHTML = `
-        <div class="toast-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="toast-content">
-          <strong>${title}</strong>
-          <span>${message}</span>
-        </div>
-      `;
       document.body.appendChild(toast);
-    } else {
-      toast.querySelector("strong").innerText = title;
-      toast.querySelector("span").innerText = message;
     }
+
+    toast.className = `vj-toast ${type === 'success' ? 'success' : ''}`;
+
+    const iconSvg = type === 'success' 
+      ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+      : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+
+    toast.innerHTML = `
+      <div class="toast-icon">
+        ${iconSvg}
+      </div>
+      <div class="toast-content">
+        <strong>${title}</strong>
+        <span>${message}</span>
+      </div>
+    `;
+
 
     toast.classList.remove("active");
     void toast.offsetWidth; // trigger reflow
@@ -98,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const data = await res.json();
           e.target.style.borderColor = "#22c55e"; // Sucesso
           e.target.dataset.validApi = "true";
-          showVjToast("CNPJ Válido", `Empresa: ${data.nome_fantasia || data.razao_social}`);
+          showVjToast("CNPJ Válido", `Empresa: ${data.nome_fantasia || data.razao_social}`, "success");
           
           // Preenche os campos se estiverem vazios
           const nomeInput = document.getElementById("nomeEstabelecimento");
