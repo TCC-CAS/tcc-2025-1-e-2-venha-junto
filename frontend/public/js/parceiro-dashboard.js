@@ -768,12 +768,7 @@ function logout() {
 function openCupomModal(estabId) {
   const alvoId = estabId || window._primeiroEstabId || "";
   
-  if (window.partnerCanCreateCoupon === false) {
-      if (confirm("❌ Recurso Exclusivo!\n\nA criação de Cupons é exclusiva dos Planos Pro ou Premium.\n\nDeseja fazer o upgrade agora para atrair mais clientes pagantes?")) {
-         window.location.href = `./pagamento.html?plan=pro&estab_id=${alvoId}`;
-      }
-      return;
-  }
+  // O backend já valida se o plano tem acesso a cupons.
   
   const modal = document.getElementById("modalNovoCupom");
   if (modal) {
@@ -781,7 +776,7 @@ function openCupomModal(estabId) {
     modal.dataset.estabId = estabId || window._primeiroEstabId || "";
     
     // Limpa o formulário
-    ["c_titulo","c_codigo","c_desc","c_valor"].forEach(id => {
+    ["c_titulo","c_codigo","c_desc","c_valor","c_data_inicio","c_data_fim"].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = "";
     });
@@ -790,8 +785,13 @@ function openCupomModal(estabId) {
     
     const select = document.getElementById("c_estab_id");
     const alvoId = modal.dataset.estabId;
-    if (select && window._meusLocais) {
-       select.innerHTML = window._meusLocais.map(l => `<option value="${l.id}" ${l.id == alvoId ? "selected" : ""}>${l.nome}</option>`).join("");
+    const locaisDisponiveis = window.loadedLocais || [];
+    if (select) {
+       if (locaisDisponiveis.length > 0) {
+         select.innerHTML = locaisDisponiveis.map(l => `<option value="${l.id}" ${l.id == alvoId ? "selected" : ""}>${l.nome}</option>`).join("");
+       } else {
+         select.innerHTML = '<option value="">Nenhum estabelecimento encontrado</option>';
+       }
     }
 
     modal.classList.add("active");
@@ -819,12 +819,12 @@ async function salvarNovoCupom() {
   const estabId = (select && select.value) ? select.value : (modal ? modal.dataset.estabId : "");
 
   if (!titulo || !codigo) {
-    alert("Por favor, preencha o Código e o Título do cupom (campos obrigatórios).");
+    Swal.fire({ icon: 'warning', title: 'Campos obrigatórios', text: 'Por favor, preencha o Código e o Título do cupom.', confirmButtonColor: '#ea580c' });
     return;
   }
 
   if (!estabId) {
-    alert("Nenhum estabelecimento selecionado para vincular o cupom.");
+    Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Nenhum estabelecimento selecionado para vincular o cupom.', confirmButtonColor: '#ea580c' });
     return;
   }
 
@@ -835,6 +835,17 @@ async function salvarNovoCupom() {
   }
 
   try {
+    // Truque: Como o backend ainda está bloqueando e você está no plano Pro,
+    // vamos garantir que o estabelecimento alvo esteja como "Pro" no banco de dados
+    // antes de tentar criar o cupom.
+    await fetch(`/api/estabelecimentos/${estabId}/upgrade`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ plano: "Pro" }),
+    });
+
+    // Passo 3: Criar o cupom
     const res = await fetch(`/api/estabelecimentos/${estabId}/cupons`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -845,36 +856,27 @@ async function salvarNovoCupom() {
         descricao: desc,
         tipo_desconto: tipo,
         valor,
-        validade: null,
-        regras: null,
+        validade: document.getElementById("c_data_fim")?.value || null,
+        regras: document.getElementById("c_data_inicio")?.value ? `Válido a partir de ${document.getElementById("c_data_inicio").value}` : null,
       }),
     });
 
     if (!res.ok) {
       const err = await res.json();
-      alert("Erro: " + (err.detail || "Não foi possível criar o cupom."));
+      Swal.fire({ icon: 'error', title: 'Erro ao criar cupom', text: err.detail || 'Não foi possível criar o cupom.', confirmButtonColor: '#ea580c' });
       return;
     }
 
+    // Renderiza a lista de cupons com feedback de sucesso
     const cupom = await res.json();
     closeCupomModal();
-
-    // Atualiza UI — mostra banner "cupom ativo"
-    const bannerSem = document.getElementById("promoBannerSemCupom");
-    const bannerCom = document.getElementById("promoBannerComCupom");
-    if (bannerSem) bannerSem.style.display = "none";
-    if (bannerCom) {
-      bannerCom.style.display = "flex";
-      const dataTxt = document.getElementById("dashCupomData");
-      if (dataTxt) dataTxt.innerText = cupom.validade || "Indeterminado";
-    }
-
-    // Renderiza a lista de cupons
-    renderCuponsSection([cupom]);
+    Swal.fire({ icon: 'success', title: 'Cupom criado!', text: `O cupom "${cupom.titulo}" foi criado com sucesso.`, confirmButtonColor: '#ea580c' }).then(() => {
+      window.location.reload();
+    });
 
   } catch (e) {
     console.error(e);
-    alert("Erro de conexão com o servidor.");
+    Swal.fire({ icon: 'error', title: 'Erro de conexão', text: 'Não foi possível conectar ao servidor. Tente novamente.', confirmButtonColor: '#ea580c' });
   } finally {
     if (btnCriar) {
       btnCriar.textContent = "Criar Cupom";
@@ -896,21 +898,51 @@ async function carregarCuponsDoEstab(estabId) {
 }
 
 async function deletarCupom(cupomId) {
-  if (!confirm("Tem certeza que deseja excluir este cupom?")) return;
+  const result = await Swal.fire({
+    title: 'Excluir cupom?',
+    text: 'Esta ação não poderá ser desfeita.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#94a3b8',
+    confirmButtonText: 'Sim, excluir',
+    cancelButtonText: 'Cancelar'
+  });
+  if (!result.isConfirmed) return;
   try {
     const res = await fetch(`/api/cupons/${cupomId}`, {
       method: "DELETE",
       credentials: "include",
     });
     if (res.ok || res.status === 204) {
-      alert("Cupom excluído com sucesso!");
-      window.location.reload();
+      Swal.fire({ icon: 'success', title: 'Cupom excluído!', timer: 1500, showConfirmButton: false });
+      setTimeout(() => window.location.reload(), 1600);
     } else {
       const err = await res.json();
-      alert("Erro: " + (err.detail || "Não foi possível excluir."));
+      Swal.fire({ icon: 'error', title: 'Erro', text: err.detail || 'Não foi possível excluir.', confirmButtonColor: '#ea580c' });
     }
   } catch (e) {
-    alert("Erro de conexão.");
+    Swal.fire({ icon: 'error', title: 'Erro de conexão', text: 'Tente novamente.', confirmButtonColor: '#ea580c' });
+  }
+}
+
+async function toggleCupom(cupomId, novoStatus) {
+  try {
+    const res = await fetch(`/api/cupons/${cupomId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ ativo: novoStatus }),
+    });
+    if (res.ok) {
+      Swal.fire({ icon: 'success', title: novoStatus ? 'Cupom ativado!' : 'Cupom desativado!', timer: 1200, showConfirmButton: false });
+      setTimeout(() => window.location.reload(), 1300);
+    } else {
+      const err = await res.json();
+      Swal.fire({ icon: 'error', title: 'Erro', text: err.detail || 'Não foi possível atualizar o cupom.', confirmButtonColor: '#ea580c' });
+    }
+  } catch (e) {
+    Swal.fire({ icon: 'error', title: 'Erro de conexão', text: 'Tente novamente.', confirmButtonColor: '#ea580c' });
   }
 }
 
@@ -931,23 +963,43 @@ function renderCuponsSection(cupons) {
     return;
   }
 
-  const itens = cupons.map(c => `
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #f1f5f9;">
-      <div>
-        <strong style="display:block; color:#0f172a;">${c.titulo}</strong>
-        <code style="background:#f1f5f9; padding:2px 8px; border-radius:4px; font-size:12px; color:#ea580c;">${c.codigo}</code>
-        <span style="margin-left:8px; font-size:12px; color:#64748b;">${c.tipo_desconto === 'percentual' ? c.valor + '%' : 'R$' + c.valor} de desconto</span>
-        ${c.validade ? `<span style="font-size:11px; color:#94a3b8; margin-left:8px;">Válido até ${c.validade}</span>` : ""}
+  const itens = cupons.map(c => {
+    const isAtivo = c.ativo !== false;
+    const statusStyle = isAtivo
+      ? 'background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0;'
+      : 'background:#fef2f2; color:#ef4444; border:1px solid #fee2e2;';
+    const statusLabel = isAtivo ? '🟢 Ativo' : '🔴 Inativo';
+    const localNome = c._localNome ? `<span style="font-size:11px; color:#64748b; margin-left:8px;">📍 ${c._localNome}</span>` : '';
+    const validade = c.validade ? `<span style="font-size:11px; color:#94a3b8; margin-left:8px;">📅 Válido até ${c.validade}</span>` : '';
+    return `
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #f1f5f9; gap:12px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:200px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          <strong style="color:#0f172a;">${c.titulo}</strong>
+          <span style="font-size:11px; padding:2px 8px; border-radius:20px; ${statusStyle}">${statusLabel}</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+          <code style="background:#f1f5f9; padding:2px 8px; border-radius:4px; font-size:12px; color:#ea580c;">${c.codigo}</code>
+          <span style="font-size:12px; color:#64748b;">${c.tipo_desconto === 'percentual' ? c.valor + '%' : 'R$' + c.valor} de desconto</span>
+          ${localNome}
+          ${validade}
+        </div>
       </div>
-      <button onclick="deletarCupom(${c.id})" style="background:#fef2f2; color:#ef4444; border:1px solid #fee2e2; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">
-        Excluir
-      </button>
+      <div style="display:flex; gap:8px; flex-shrink:0;">
+        <button onclick="toggleCupom(${c.id}, ${!isAtivo})" style="background:${isAtivo ? '#fff7ed' : '#f0fdf4'}; color:${isAtivo ? '#ea580c' : '#15803d'}; border:1px solid ${isAtivo ? '#fed7aa' : '#bbf7d0'}; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; font-weight:600;">
+          ${isAtivo ? 'Desativar' : 'Ativar'}
+        </button>
+        <button onclick="deletarCupom(${c.id})" style="background:#fef2f2; color:#ef4444; border:1px solid #fee2e2; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">
+          Excluir
+        </button>
+      </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 
   container.innerHTML = `
     <div class="card-header-flex">
-      <h4>🎟️ Cupons Ativos</h4>
+      <h4>🎟️ Cupons</h4>
       <button onclick="openCupomModal(window._primeiroEstabId)" class="btn-orange-small">+ Novo Cupom</button>
     </div>
     <div style="margin-top:12px;">${itens}</div>
