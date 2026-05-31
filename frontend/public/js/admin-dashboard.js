@@ -331,7 +331,11 @@ const VJ_API_BASE = (function() {
   // Approvals View Logic
   // ---------------------------
   async function loadApprovals() {
-    const status = filterStatus.value;
+    const filterStatus = document.getElementById("filterStatus");
+    const fullApprovalsList = document.getElementById("full-approvals-list");
+    if (!fullApprovalsList) return;
+    
+    const status = filterStatus ? filterStatus.value : "PENDING_REVIEW";
     fullApprovalsList.innerHTML = '<div style="padding: 40px; text-align: center;">Carregando...</div>';
 
     try {
@@ -1033,8 +1037,10 @@ const VJ_API_BASE = (function() {
     // Default view
     loadStats();
     
-    btnReloadList.addEventListener("click", loadApprovals);
-    filterStatus.addEventListener("change", loadApprovals);
+    const btnReloadList = document.getElementById("btnReloadList");
+    const filterStatus = document.getElementById("filterStatus");
+    if(btnReloadList) btnReloadList.addEventListener("click", loadApprovals);
+    if(filterStatus) filterStatus.addEventListener("change", loadApprovals);
     
     const btnReloadPartners = document.getElementById("btnReloadPartnersList");
     if(btnReloadPartners) btnReloadPartners.addEventListener("click", loadPartners);
