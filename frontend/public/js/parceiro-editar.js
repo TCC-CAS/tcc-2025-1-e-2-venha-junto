@@ -432,6 +432,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         confView.style.display = "block";
       }
 
+      // Salva coordenadas existentes
+      window.selectedLat = estab.latitude || null;
+      window.selectedLng = estab.longitude || null;
+
       // Contatos auxiliares
       if (estab.telefone_local) document.getElementById("telLocal").value = estab.telefone_local;
       if (estab.whatsapp_local) document.getElementById("zapLocal").value = estab.whatsapp_local;
@@ -624,6 +628,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         facebook_local: document.getElementById("faceLocal")?.value || null,
         horario_funcionamento: document.getElementById("horarioLocal").value,
         recursos_acessibilidade: acessibilidadeArr.join(","),
+        latitude: window.selectedLat || null,
+        longitude: window.selectedLng || null,
         plano_escolhido: planoEscolhido,
         cupom: cupomData,
       };
@@ -744,7 +750,12 @@ function configurarAutocomplete() {
         div.innerText = f.place_name;
         div.onclick = () => {
           document.getElementById("endereco").value = f.place_name;
-          if (mapPreview && f.center) { mapPreview.jumpTo({ center: f.center, zoom: 16 }); markerPreview.setLngLat(f.center); }
+          if (mapPreview && f.center) {
+              window.selectedLng = f.center[0];
+              window.selectedLat = f.center[1];
+              mapPreview.jumpTo({ center: f.center, zoom: 16 });
+              markerPreview.setLngLat(f.center);
+          }
           document.getElementById("addressSearchView").style.display = "none";
           document.getElementById("addressConfirmView").style.display = "block";
           results.style.display = "none";

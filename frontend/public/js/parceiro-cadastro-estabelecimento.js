@@ -848,6 +848,8 @@ document.addEventListener("DOMContentLoaded", () => {
           facebook_local: document.getElementById("faceLocal") ? document.getElementById("faceLocal").value : null,
           horario_funcionamento: document.getElementById("horarioLocal").value,
           recursos_acessibilidade: acessibilidadeArr.join(","),
+          latitude: window.selectedLat || null,
+          longitude: window.selectedLng || null,
           plano_escolhido: planoEscolhido,
           cupom: cupomData,
         };
@@ -1224,6 +1226,8 @@ function preencherFormularioComPlace(place, displayText) {
   // Atualiza mapa de preview
   if (mapPreview && markerPreview && place.center) {
     const lngLat = place.center; // [lng, lat]
+    window.selectedLng = lngLat[0];
+    window.selectedLat = lngLat[1];
     mapPreview.jumpTo({ center: lngLat, zoom: 16 });
     markerPreview.setLngLat(lngLat);
   }
