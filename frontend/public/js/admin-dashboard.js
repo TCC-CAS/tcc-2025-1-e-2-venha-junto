@@ -1014,8 +1014,8 @@ const VJ_API_BASE = (function() {
     const admin = await requireAdmin();
     if (!admin) return;
 
-    document.getElementById("adminNome").textContent = admin.nome;
-    
+    const adminNomeEl = document.getElementById("adminNome");
+    if (adminNomeEl) adminNomeEl.textContent = admin.nome;
     // Setup Conta Administrativa Info
     const confNome = document.getElementById("config-admin-nome");
     if (confNome) confNome.textContent = admin.nome;
