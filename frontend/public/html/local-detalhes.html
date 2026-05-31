@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
   <head><style>html,body{background:#f6f8fc!important}</style>
     <meta charset="UTF-8" />
@@ -232,7 +232,10 @@
       <div class="vj-modal__card">
         <div class="vj-modal__head">
           <div class="vj-modal__brand">
-            <span class="dot">📍</span>
+            <!-- ✅ LOGO NO MODAL -->
+            <span class="dot" aria-hidden="true">
+              <img src="../img/logo-vj.png" alt="" class="logo-img" loading="lazy" decoding="async" />
+            </span>
             <span>Venha Junto</span>
           </div>
 
@@ -251,13 +254,17 @@
           <h2 id="vjAuthTitle">Para avaliar, faça login</h2>
           <p>Entre ou crie sua conta para publicar uma avaliação.</p>
 
-          <div class="vj-modal_toggle">
-            <a id="vjGoLogin" class="auth-btn primary" href="./usuario-login.html">
+          <div class="vj-modal__actions">
+            <a id="vjGoLogin" class="vj-btn-primary" href="./usuario-login.html">
               Entrar
             </a>
-            <a id="vjGoSignup" class="auth-btn outline" href="./usuario-criar-conta.html">
+            <a id="vjGoSignup" class="vj-btn-ghost" href="./usuario-criar-conta.html">
               Criar conta
             </a>
+          </div>
+          
+          <div class="vj-modal__fineprint" style="margin-top: 12px; font-size: 11px; color: #64748b; font-weight: 700;">
+            * O Venha Junto não realiza reservas e não intermedia pagamentos.
           </div>
         </div>
       </div>
