@@ -779,7 +779,7 @@ function openCupomModal(estabId) {
   if (modal) {
     // Guarda o id do estabelecimento para usar ao salvar
     modal.dataset.estabId = estabId || window._primeiroEstabId || "";
-    modal.classList.add("active");
+    
     // Limpa o formulário
     ["c_titulo","c_codigo","c_desc","c_valor"].forEach(id => {
       const el = document.getElementById(id);
@@ -787,6 +787,14 @@ function openCupomModal(estabId) {
     });
     const destaque = document.getElementById("c_destaque");
     if (destaque) destaque.checked = true;
+    
+    const select = document.getElementById("c_estab_id");
+    const alvoId = modal.dataset.estabId;
+    if (select && window._meusLocais) {
+       select.innerHTML = window._meusLocais.map(l => `<option value="${l.id}" ${l.id == alvoId ? "selected" : ""}>${l.nome}</option>`).join("");
+    }
+
+    modal.classList.add("active");
     const tipo = document.getElementById("c_tipo");
     if (tipo) tipo.value = "percentual";
   }
@@ -805,8 +813,10 @@ async function salvarNovoCupom() {
   const desc   = document.getElementById("c_desc").value.trim();
   const tipo   = document.getElementById("c_tipo").value;
   const valor  = parseInt(document.getElementById("c_valor").value) || 0;
+  
+  const select = document.getElementById("c_estab_id");
   const modal  = document.getElementById("modalNovoCupom");
-  const estabId = modal ? modal.dataset.estabId : "";
+  const estabId = (select && select.value) ? select.value : (modal ? modal.dataset.estabId : "");
 
   if (!titulo || !codigo) {
     alert("Por favor, preencha o Código e o Título do cupom (campos obrigatórios).");

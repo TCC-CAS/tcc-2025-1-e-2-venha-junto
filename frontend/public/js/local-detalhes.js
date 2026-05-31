@@ -322,7 +322,11 @@ const API_BASE = isLocal ? "http://127.0.0.1:8000" : "";
         const user = await apiMe();
         if (!user) {
           const returnUrl = window.location.pathname + window.location.search;
-          if (window.VJ_openAuthModal) window.VJ_openAuthModal(returnUrl);
+          if (window.VJ_openAuthModal) {
+            window.VJ_openAuthModal(returnUrl);
+          } else {
+            window.location.href = `./usuario-login.html?returnUrl=${encodeURIComponent(returnUrl)}`;
+          }
           return;
         }
 
@@ -346,7 +350,19 @@ const API_BASE = isLocal ? "http://127.0.0.1:8000" : "";
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       };
 
-      if (btnAvaliar) btnAvaliar.onclick = () => window.handleOpenReview();
+      const userLoggedIn = await apiMe();
+      if (!userLoggedIn) {
+         if (btnAvaliar) {
+             btnAvaliar.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg> Faça login para avaliar`;
+             btnAvaliar.onclick = () => {
+                const returnUrl = window.location.pathname + window.location.search;
+                window.location.href = `./usuario-login.html?returnUrl=${encodeURIComponent(returnUrl)}`;
+             };
+         }
+      } else {
+         if (btnAvaliar) btnAvaliar.onclick = () => window.handleOpenReview();
+      }
+      
       if (btnCancel) btnCancel.onclick = () => { reviewBox.hidden = true; };
 
       if (btnSend) {

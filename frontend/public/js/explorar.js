@@ -785,8 +785,8 @@
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // Pega o texto do botão para filtrar
-        const tipoText = btn.innerText.trim();
+        // Pega o valor correto do atributo data-val para não pegar o texto no plural
+        const tipoText = btn.getAttribute("data-val") || btn.innerText.trim();
         const selectTipo = qs("tipo");
         if (selectTipo) {
           selectTipo.value = tipoText;

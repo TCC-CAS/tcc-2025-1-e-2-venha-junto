@@ -78,7 +78,7 @@
       if (window.VJ_openAuthModal) {
          window.VJ_openAuthModal(window.location.href);
       } else {
-         alert("Erro ao favoritar. Você precisa estar logado.");
+         window.location.href = `./usuario-login.html?returnUrl=${encodeURIComponent(window.location.href)}`;
       }
     }
   }
@@ -325,7 +325,11 @@
     const handleOpenForm = async () => {
       const isLogged = await getAuth();
       if (!isLogged) {
-        if (window.VJ_openAuthModal) window.VJ_openAuthModal(window.location.href);
+        if (window.VJ_openAuthModal) {
+          window.VJ_openAuthModal(window.location.href);
+        } else {
+          window.location.href = `./usuario-login.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+        }
         return;
       }
       if (box) box.hidden = false;
