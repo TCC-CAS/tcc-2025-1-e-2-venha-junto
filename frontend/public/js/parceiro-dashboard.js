@@ -288,7 +288,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", (e) => {
              if (window._totalLocais >= window._capacidadeLocais) {
                  e.preventDefault();
-                 alert(`Você atingiu o limite de locais (${window._capacidadeLocais}) para o seu plano atual. Faça um upgrade na aba Configurações para cadastrar mais estabelecimentos.`);
+                 const modal = document.getElementById('planLimitModal');
+                 const msg = document.getElementById('planLimitMsg');
+                 if (modal && msg) {
+                     msg.textContent = `Você atingiu o limite de locais (${window._capacidadeLocais}) para o seu plano atual. Faça um upgrade na aba Configurações para cadastrar mais estabelecimentos.`;
+                     modal.style.display = 'flex';
+                 }
              }
         });
       });

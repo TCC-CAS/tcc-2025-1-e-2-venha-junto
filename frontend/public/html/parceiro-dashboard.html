@@ -1476,6 +1476,29 @@
       </div>
     </div>
 
+    <!-- Modal Limite de Plano -->
+    <div id="planLimitModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+      <div style="background: white; padding: 32px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="width: 64px; height: 64px; background: #fff7ed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #ea580c;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+             <line x1="12" y1="9" x2="12" y2="13"></line>
+             <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h3 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Limite Atingido</h3>
+        <p style="color: #64748b; margin: 0 0 24px; font-size: 15px; line-height: 1.5;" id="planLimitMsg">
+           Você atingiu o limite de locais para o seu plano atual. Faça um upgrade na aba Configurações para cadastrar mais estabelecimentos.
+        </p>
+        <button onclick="document.getElementById('planLimitModal').style.display='none'; switchToSection('configuracoes');" style="width: 100%; padding: 12px; background: #ea580c; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s;">
+          Fazer Upgrade
+        </button>
+        <button onclick="document.getElementById('planLimitModal').style.display='none';" style="width: 100%; padding: 12px; background: transparent; color: #64748b; border: none; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 8px;">
+          Agora não
+        </button>
+      </div>
+    </div>
+
     <!-- ✅ VLibras (plugin oficial gov.br) -->
     <div vw class="enabled">
       <div vw-access-button class="active"></div>
