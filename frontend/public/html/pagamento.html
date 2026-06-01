@@ -355,20 +355,20 @@
           <div class="credit-card-form" id="cc-form">
             <div class="form-group">
               <label>Número do cartão</label>
-              <input type="text" class="form-control" placeholder="0000 0000 0000 0000" id="ccBox" required>
+              <input type="text" class="form-control" placeholder="0000 0000 0000 0000" id="ccBox" maxlength="19" required oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ')">
             </div>
             <div class="form-group">
               <label>Nome no cartão</label>
-              <input type="text" class="form-control" placeholder="NOME COMPLETO" required>
+              <input type="text" class="form-control" placeholder="NOME COMPLETO" maxlength="50" required oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '').toUpperCase()">
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label>Validade</label>
-                <input type="text" class="form-control" placeholder="MM/AA" required>
+                <input type="text" class="form-control" placeholder="MM/AA" maxlength="5" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^(\d{2})(\d)/, '$1/$2')">
               </div>
               <div class="form-group">
                 <label>CVV</label>
-                <input type="text" class="form-control" placeholder="000" required>
+                <input type="text" class="form-control" placeholder="000" maxlength="4" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
             </div>
           </div>
