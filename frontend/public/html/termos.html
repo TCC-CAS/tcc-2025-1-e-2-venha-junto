@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="pt-br">
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Termos de Uso</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/mobile-fixes.css" />
+    <link rel="stylesheet" href="../css/perfil.css" />
+  <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+    <link rel="stylesheet" href="../css/legal.css" />
+</head>
+
+  <body class="perfil-page">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- Topbar mobile (Design Premium) -->
+    <header class="mobile-topbar" role="banner">
+      <div class="mobile-left">
+        <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+          <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 32px;">
+          <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.1;">
+            <strong style="color: #0f172a; font-size: 14px;">Venha Junto</strong>
+            <span style="color: #64748b; font-size: 11px;">Turismo Acessível</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="mobile-right">
+        <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <a href="./usuario-login.html" class="user-circle" style="width: 36px; height: 36px; background: #94a3b8; text-decoration: none;">👤</a>
+        <button id="btnMenu" class="btn-icon" style="border:none; background:transparent; width: 32px;" aria-label="Abrir menu">
+          <svg id="menuIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="page">
+      <!-- Sidebar / Desktop Header -->
+      <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
+        <div class="brand">
+          <a href="./index.html" class="logo-vj" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+            <img src="../img/logo-vj.png" alt="Venha Junto" style="height: 40px;">
+            <div class="brand-text" style="display: flex; flex-direction: column; line-height: 1.2;">
+              <strong style="color: #0f172a; font-size: 16px;">Venha Junto</strong>
+              <span style="color: #64748b; font-size: 12px;">Turismo Acessível</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="menu">
+          <a href="./index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Início
+          </a>
+          <a href="./explorar.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+            Explorar
+          </a>
+          <a href="./favoritos.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritos
+          </a>
+          <a href="./parceiro.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Sou Parceiro
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <div id="vj-translate-host"></div>
+          <div class="user-info">
+            <a href="./usuario-login.html" class="user-circle" style="background: #94a3b8; text-decoration: none;">👤</a>
+            <span class="user-name">Entrar</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo -->
+      <main id="conteudo" class="legal-content" role="main">
+      <!-- Header Hero com visual premium em Laranja -->
+      <header class="legal-header-hero">
+        <div class="legal-header-container">
+          <a href="./index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Voltar ao início
+          </a>
+          <h1 class="legal-hero-title">Documentos Legais</h1>
+          <p class="legal-hero-subtitle">Venha Junto – Turismo Acessível • Última atualização: 24/05/2026</p>
+        </div>
+      </header>
+
+      <!-- Tabs para alternar entre documentos -->
+      <div class="legal-tabs">
+        <a href="./termos.html" class="legal-tab active">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Termos de Uso
+        </a>
+        <a href="./privacidade.html" class="legal-tab">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Política de Privacidade
+        </a>
+      </div>
+
+      <div class="legal-card">
+        <div class="notice" role="note" aria-label="Aviso importante" style="border: 1px solid rgba(234, 88, 12, 0.15); background: rgba(234, 88, 12, 0.03); color: #ea580c; margin-top: 0;">
+          Bem-vindo à plataforma <strong>Venha Junto – Turismo Acessível</strong>, um serviço digital destinado à divulgação, busca e gerenciamento de estabelecimentos acessíveis para turistas e visitantes. Ao acessar ou utilizar a Plataforma, o usuário declara ter lido, compreendido e aceitado integralmente estes Termos de Uso.
+        </div>
+
+        <h2 class="section-title"><span class="section-number">1</span>Sobre a Plataforma</h2>
+        <p>O Venha Junto – Turismo Acessível é uma plataforma digital desenvolvida para promover o turismo acessível, conectando usuários, turistas, visitantes e parceiros comerciais a estabelecimentos que disponibilizam informações relacionadas à acessibilidade, inclusão e atendimento adaptado.</p>
+        <p>A Plataforma tem como objetivo facilitar o acesso à informação, promover a autonomia dos usuários e incentivar práticas inclusivas no setor turístico.</p>
+        <p>Por meio da Plataforma, os usuários poderão:</p>
+        <ul>
+          <li>Buscar estabelecimentos acessíveis;</li>
+          <li>Visualizar informações, imagens, avaliações e recursos de acessibilidade;</li>
+          <li>Salvar locais de interesse;</li>
+          <li>Avaliar estabelecimentos cadastrados;</li>
+          <li>Consultar informações institucionais e comerciais;</li>
+          <li>Entrar em contato com parceiros comerciais.</li>
+        </ul>
+        <p>Os parceiros comerciais poderão:</p>
+        <ul>
+          <li>Realizar cadastro na Plataforma;</li>
+          <li>Publicar estabelecimentos;</li>
+          <li>Gerenciar informações dos seus estabelecimentos;</li>
+          <li>Atualizar recursos de acessibilidade;</li>
+          <li>Divulgar informações institucionais e promocionais.</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">2</span>Definições</h2>
+        <p>Para fins destes Termos de Uso, considera-se:</p>
+        <ul>
+          <li><strong>Usuário:</strong> qualquer pessoa que acesse ou utilize a Plataforma.</li>
+          <li><strong>Parceiro Comercial:</strong> pessoa física ou jurídica responsável pelo cadastro e gerenciamento de estabelecimentos na Plataforma.</li>
+          <li><strong>Conteúdo Publicado:</strong> textos, imagens, avaliações, comentários, documentos e demais informações disponibilizadas na Plataforma.</li>
+          <li><strong>Estabelecimento Cadastrado:</strong> local registrado por um Parceiro Comercial para divulgação na Plataforma.</li>
+          <li><strong>Plataforma:</strong> sistema digital Venha Junto – Turismo Acessível.</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">3</span>Aceitação dos Termos</h2>
+        <p>Ao acessar ou utilizar a Plataforma, o usuário declara ter lido, compreendido e concordado integralmente com estes Termos de Uso e com a Política de Privacidade.</p>
+        <p>O uso da Plataforma implica concordância com:</p>
+        <ul>
+          <li>Estes Termos de Uso;</li>
+          <li>A Política de Privacidade;</li>
+          <li>A legislação brasileira aplicável;</li>
+          <li>A Lei Geral de Proteção de Dados Pessoais (LGPD – Lei nº 13.709/2018).</li>
+        </ul>
+        <p>Caso o usuário não concorde com qualquer disposição destes Termos, deverá interromper imediatamente a utilização da Plataforma.</p>
+
+        <h2 class="section-title"><span class="section-number">4</span>Cadastro de Usuários e Parceiros</h2>
+        <p>Algumas funcionalidades poderão exigir a criação de uma conta.</p>
+        <p>Ao realizar cadastro, o usuário declara que:</p>
+        <ul>
+          <li>Fornecerá informações verdadeiras, completas e atualizadas;</li>
+          <li>Possui capacidade legal para utilizar a Plataforma;</li>
+          <li>É responsável pela confidencialidade de sua senha;</li>
+          <li>Não compartilhará suas credenciais de acesso com terceiros;</li>
+          <li>Manterá seus dados cadastrais atualizados.</li>
+        </ul>
+        <p>O usuário é responsável por todas as atividades realizadas por meio de sua conta.</p>
+        <p>O Parceiro Comercial declara possuir autorização legítima para representar o estabelecimento cadastrado.</p>
+
+        <h2 class="section-title"><span class="section-number">5</span>Cadastro de Estabelecimentos</h2>
+        <p>Os Parceiros Comerciais poderão cadastrar estabelecimentos contendo:</p>
+        <ul>
+          <li>Nome comercial;</li>
+          <li>Endereço;</li>
+          <li>Telefones e canais de contato;</li>
+          <li>Horários de funcionamento;</li>
+          <li>Fotografias;</li>
+          <li>Descrições institucionais;</li>
+          <li>Recursos de acessibilidade;</li>
+          <li>Informações complementares relevantes.</li>
+        </ul>
+        <p>O Parceiro Comercial é integralmente responsável pela veracidade, atualização e legalidade das informações publicadas.</p>
+        <p>A Plataforma poderá solicitar documentação comprobatória, revisar conteúdos, remover informações inadequadas ou suspender cadastros que apresentem irregularidades.</p>
+
+        <h2 class="section-title"><span class="section-number">6</span>Acessibilidade e Informações Publicadas</h2>
+        <p>O Venha Junto incentiva a divulgação de informações relacionadas à acessibilidade física, comunicacional e digital dos estabelecimentos cadastrados.</p>
+        <p>As informações disponibilizadas são fornecidas pelos próprios Parceiros Comerciais.</p>
+        <p>Embora sejam adotadas medidas para promover a qualidade das informações publicadas, a Plataforma não garante integralmente:</p>
+        <ul>
+          <li>Precisão das informações;</li>
+          <li>Disponibilidade dos recursos informados;</li>
+          <li>Conformidade estrutural dos estabelecimentos;</li>
+          <li>Adequação às necessidades específicas de cada usuário.</li>
+        </ul>
+        <p>Recomenda-se que o usuário confirme diretamente com o estabelecimento quaisquer informações relevantes antes da visita.</p>
+
+        <h2 class="section-title"><span class="section-number">7</span>Avaliações e Comentários</h2>
+        <p>Os usuários poderão publicar avaliações e comentários relacionados às suas experiências nos estabelecimentos cadastrados.</p>
+        <p>As avaliações deverão refletir experiências reais e observar os princípios da boa-fé, respeito e cordialidade.</p>
+        <p>É proibida a publicação de:</p>
+        <ul>
+          <li>Conteúdo ofensivo;</li>
+          <li>Discurso de ódio;</li>
+          <li>Informações falsas ou enganosas;</li>
+          <li>Spam;</li>
+          <li>Conteúdo discriminatório;</li>
+          <li>Material ilegal;</li>
+          <li>Conteúdo que viole direitos de terceiros.</li>
+        </ul>
+        <p>A Plataforma poderá remover conteúdos que violem estes Termos, independentemente de aviso prévio.</p>
+
+        <h2 class="section-title"><span class="section-number">8</span>Propriedade Intelectual</h2>
+        <p>Todo o conteúdo da Plataforma, incluindo:</p>
+        <ul>
+          <li>Marca;</li>
+          <li>Identidade visual;</li>
+          <li>Logotipo;</li>
+          <li>Interface;</li>
+          <li>Sistema;</li>
+          <li>Banco de dados;</li>
+          <li>Textos;</li>
+          <li>Imagens;</li>
+          <li>Códigos-fonte;</li>
+        </ul>
+        <p>é protegido pela legislação brasileira de propriedade intelectual.</p>
+        <p>É proibida a reprodução, distribuição, modificação ou utilização sem autorização prévia e expressa da Plataforma.</p>
+
+        <h2 class="section-title"><span class="section-number">9</span>Licença de Uso de Conteúdo</h2>
+        <p>Ao publicar conteúdos na Plataforma, o usuário concede ao Venha Junto licença gratuita, não exclusiva e por prazo indeterminado para armazenar, exibir, reproduzir e divulgar o conteúdo exclusivamente para fins operacionais e promocionais relacionados à Plataforma.</p>
+        <p>O usuário declara possuir os direitos necessários sobre todo material enviado.</p>
+
+        <h2 class="section-title"><span class="section-number">10</span>Condutas Proibidas</h2>
+        <p>É proibido utilizar a Plataforma para:</p>
+        <ul>
+          <li>Inserir informações falsas;</li>
+          <li>Tentar acessar áreas restritas sem autorização;</li>
+          <li>Realizar engenharia reversa do sistema;</li>
+          <li>Distribuir vírus ou códigos maliciosos;</li>
+          <li>Utilizar robôs ou mecanismos automatizados sem autorização;</li>
+          <li>Fraudar avaliações ou classificações;</li>
+          <li>Publicar conteúdo ofensivo, discriminatório ou ilegal;</li>
+          <li>Comprometer a segurança da Plataforma;</li>
+          <li>Violar direitos de terceiros.</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">11</span>Segurança da Informação</h2>
+        <p>O Venha Junto adota medidas técnicas e administrativas destinadas à proteção dos dados e informações armazenadas na Plataforma.</p>
+        <p>Entretanto, nenhum ambiente digital é completamente livre de riscos.</p>
+        <p>O usuário compromete-se a:</p>
+        <ul>
+          <li>Manter sua senha protegida;</li>
+          <li>Utilizar dispositivos confiáveis;</li>
+          <li>Não compartilhar credenciais;</li>
+          <li>Comunicar imediatamente qualquer suspeita de acesso não autorizado.</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">12</span>Disponibilidade dos Serviços</h2>
+        <p>A Plataforma poderá passar por:</p>
+        <ul>
+          <li>Atualizações;</li>
+          <li>Correções;</li>
+          <li>Manutenções programadas;</li>
+          <li>Interrupções temporárias;</li>
+          <li>Melhorias de desempenho.</li>
+        </ul>
+        <p>O Venha Junto não garante disponibilidade ininterrupta ou ausência total de falhas técnicas.</p>
+
+        <h2 class="section-title"><span class="section-number">13</span>Limitação de Responsabilidade</h2>
+        <p>O Venha Junto não se responsabiliza por:</p>
+        <ul>
+          <li>Qualidade dos serviços prestados pelos estabelecimentos;</li>
+          <li>Informações incorretas fornecidas por Parceiros Comerciais;</li>
+          <li>Danos decorrentes da utilização dos estabelecimentos;</li>
+          <li>Condutas de terceiros;</li>
+          <li>Falhas de conexão à internet;</li>
+          <li>Problemas relacionados aos dispositivos utilizados pelos usuários;</li>
+          <li>Perdas indiretas ou lucros cessantes.</li>
+        </ul>
+        <p>A responsabilidade pelas operações e atendimentos dos estabelecimentos é exclusiva dos respectivos Parceiros Comerciais.</p>
+
+        <h2 class="section-title"><span class="section-number">14</span>Suspensão ou Encerramento de Contas</h2>
+        <p>A Plataforma poderá suspender ou remover contas que:</p>
+        <ul>
+          <li>Descumpram estes Termos;</li>
+          <li>Pratiquem fraudes;</li>
+          <li>Publiquem conteúdo inadequado;</li>
+          <li>Comprometam a segurança da Plataforma;</li>
+          <li>Realizem atividades ilícitas.</li>
+        </ul>
+        <p>O usuário poderá solicitar o encerramento de sua conta a qualquer momento pelos canais oficiais de atendimento.</p>
+
+        <h2 class="section-title"><span class="section-number">15</span>Privacidade e Proteção de Dados</h2>
+        <p>O tratamento de dados pessoais observará os princípios previstos na Lei Geral de Proteção de Dados Pessoais (LGPD).</p>
+        <p>Os dados poderão ser utilizados para:</p>
+        <ul>
+          <li>Autenticação de usuários;</li>
+          <li>Funcionamento da Plataforma;</li>
+          <li>Comunicação com usuários;</li>
+          <li>Melhoria dos serviços;</li>
+          <li>Segurança da informação;</li>
+          <li>Prevenção de fraudes;</li>
+          <li>Cumprimento de obrigações legais.</li>
+        </ul>
+        <p>Informações adicionais estão disponíveis na Política de Privacidade da Plataforma.</p>
+
+        <h2 class="section-title"><span class="section-number">16</span>Links Externos</h2>
+        <p>A Plataforma poderá disponibilizar links para sites e serviços de terceiros.</p>
+        <p>O Venha Junto não possui responsabilidade sobre conteúdos, políticas, práticas ou serviços oferecidos por terceiros.</p>
+
+        <h2 class="section-title"><span class="section-number">17</span>Atualizações da Plataforma</h2>
+        <p>A Plataforma poderá implementar novas funcionalidades, alterar recursos existentes ou descontinuar determinados serviços sempre que necessário para melhorias operacionais, adequações legais, segurança ou evolução tecnológica.</p>
+
+        <h2 class="section-title"><span class="section-number">18</span>Alterações dos Termos</h2>
+        <p>Estes Termos poderão ser atualizados a qualquer momento.</p>
+        <p>As alterações entrarão em vigor após sua publicação na Plataforma.</p>
+        <p>A continuidade do uso da Plataforma após as atualizações representará concordância com os novos Termos.</p>
+
+        <h2 class="section-title"><span class="section-number">19</span>Contato</h2>
+        <p>Para dúvidas, solicitações, suporte ou assuntos relacionados à privacidade e proteção de dados, o usuário poderá entrar em contato pelos canais oficiais da Plataforma:</p>
+        <ul>
+          <li>E-mail: <strong>contato@venhajunto.com.br</strong></li>
+          <li>Plataforma: Venha Junto – Turismo Acessível</li>
+        </ul>
+
+        <h3>Termos Específicos para Parceiros Comerciais</h3>
+
+        <h2 class="section-title"><span class="section-number">20</span>Responsabilidades dos Parceiros</h2>
+        <p>O Parceiro Comercial é exclusivamente responsável por:</p>
+        <ul>
+          <li>Manter informações atualizadas;</li>
+          <li>Garantir autorização de uso das imagens publicadas;</li>
+          <li>Informar corretamente os recursos de acessibilidade;</li>
+          <li>Cumprir a legislação aplicável;</li>
+          <li>Respeitar normas sanitárias, consumeristas e de acessibilidade;</li>
+          <li>Atender usuários com respeito, inclusão e igualdade.</li>
+        </ul>
+
+        <h2 class="section-title"><span class="section-number">21</span>Verificação de Estabelecimentos</h2>
+        <p>A Plataforma poderá aplicar selos identificadores, como:</p>
+        <ul>
+          <li>Verificado;</li>
+          <li>Acessível;</li>
+          <li>Parceiro.</li>
+        </ul>
+        <p>Os critérios para concessão dos selos serão definidos internamente pela Plataforma.</p>
+        <p>A concessão de um selo não constitui certificação oficial nem garantia absoluta de qualidade, acessibilidade ou conformidade legal.</p>
+
+        <h2 class="section-title"><span class="section-number">22</span>Remoção de Estabelecimentos</h2>
+        <p>A Plataforma poderá remover anúncios ou cadastros que:</p>
+        <ul>
+          <li>Possuam denúncias recorrentes;</li>
+          <li>Apresentem informações falsas;</li>
+          <li>Descumpram legislação vigente;</li>
+          <li>Pratiquem discriminação;</li>
+          <li>Comprometam a experiência dos usuários;</li>
+          <li>Violem estes Termos de Uso.</li>
+        </ul>
+
+        <div class="legal-footer-info">
+          © 2026 Venha Junto – Turismo Acessível. Todos os direitos reservados.
+        </div>
+      </div>
+    </main>
+
+    </div>
+
+    <!-- Avatar Script -->
+    <script>
+      (function () {
+        const input = document.getElementById("avatarInput");
+        const container = document.getElementById("avatarContainer");
+        const img = document.getElementById("avatarImgHero");
+        const fallback = document.getElementById("avatarFallbackHero");
+
+        let currentObjectUrl = null;
+
+        function applyPreview(url) {
+          if (fallback) fallback.style.display = "none";
+          if (img) {
+            img.src = url;
+            img.style.display = "block";
+            img.parentElement.style.background = "transparent";
+          }
+        }
+
+        function clearPreview() {
+          if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+          if (img) {
+            img.src = "";
+            img.style.display = "none";
+            img.parentElement.style.background = ""; // falls back to css orange
+          }
+          if (fallback) fallback.style.display = "block";
+        }
+
+        async function uploadToBackend(file) {
+          const fd = new FormData();
+          fd.append("file", file);
+
+          const res = await fetch(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar",
+            {
+              method: "POST",
+              body: fd,
+              credentials: "include",
+            },
+          );
+
+          if (!res.ok) throw new Error("Erro ao enviar avatar.");
+
+          applyPreview(
+            "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now(),
+          );
+          document.dispatchEvent(new Event("userbox:refresh"));
+        }
+
+        if (container && input) {
+          container.addEventListener("click", () => input.click());
+
+          input.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentObjectUrl = URL.createObjectURL(file);
+            applyPreview(currentObjectUrl);
+
+            try {
+              await uploadToBackend(file);
+            } catch (err) {
+              console.error(err);
+              clearPreview();
+              alert("Erro ao fazer upload da foto.");
+            }
+          });
+        }
+
+        const cachedUrl = localStorage.getItem("vj_last_avatar_url");
+        if (cachedUrl) applyPreview(cachedUrl);
+
+        window.addEventListener("load", () => {
+          const url = "http://127.0.0.1:8000/api/usuarios/me/avatar?t=" + Date.now();
+          const imgTest = new Image();
+          imgTest.onload = () => {
+             applyPreview(url);
+             localStorage.setItem("vj_last_avatar_url", url);
+          };
+          imgTest.onerror = () => {
+             if (!cachedUrl) clearPreview();
+          };
+          imgTest.src = url;
+        });
+      })();
+    </script>
+
+    <script src="../js/api.js" defer></script>
+    
+    <script src="../js/vlibras.js" defer></script>
+    <!-- ✅ Failsafe Menu & Accessibility Force -->
+    <script>
+      (function() {
+        const btn = document.getElementById('btnMenu');
+        const sidebar = document.getElementById('sidebar');
+        const icon = document.getElementById('menuIcon');
+        
+        const toggleMenu = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (!sidebar) return;
+          const isOpen = sidebar.getAttribute('data-open') === 'true';
+          const next = !isOpen;
+          sidebar.setAttribute('data-open', String(next));
+          
+          if (icon) {
+            if (next) {
+              icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            } else {
+              icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+            }
+          }
+        };
+
+        if (btn && sidebar) {
+          btn.addEventListener('click', toggleMenu);
+          btn.addEventListener('touchend', function(e){ e.preventDefault(); toggleMenu(); });
+        }
+
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay && sidebar) {
+          overlay.addEventListener('click', () => {
+            sidebar.setAttribute('data-open', 'false');
+            if (icon) icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          });
+        }
+
+          const vlibras = document.querySelector('[vw]');
+          if (uway) {
+            uway.style.setProperty('left', '10px', 'important');
+            uway.style.setProperty('right', 'auto', 'important');
+            uway.style.setProperty('bottom', '80px', 'important');
+          }
+          if (vlibras) {
+            vlibras.style.setProperty('left', '10px', 'important');
+            vlibras.style.setProperty('right', 'auto', 'important');
+            vlibras.style.setProperty('bottom', '100px', 'important');
+          }
+        }
+      )();
+    </script>
+    <!-- ✅ Tradução & Idiomas -->
+    <script src="../js/i18n.js" defer></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+  <script src="../js/userbox.js" defer></script>
+  
+    <!-- Navegação de rodapé (Mobile only via CSS) -->
+    <nav class="mobile-nav" role="navigation" aria-label="Navegação rápida">
+      <a href="./index.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Início
+      </a>
+      <a href="./explorar.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explorar
+      </a>
+      <a href="./favoritos.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+      <a href="./parceiro.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parceiro
+      </a>
+    </nav>
+
+  </body>
+</html>

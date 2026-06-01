@@ -1,0 +1,86 @@
+/* ========================================================
+   Venha Junto - Componentes Compartilhados (Cards)
+   ======================================================== */
+
+/* GRID DA LISTA */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 1050px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 860px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+
+/* CARD BASE */
+.local-card {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.local-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(2, 6, 23, 0.12); }
+
+/* IMAGEM */
+.img-wrapper { position: relative; width: 100%; height: 170px; overflow: hidden; }
+.img-wrapper img, .img-wrapper .imgEmpty { width: 100%; height: 100%; object-fit: cover; background: #e2e8f0; }
+.img-wrapper .imgEmpty { display: grid; place-items: center; font-weight: 900; color: #475569; }
+
+/* BADGES SOBRE A IMAGEM */
+.card-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; z-index: 5; }
+.badge-item { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+.badge-item.premium { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.badge-item.atracao { background: #2563eb; }
+.badge-item.acessivel { background: #10b981; }
+.badge-item.verificado { background: #059669; }
+.badge-item svg { width: 12px; height: 12px; }
+
+/* CORAÇÃO (FAVORITO) */
+.fav-btn {
+  position: absolute; top: 12px; right: 12px; width: 42px; height: 42px;
+  border-radius: 999px; border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.92); display: grid; place-items: center;
+  cursor: pointer; box-shadow: 0 12px 30px rgba(2, 6, 23, 0.18); z-index: 5;
+}
+.fav-icon { font-size: 18px; color: rgba(239, 68, 68, 0.55); }
+.fav-btn.is-active .fav-icon { color: #ef4444; }
+.fav-btn.is-active { border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.12); }
+
+/* CORPO DO CARD */
+.local-card .body { padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.title-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.title-row h3 { margin: 0; font-size: 18px; font-weight: 900; color: #0f172a; line-height: 1.2; }
+.loc-row { display: flex; align-items: center; gap: 4px; color: #64748b; font-size: 13px; font-weight: 800; }
+.rating-bar { display: flex; align-items: center; gap: 12px; }
+.rating-item { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 900; }
+.rating-item.avg { color: #f59e0b; }
+.rating-item.access { color: #10b981; }
+
+.desc { margin: 0; color: #475569; font-weight: 700; font-size: 13px; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; min-height: 56px; }
+
+/* CHIPS */
+.category-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-chip { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+
+.access-box { background: #f0fdf4; border-radius: 12px; padding: 10px; }
+.access-box h4 { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 900; color: #166534; margin: 0 0 8px 0; }
+.access-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.access-chip { background: #fff; border: 1px solid #bbf7d0; color: #166534; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; }
+
+/* FOOTER */
+.local-card .footer { padding: 0 14px 14px; }
+.local-card .btn { width: 100%; border: 0; cursor: pointer; padding: 12px; border-radius: 12px; font-weight: 900; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.local-card .btn:hover { filter: brightness(1.1); }
+
+/* VAZIO / ERRO */
+.vj-empty, .vj-error { grid-column: 1 / -1; padding: 40px; text-align: center; background: #fff; border-radius: 18px; border: 1px dashed #cbd5e1; font-weight: 800; color: #64748b; }

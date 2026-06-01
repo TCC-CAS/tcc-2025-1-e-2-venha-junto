@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+passlib[bcrypt]
+pyjwt
+python-multipart
+python-dotenv
+pydantic[email]
+pyodbc
+httpx
+validate-docbr
+Pillow>=10.0.0
+boto3
+requests

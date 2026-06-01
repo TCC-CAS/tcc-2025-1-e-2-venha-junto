@@ -1,0 +1,1336 @@
+<!doctype html>
+<html lang="pt-br">
+  <head><style>html,body{background:#f6f8fc!important}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venha Junto • Área do Parceiro</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+</head>
+
+  <body>
+    <div class="dash-layout">
+      <!-- MOBILE HEADER -->
+      <header class="dash-mobile-header">
+        <div class="dash-mobile-logo">
+          <img src="../img/logo-vj.png" alt="VJ">
+          <span>Venha Junto</span>
+        </div>
+        <button id="dashMenuBtn" class="dash-menu-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </header>
+
+      <!-- SIDEBAR LARANJA -->
+      <aside class="dash-sidebar">
+        <a href="./index.html" class="back-link" target="_blank" rel="noopener noreferrer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Ver Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px;opacity:0.7"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+
+        <div class="sidebar-header-profile">
+          <div class="brand-avatar">
+            <img src="../img/logo-vj.png" alt="VJ">
+          </div>
+          <div class="brand-info">
+            <h1>Venha Junto</h1>
+            <span>Área do Parceiro</span>
+          </div>
+        </div>
+
+
+        <div class="dash-user">
+          <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="dash-avatar-link" style="text-decoration: none;">
+            <div class="dash-avatar">P</div>
+          </a>
+          <div class="dash-user-info">
+            <strong>Parceiro</strong>
+            <span class="badge-premium" style="background: rgba(255, 255, 255, 0.2); color: white;">
+              📋 Básico
+            </span>
+          </div>
+        </div>
+
+        <div class="dash-menu-title">MENU</div>
+        <nav class="dash-nav">
+          <button class="nav-item active" data-target="dashboard">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </button>
+          <button class="nav-item" data-target="locais">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Meus Locais
+          </button>
+          <button class="nav-item" data-target="metricas">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Métricas
+          </button>
+          <button class="nav-item" data-target="avaliacoes">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+            Avaliações
+          </button>
+          <button class="nav-item" data-target="suporte">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+              <path
+                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"
+              ></path>
+            </svg>
+            Suporte
+          </button>
+          <button class="nav-item" data-target="configuracoes">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              ></path>
+            </svg>
+            Configurações
+          </button>
+        </nav>
+
+        <div class="dash-tips">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+            <path d="M12 2v1"></path>
+            <path
+              d="M12 7a5 5 0 0 1 5 5c0 2-1.5 3-2 4a3 3 0 0 0-1 2H10a3 3 0 0 0-1-2c-.5-1-2-2-2-4a5 5 0 0 1 5-5z"
+            ></path>
+          </svg>
+          <strong>Dica:</strong> Mantenha suas fotos atualizadas para melhorar o
+          engajamento.
+        </div>
+
+        <button class="dash-logout" onclick="logout()">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Sair
+        </button>
+      </aside>
+
+      <!-- ÁREA CENTRAL -->
+      <main class="dash-main">
+        <!-- HEADER SUPERIOR -->
+        <header class="dash-header">
+          <h2 id="pageTitle">Dashboard</h2>
+          <div class="dash-header-right">
+            <div class="notification-container" style="position: relative;">
+              <button class="btn-icon" id="btnNotifications">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <div class="notification-dot" id="notifDot" style="display: none;"></div>
+              </button>
+              
+              <!-- Dropdown de Notificações -->
+              <div class="notif-dropdown" id="notifDropdown" style="display: none; position: absolute; top: 50px; right: 0; width: 300px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; z-index: 1000; overflow: hidden;">
+                <div style="padding: 12px 16px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                  <strong style="font-size: 14px; color: #0f172a;">Notificações</strong>
+                  <span id="notifCount" style="font-size: 11px; background: #ea580c; color: white; padding: 2px 6px; border-radius: 10px; display: none;">0</span>
+                </div>
+                <div id="notifList" style="max-height: 350px; overflow-y: auto;">
+                  <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 13px;">
+                    Carregando...
+                  </div>
+                </div>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid #f1f5f9; background: #f8fafc;">
+                   <a href="javascript:void(0)" onclick="switchToSection('suporte')" style="font-size: 12px; color: #ea580c; text-decoration: none; font-weight: 600;">Ver suporte</a>
+                </div>
+              </div>
+            </div>
+            <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="dash-avatar-link" style="text-decoration: none;">
+              <div class="dash-avatar small">P</div>
+            </a>
+            <a href="javascript:void(0)" onclick="switchToSection('configuracoes')" class="user-name-link" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+              <span class="user-name">Parceiro</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- CONTEÚDO DINÂMICO -->
+        <div class="dash-content">
+          <!-- SEÇÃO 1: DASHBOARD -->
+          <section id="section-dashboard" class="dash-section active">
+            <div class="welcome-box" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <h3 style="margin: 0 0 4px; font-size: 24px; font-weight: 800; color: #0f172a;">Olá, <span class="username-display">Parceiro</span>! 👋</h3>
+                <p style="margin: 0; color: #64748b; font-size: 14.5px;">Confira o desempenho dos seus estabelecimentos</p>
+              </div>
+              <a href="./parceiro-cadastro-estabelecimento.html" class="btn-orange-small" style="background: #F5892A; color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(245, 137, 42, 0.2); transition: all 0.2s;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Novo Local
+              </a>
+            </div>
+
+            <!-- Filtro de Estabelecimento Premium Card Estilo Mockup -->
+            <div class="filter-card-premium" style="background: #fffcf9; border: 1.5px solid #fed7aa; border-radius: 16px; padding: 18px 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+              <div style="display: flex; align-items: center; gap: 8px; color: #ea580c; font-size: 13.5px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ea580c;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filtrar por estabelecimento
+              </div>
+              <div style="position: relative; width: 100%;">
+                <select id="filtroEstabelecimentoDashboard" style="width: 100%; border: 1px solid #cbd5e1; background: #ffffff; padding: 12px 16px; padding-right: 42px; border-radius: 10px; font-size: 14.5px; font-weight: 600; color: #1e293b; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394a3b8%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>'); background-repeat: no-repeat; background-position: calc(100% - 16px) center; transition: all 0.2s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); font-family: inherit;">
+                  <option value="todos">Todos os estabelecimentos</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Banner Promocional (Sem cupom) -->
+            <div
+              class="dash-card"
+              id="promoBannerSemCupom"
+              style="
+                background: linear-gradient(135deg, #fffbeb, #fefce8);
+                border-color: #fde047;
+                margin-bottom: 24px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+              "
+            >
+              <div>
+                <h4
+                  style="
+                    color: #b45309;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span style="font-size: 20px">🎁</span> Aumente suas visitas!
+                </h4>
+                <p style="color: #78350f; margin: 0; font-size: 14px">
+                  Crie uma oferta exclusiva e aumente suas chances de receber
+                  visitantes.
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="openCupomModal(window._primeiroEstabId)"
+                class="btn-orange-small"
+                style="
+                  background: #ea580c;
+                  border: none;
+                  padding: 10px 16px;
+                  min-width: intrinsic;
+                  cursor: pointer;
+                "
+              >
+                Adicionar cupom
+              </button>
+            </div>
+
+            <!-- Banner Promocional (Com cupom) -->
+            <div
+              class="dash-card"
+              id="promoBannerComCupom"
+              style="
+                background: #f0fdf4;
+                border-color: #bbf7d0;
+                margin-bottom: 24px;
+                display: none;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px;
+              "
+            >
+              <div>
+                <h4
+                  style="
+                    color: #166534;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <span style="font-size: 20px">✅</span> Cupom Ativo
+                </h4>
+                <p style="color: #15803d; margin: 0; font-size: 14px">
+                  Você possui um cupom ativo até
+                  <strong id="dashCupomData">31/12/2026</strong>.
+                </p>
+              </div>
+              <button
+                type="button"
+                onclick="openCupomModal(window._primeiroEstabId)"
+                class="btn-orange-small"
+                style="
+                  background: #22c55e;
+                  border: none;
+                  padding: 10px 16px;
+                  min-width: intrinsic;
+                  cursor: pointer;
+                "
+              >
+                Gerenciar cupom
+              </button>
+            </div>
+
+            <!-- Cards de Metricas -->
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Visualizações</span>
+                  <div class="icon-box blue">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </div>
+                </div>
+                <strong>0</strong>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Cliques</span>
+                  <div class="icon-box orange">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <strong>0</strong>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Avaliações</span>
+                  <div class="icon-box yellow">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      ></polygon>
+                    </svg>
+                  </div>
+                </div>
+                <strong>0</strong>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-header">
+                  <span>Favoritos</span>
+                  <div class="icon-box green">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline
+                        points="22 7 13.5 15.5 8.5 10.5 2 17"
+                      ></polyline>
+                      <polyline points="16 7 22 7 22 13"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <strong>0</strong>
+              </div>
+            </div>
+
+            <!-- Gráfico e Avaliações Recentes -->
+            <div class="dash-grid-2">
+              <div class="dash-card">
+                <h4>Visualizações e Cliques (últimos 7 dias)</h4>
+                <div class="chart-faux">
+                  <!-- Bar chart simulation -->
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Seg</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Ter</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Qua</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Qui</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Sex</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Sáb</span>
+                  </div>
+                  <div class="bar-col">
+                    <div class="bar-bg"></div>
+                    <div class="bar-fill" style="height: 0%"></div>
+                    <span class="bar-label">Dom</span>
+                  </div>
+                </div>
+                <div class="chart-legend">
+                  <span class="legend-item"
+                    ><span class="dot light"></span> Visualizações</span
+                  >
+                  <span class="legend-item"
+                    ><span class="dot dark"></span> Cliques</span
+                  >
+                </div>
+              </div>
+
+              <div class="dash-card">
+                <h4>Avaliações Recentes</h4>
+                <div class="review-list">
+                  <div style="color: #64748b; padding: 12px 0;">Carregando avaliações...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Resumo Meus Locais -->
+            <div class="dash-card mt-24">
+              <div class="card-header-flex">
+                <h4>Meus Locais</h4>
+                <a
+                  href="./parceiro-cadastro-estabelecimento.html"
+                  class="btn-orange-small"
+                  >+ Novo Local</a
+                >
+              </div>
+              <div class="locais-list-preview" id="locaisListPreview">
+                <!-- Injetado via JS -->
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 2: MEUS LOCAIS (LIST VIEW) -->
+          <section id="section-locais" class="dash-section">
+            <div class="welcome-box">
+              <h3>Meus Locais</h3>
+              <p>Gerencie seus estabelecimentos cadastrados</p>
+            </div>
+            <div class="card-header-flex" style="margin-bottom: 24px">
+              <div></div>
+              <a
+                href="./parceiro-cadastro-estabelecimento.html"
+                class="btn-orange-small"
+                >+ Novo Local</a
+              >
+            </div>
+            <div class="locais-grid" id="locaisGridCompleto">
+              <!-- Injetado via JS -->
+            </div>
+          </section>
+
+          <!-- SEÇÃO 3: MÉTRICAS COMPLETO -->
+          <section id="section-metricas" class="dash-section">
+            <div class="welcome-box" style="margin-bottom: 24px">
+              <h3 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Métricas Detalhadas</h3>
+              <p style="color: #64748b; font-size: 15px; margin: 0;">Acompanhe o desempenho dos seus locais</p>
+            </div>
+
+            <!-- Filtro de Estabelecimento Premium Card em Métricas -->
+            <div class="filter-card-premium" style="background: #fffcf9; border: 1.5px solid #fed7aa; border-radius: 16px; padding: 18px 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+              <div style="display: flex; align-items: center; gap: 8px; color: #ea580c; font-size: 13.5px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ea580c;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filtrar por estabelecimento
+              </div>
+              <div style="position: relative; width: 100%;">
+                <select id="filtroEstabelecimentoMetricas" style="width: 100%; border: 1px solid #cbd5e1; background: #ffffff; padding: 12px 16px; padding-right: 42px; border-radius: 10px; font-size: 14.5px; font-weight: 600; color: #1e293b; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394a3b8%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226 9 12 15 18 9%22></polyline></svg>'); background-repeat: no-repeat; background-position: calc(100% - 16px) center; transition: all 0.2s; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); font-family: inherit;">
+                  <option value="todos">Todos os estabelecimentos</option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              class="metrics-grid"
+              style="grid-template-columns: repeat(4, 1fr); margin-bottom: 24px"
+            >
+              <div class="metric-card" style="padding: 16px">
+                <div class="metric-header" style="margin-bottom: 8px">
+                  <span>Visualizações</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#3b82f6"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="width: 16px; height: 16px"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
+                <strong style="font-size: 24px">0</strong>
+              </div>
+              <div class="metric-card" style="padding: 16px">
+                <div class="metric-header" style="margin-bottom: 8px">
+                  <span>Cliques</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ea580c"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="width: 16px; height: 16px"
+                  >
+                    <path
+                      d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                    ></path>
+                  </svg>
+                </div>
+                <strong style="font-size: 24px">0</strong>
+              </div>
+              <div class="metric-card" style="padding: 16px">
+                <div class="metric-header" style="margin-bottom: 8px">
+                  <span>Avaliações</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#eab308"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="width: 16px; height: 16px"
+                  >
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                    ></polygon>
+                  </svg>
+                </div>
+                <strong style="font-size: 24px">0</strong>
+              </div>
+              <div class="metric-card" style="padding: 16px">
+                <div class="metric-header" style="margin-bottom: 8px">
+                  <span>Favoritos</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#22c55e"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="width: 16px; height: 16px"
+                  >
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                    <polyline points="16 7 22 7 22 13"></polyline>
+                  </svg>
+                </div>
+                <strong style="font-size: 24px">0</strong>
+              </div>
+            </div>
+
+            <!-- Gráfico Horizontal -->
+            <div class="dash-card" style="margin-bottom: 24px">
+              <h4 style="margin-bottom: 24px">Visualizações por dia</h4>
+              <div class="horizontal-chart">
+                <!-- Seg -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Seg</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Ter -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Ter</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Qua -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Qua</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Qui -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Qui</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Sex -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Sex</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Sab -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Sáb</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+                <!-- Dom -->
+                <div class="hbar-row">
+                  <span class="hbar-label">Dom</span>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" style="width: 0%">
+                      <span class="hbar-value">0</span>
+                    </div>
+                  </div>
+                  <span class="hbar-suffix">0 cliques</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-grid-2">
+              <div class="dash-card">
+                <h4 style="margin-bottom: 8px">Taxa de Conversão</h4>
+                <div style="margin-top: 24px">
+                  <strong
+                    style="
+                      display: block;
+                      font-size: 32px;
+                      color: #ea580c;
+                      font-weight: 900;
+                    "
+                    >0%</strong
+                  >
+                  <span
+                    style="
+                      display: block;
+                      font-size: 13px;
+                      color: #64748b;
+                      margin-bottom: 16px;
+                    "
+                    >Cliques / Visualizações</span
+                  >
+                  <div
+                    style="
+                      width: 100%;
+                      height: 8px;
+                      background: #f1f5f9;
+                      border-radius: 4px;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 0%;
+                        height: 100%;
+                        background: #ea580c;
+                        border-radius: 4px;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-card">
+                <h4 style="margin-bottom: 8px">Engajamento</h4>
+                <div style="margin-top: 24px">
+                  <strong
+                    style="
+                      display: block;
+                      font-size: 32px;
+                      color: #22c55e;
+                      font-weight: 900;
+                    "
+                    >0%</strong
+                  >
+                  <span
+                    style="
+                      display: block;
+                      font-size: 13px;
+                      color: #64748b;
+                      margin-bottom: 16px;
+                    "
+                    >Avaliações positivas (4-5 estrelas)</span
+                  >
+                  <div
+                    style="
+                      width: 100%;
+                      height: 8px;
+                      background: #f1f5f9;
+                      border-radius: 4px;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 0%;
+                        height: 100%;
+                        background: #ea580c;
+                        border-radius: 4px;
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 4: AVALIAÇÕES -->
+          <section id="section-avaliacoes" class="dash-section">
+            <div class="welcome-box" style="margin-bottom: 24px">
+              <h3 style="font-size: 20px">Avaliações</h3>
+              <p>Veja o que os usuários dizem sobre seus locais</p>
+            </div>
+
+            <div
+              class="metrics-grid"
+              style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px"
+            >
+              <div
+                class="metric-card"
+                style="text-align: center; padding: 32px 24px"
+              >
+                <strong style="font-size: 36px; color: #0f172a">0.0</strong>
+                <div class="stars" style="margin: 8px 0; font-size: 16px">
+                  ☆☆☆☆☆
+                </div>
+                <span style="font-size: 13px; color: #64748b">Nota média</span>
+              </div>
+              <div
+                class="metric-card"
+                style="text-align: center; padding: 32px 24px"
+              >
+                <strong style="font-size: 36px; color: #0f172a">0</strong>
+                <span
+                  style="
+                    display: block;
+                    font-size: 13px;
+                    color: #64748b;
+                    margin-top: 12px;
+                  "
+                  >Total de avaliações</span
+                >
+              </div>
+              <div
+                class="metric-card"
+                style="text-align: center; padding: 32px 24px"
+              >
+                <strong style="font-size: 36px; color: #22c55e">0%</strong>
+                <span
+                  style="
+                    display: block;
+                    font-size: 13px;
+                    color: #64748b;
+                    margin-top: 12px;
+                  "
+                  >Positivas</span
+                >
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <h4 style="margin-bottom: 20px">Avaliações Recentes</h4>
+              <div
+                class="review-box-list"
+                style="display: flex; flex-direction: column; gap: 16px"
+              >
+                <div style="color: #64748b; padding: 12px 0;">Carregando avaliações...</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 5: SUPORTE -->
+          <section id="section-suporte" class="dash-section">
+            <div class="welcome-box" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 style="font-size: 20px">🎧 Central de Suporte</h3>
+                <p>Abra chamados e acompanhe o atendimento da nossa equipe.</p>
+              </div>
+              <button class="btn-orange-small" onclick="openSupportModal()">+ Novo Chamado</button>
+            </div>
+
+            <!-- Stats de Suporte -->
+            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px">
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #ea580c" id="stat-tickets-abertos">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Em aberto</span>
+              </div>
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #22c55e" id="stat-tickets-resolvidos">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Resolvidos</span>
+              </div>
+              <div class="metric-card" style="text-align: center; padding: 24px">
+                <strong style="font-size: 32px; color: #0f172a" id="stat-tickets-total">0</strong>
+                <span style="font-size: 13px; color: #64748b; display: block; margin-top: 4px;">Total</span>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <h4 style="margin-bottom: 20px">Seus Chamados</h4>
+              <div id="ticketsList" class="tickets-list">
+                <!-- Injetado via JS -->
+                <div style="text-align: center; padding: 40px; color: #64748b;">
+                  <span style="font-size: 40px; display: block; margin-bottom: 16px;">💬</span>
+                  <p>Nenhum chamado aberto ainda. Nossa equipe está pronta para te ajudar!</p>
+                  <button class="btn-orange-small" style="margin-top: 16px;" onclick="openSupportModal()">Abrir primeiro chamado</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEÇÃO 6: CONFIGURAÇÕES -->
+          <section id="section-configuracoes" class="dash-section">
+            <div class="welcome-box">
+              <h3>Configurações</h3>
+              <p>Gerencie suas informações e plano</p>
+            </div>
+
+            <div class="dash-card" style="margin-bottom: 24px">
+              <h4 style="margin-bottom: 20px">Dados Pessoais</h4>
+              <form id="formDashboardConfig" class="dash-form">
+                <div class="dash-form-group">
+                  <label>Nome</label>
+                  <input type="text" value="" placeholder="Carregando..." class="dash-input" />
+                </div>
+                <div class="dash-form-group">
+                  <label>E-mail</label>
+                  <input
+                    type="email"
+                    value=""
+                    placeholder="Carregando..."
+                    class="dash-input"
+                  />
+                </div>
+                <button
+                  type="button"
+                  class="btn-orange-small style-button-config"
+                >
+                  Salvar alterações
+                </button>
+              </form>
+            </div>
+
+            <div class="dash-card">
+              <h4 style="margin-bottom: 20px">Seu Plano</h4>
+              <div class="plan-box">
+                <div class="plan-info-flex">
+                  <div class="plan-icon-wrap">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M2 4h20l-2 10H4L2 4z"></path>
+                      <path d="M12 14v8"></path>
+                      <path d="M8 22h8"></path>
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                      ></polygon>
+                    </svg>
+                  </div>
+                  <div class="plan-text">
+                    <strong>Plano Básico</strong>
+                    <span>Grátis</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <a href="./planos.html" class="style-button-plan" id="btnAlterarPlanoConfig" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">Alterar plano</a>
+                  <button type="button" id="btnCancelarPlanoConfig" style="display: none; padding: 10px 16px; border: 1px solid #fee2e2; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; background: #fff; color: #ef4444; transition: all 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='#fff'" onclick="cancelarPlanoAtual()">Cancelar Assinatura</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- GERENCIAMENTO DA CONTA (Airbnb Style) -->
+            <div class="dash-card" style="margin-top: 24px; border: 1px solid #fee2e2;">
+              <h4 style="margin-bottom: 8px; color: #991b1b;">Gerenciamento da Conta</h4>
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Gerencie o status da sua conta na plataforma.</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button type="button" class="btn-deactivate" onclick="openDeactivateModal()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer; text-align: left; transition: all 0.2s;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; color: #0f172a;">Desativar conta temporariamente</strong>
+                    <span style="font-size: 13px; color: #64748b;">Seus locais ficarão ocultos até que você decida voltar.</span>
+                  </div>
+                  <span style="font-size: 20px; color: #94a3b8;">›</span>
+                </button>
+
+                <button type="button" class="btn-delete-request" onclick="checkDeletionPendencies()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px; background: #fff; border: 1px solid #fee2e2; border-radius: 12px; cursor: pointer; text-align: left; transition: all 0.2s;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; color: #ef4444;">Solicitar exclusão da conta</strong>
+                    <span style="font-size: 13px; color: #64748b;">Encerre permanentemente sua conta e remova seus dados.</span>
+                  </div>
+                  <span style="font-size: 20px; color: #ef4444;">›</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL CRIAR NOVO CUPOM -->
+    <div id="modalNovoCupom" class="cupom-modal-overlay">
+      <div class="cupom-modal-content">
+        <div class="cupom-modal-header">
+          <h3>Criar Novo Cupom</h3>
+          <button
+            type="button"
+            class="btn-close-modal"
+            aria-label="Fechar"
+            onclick="closeCupomModal()"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="cupom-modal-body">
+            <div class="c-form-group">
+              <label for="c_estab_id">Vincular a qual estabelecimento? <span>*</span></label>
+              <select id="c_estab_id" class="input-light">
+                <!-- Preenchido via JS -->
+              </select>
+            </div>
+            
+            <div class="c-form-group">
+            <label for="c_codigo">Código <span>*</span></label>
+            <input type="text" id="c_codigo" placeholder="Ex: ACESSO20" />
+          </div>
+
+          <div class="c-form-group">
+            <label for="c_titulo">Título <span>*</span></label>
+            <input
+              type="text"
+              id="c_titulo"
+              placeholder="Ex: 20% de desconto no Restaurante X"
+            />
+          </div>
+
+          <div class="c-form-group">
+            <label for="c_desc">Descrição</label>
+            <textarea
+              id="c_desc"
+              rows="3"
+              placeholder="Descreva o benefício..."
+            ></textarea>
+          </div>
+
+          <div class="c-form-row">
+            <div class="c-form-group">
+              <label for="c_tipo">Tipo</label>
+              <select id="c_tipo">
+                <option value="percentual">Percentual (%)</option>
+                <option value="fixo">Valor Fixo (R$)</option>
+              </select>
+            </div>
+            <div class="c-form-group">
+              <label for="c_valor">Valor</label>
+              <input type="number" id="c_valor" placeholder="10" />
+            </div>
+          </div>
+
+          <div class="c-form-row">
+            <div class="c-form-group">
+              <label for="c_data_inicio">📅 Válido a partir de</label>
+              <input type="date" id="c_data_inicio" />
+            </div>
+            <div class="c-form-group">
+              <label for="c_data_fim">📅 Válido até (opcional)</label>
+              <input type="date" id="c_data_fim" />
+            </div>
+          </div>
+
+          <label class="c-checkbox">
+            <input type="checkbox" id="c_destaque" checked />
+            <span class="c-label-text">Destacar na página inicial</span>
+          </label>
+        </div>
+
+        <div class="cupom-modal-footer">
+          <button
+            type="button"
+            class="btn-cancelar"
+            onclick="closeCupomModal()"
+          >
+            Cancelar
+          </button>
+          <button type="button" class="btn-criar" onclick="salvarNovoCupom()">
+            Criar Cupom
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../js/api.js" defer></script>
+    <script src="../js/parceiro-dashboard.js" defer></script>
+    <script src="../js/vlibras.js" defer></script>
+
+    <!-- ====================================================
+         MODAL GERENCIAR VISIBILIDADE (Airbnb-style) 👁️
+         ==================================================== -->
+    <div id="modalVisibilidade" class="vis-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="visModalTitle">
+      <div class="vis-modal-card">
+
+        <!-- Cabeçalho -->
+        <div class="vis-modal-head">
+          <div>
+            <h3 id="visModalTitle">Gerenciar visibilidade</h3>
+            <p id="visModalSubtitle">Escolha o que deseja fazer com este local</p>
+          </div>
+          <button class="vis-modal-close" onclick="fecharModalVisibilidade()" aria-label="Fechar">✕</button>
+        </div>
+
+        <!-- Opções -->
+        <div class="vis-modal-body">
+
+          <!-- OPÇÃO 1: Ocultar por período -->
+          <div class="vis-opcao" id="visOpcao1" onclick="selecionarOpcaoVis(1)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">🌙</span>
+              <span class="vis-opcao-titulo">Ocultar por um período</span>
+            </div>
+            <p class="vis-opcao-desc">Seu local ficará invisível durante o intervalo de datas. Voltará automaticamente quando o período terminar.</p>
+          </div>
+
+          <!-- Sub-bloco de datas (aparece só quando opção 1 ativa) -->
+          <div class="vis-date-block" id="visDateBlock">
+            <label for="visDataFim">📅 Ocultar até a data:</label>
+            <input type="date" id="visDataFim" min="" />
+          </div>
+
+          <!-- OPÇÃO 2: Desativar -->
+          <div class="vis-opcao" id="visOpcao2" onclick="selecionarOpcaoVis(2)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">⏸️</span>
+              <span class="vis-opcao-titulo">Desativar por tempo indeterminado</span>
+            </div>
+            <p class="vis-opcao-desc">Seu local será removido da plataforma pública, mas você pode reativá-lo a qualquer momento no painel.</p>
+          </div>
+
+          <!-- Separador Visual -->
+          <div style="border-top: 1px solid #fee2e2; margin: 4px 0; padding-top: 4px;">
+            <p style="font-size: 12px; color: #ef4444; font-weight: 700; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.5px;">⚠️ Zona de danger</p>
+          </div>
+
+          <!-- OPÇÃO 3: Remover permanentemente -->
+          <div class="vis-opcao danger" id="visOpcao3" onclick="selecionarOpcaoVis(3)">
+            <div class="vis-opcao-top">
+              <div class="vis-opcao-radio"></div>
+              <span class="vis-opcao-icon">🗑️</span>
+              <span class="vis-opcao-titulo">Remover permanentemente</span>
+            </div>
+            <p class="vis-opcao-desc">Essa ação não poderá ser desfeita. O local será removido da plataforma definitivamente após análise administrativa.</p>
+          </div>
+
+          <!-- Alerta de cupons ativos (visível só se houver) -->
+          <div class="vis-alerta-cupons" id="visAlertaCupons">
+            <span>⚠️</span>
+            <span id="visAlertaCuponsText">Este estabelecimento possui cupons ativos. Ao confirmar, os cupons serão desativados.</span>
+          </div>
+
+        </div>
+
+        <!-- Rodapé -->
+        <div class="vis-modal-footer">
+          <button class="btn-vis-cancelar" onclick="fecharModalVisibilidade()">Cancelar</button>
+          <button class="btn-vis-confirmar" id="btnConfirmarVisib" onclick="confirmarAcaoVisibilidade()" disabled>
+            Confirmar ação
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL EXCLUSÃO DE CONTA (Airbnb Style Refinado) 🗑️
+         ============================================== -->
+    <div id="modalExcluirConta" class="vis-modal-overlay" style="display: none; z-index: 10000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+      <div class="vis-modal-card" style="max-width: 550px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);">
+        <div class="vis-modal-head" style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+          <h3 style="margin: 0; font-size: 22px; color: #0f172a; font-weight: 700;">Excluir sua conta</h3>
+          <button class="vis-modal-close" onclick="closeDeleteAccountModal()" style="background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; transition: all 0.2s;">✕</button>
+        </div>
+
+        <div class="vis-modal-body" style="padding: 32px; max-height: 70vh; overflow-y: auto;">
+          <!-- Mensagem de Impacto -->
+          <div style="margin-bottom: 24px;">
+            <p style="font-size: 16px; color: #475569; line-height: 1.6; margin: 0;">
+              Lamentamos muito ver você partir. Antes de prosseguir, saiba que esta ação encerrará permanentemente sua parceria com o <strong>Venha Junto</strong>.
+            </p>
+          </div>
+
+          <!-- Box de Alerta de Impacto -->
+          <div style="background: #fff1f2; border-radius: 16px; padding: 20px; border: 1px solid #ffe4e6; margin-bottom: 32px; display: flex; gap: 16px;">
+            <div style="font-size: 24px;">⚠️</div>
+            <div>
+              <strong style="display: block; color: #991b1b; font-size: 15px; margin-bottom: 4px;">O que acontece agora?</strong>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; color: #b91c1c; line-height: 1.5;">
+                <li>Seu acesso será revogado imediatamente.</li>
+                <li>Todos os seus locais serão removidos permanentemente das buscas.</li>
+                <li>Seus dados de faturamento e históricos serão arquivados.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Seção de Pendências (Visível apenas se houver) -->
+          <div id="deletionPendenciesArea" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <span style="color: #ef4444; font-size: 18px;">🚫</span>
+              <h5 style="margin: 0; font-size: 16px; color: #0f172a; font-weight: 600;">Exclusão Bloqueada</h5>
+            </div>
+            <p style="font-size: 14px; color: #64748b; margin-bottom: 16px;">Existem itens ativos que impedem o encerramento imediato da conta:</p>
+            <ul id="listPendencies" style="margin: 0; padding-left: 20px; font-size: 14px; color: #475569; line-height: 1.8; font-weight: 500;"></ul>
+            <div style="margin-top: 16px; padding-top:16px; border-top: 1px solid #e2e8f0;">
+               <p style="font-size: 13px; color: #94a3b8; font-style: italic; margin: 0;">Resolva estas pendências para habilitar o formulário de exclusão.</p>
+            </div>
+          </div>
+
+          <!-- Confirmação Final (Visível apenas sem pendências) -->
+          <div id="deletionConfirmArea" style="display: none;">
+            <div style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 16px; padding: 20px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start;">
+              <span style="color: #16a34a; font-size: 18px;">✅</span>
+              <p style="margin: 0; font-size: 14px; color: #166534;">Sua conta está pronta para ser excluída. Não identificamos pendências ativas.</p>
+            </div>
+            
+            <label for="confirmDeleteInput" style="display: block; font-size: 14px; color: #0f172a; font-weight: 600; margin-bottom: 8px;">Confirme digitando a frase abaixo:</label>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 12px; background: #f1f5f9; padding: 8px 12px; border-radius: 8px; display: inline-block;">EXCLUIR MINHA CONTA</p>
+            <input type="text" id="confirmDeleteInput" class="dash-input" placeholder="Digite exatamente a frase acima" oninput="validateDeleteAccountPhrase()" style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; transition: border-color 0.2s;">
+          </div>
+        </div>
+
+        <div class="vis-modal-footer" style="padding: 24px 32px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="btn-vis-cancelar" onclick="closeDeleteAccountModal()" style="padding: 12px 24px; background: #fff; border: 1px solid #e2e8f0; color: #475569; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s;">Cancelar</button>
+          
+          <button class="btn-vis-confirmar" id="btnConfirmDeleteAccount" onclick="confirmDeleteAccount()" disabled style="display: none; padding: 12px 24px; background: #ef4444; color: #fff; border: none; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s; opacity: 0.5;">
+             Excluir permanentemente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL ABRIR NOVO CHAMADO 🎧 -->
+    <div id="modalNovoChamado" class="cupom-modal-overlay">
+      <div class="cupom-modal-content" style="max-width: 500px;">
+        <div class="cupom-modal-header">
+          <h3>Abrir Novo Chamado</h3>
+          <button type="button" class="btn-close-modal" onclick="closeSupportModal()">✕</button>
+        </div>
+        <div class="cupom-modal-body">
+          <div class="c-form-group">
+            <label>Título <span>*</span></label>
+            <input type="text" id="sup_titulo" placeholder="Descreva brevemente o problema..." />
+          </div>
+          <div class="c-form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="c-form-group">
+              <label>Categoria</label>
+              <select id="sup_categoria" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <option value="Problema Técnico">Problema Técnico</option>
+                <option value="Cadastro de Local">Cadastro de Local</option>
+                <option value="Plano e Assinatura">Plano e Assinatura</option>
+                <option value="Pagamento">Pagamento</option>
+                <option value="Dúvidas Gerais">Dúvidas Gerais</option>
+                <option value="Outro" selected>Outro</option>
+              </select>
+            </div>
+            <div class="c-form-group">
+              <label>Prioridade</label>
+              <select id="sup_prioridade" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <option value="Baixa">Baixa</option>
+                <option value="Média" selected>Média</option>
+                <option value="Alta">Alta</option>
+                <option value="Urgente">Urgente</option>
+              </select>
+            </div>
+          </div>
+          <div class="c-form-group">
+            <label>Descrição detalhada <span>*</span></label>
+            <textarea id="sup_descricao" rows="5" placeholder="Explique em detalhes o problema, inclua informações relevantes..." style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical;"></textarea>
+          </div>
+        </div>
+        <div class="cupom-modal-footer">
+          <button type="button" class="btn-cancelar" onclick="closeSupportModal()">Cancelar</button>
+          <button type="button" class="btn-criar" id="btnSalvarChamado" onclick="salvarNovoChamado()">Abrir Chamado</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Limite de Plano -->
+    <div id="planLimitModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+      <div style="background: white; padding: 32px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="width: 64px; height: 64px; background: #fff7ed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #ea580c;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+             <line x1="12" y1="9" x2="12" y2="13"></line>
+             <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h3 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Limite Atingido</h3>
+        <p style="color: #64748b; margin: 0 0 24px; font-size: 15px; line-height: 1.5;" id="planLimitMsg">
+           Você atingiu o limite de locais para o seu plano atual. Faça um upgrade na aba Configurações para cadastrar mais estabelecimentos.
+        </p>
+        <button onclick="document.getElementById('planLimitModal').style.display='none'; switchToSection('configuracoes');" style="width: 100%; padding: 12px; background: #ea580c; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s;">
+          Fazer Upgrade
+        </button>
+        <button onclick="document.getElementById('planLimitModal').style.display='none';" style="width: 100%; padding: 12px; background: transparent; color: #64748b; border: none; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 8px;">
+          Agora não
+        </button>
+      </div>
+    </div>
+
+    <!-- ✅ VLibras (plugin oficial gov.br) -->
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget("https://vlibras.gov.br/app");
+    </script>
+  </body>
+</html>

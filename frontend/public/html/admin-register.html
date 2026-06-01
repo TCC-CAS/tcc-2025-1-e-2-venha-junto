@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Venha Junto • Admin • Cadastro</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/admin-auth.css" />
+
+  <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body>
+  <!-- Ambient background glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="admin-auth-wrap">
+    <div class="admin-card">
+      <div class="admin-header">
+        <div class="admin-icon-wrapper">🛡️</div>
+        <h1 class="admin-title">Novo Administrador</h1>
+        <p class="admin-subtitle">Crie uma conta para gerenciar a plataforma.</p>
+        <div class="admin-warning-box">
+          ⚠️ Cadastro restrito a administradores autorizados da plataforma Venha Junto.
+        </div>
+      </div>
+
+      <form id="formAdminRegister" class="admin-form" novalidate>
+        <div class="admin-field">
+          <label for="nome">Nome Completo</label>
+          <input id="nome" name="nome" type="text" class="admin-input" placeholder="Seu nome" required />
+        </div>
+
+        <div class="admin-field">
+          <label for="email">E-mail Administrativo Corporativo</label>
+          <input id="email" name="email" type="email" class="admin-input" placeholder="seu.nome@venhajunto.com.br" required />
+        </div>
+
+        <div class="admin-field">
+          <label for="password">Senha</label>
+          <div class="password-wrapper">
+            <input id="password" name="password" type="password" class="admin-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle-pwd" tabindex="-1" aria-label="Mostrar senha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <!-- Medidor de Força -->
+          <div class="pwd-strength-container">
+            <div class="pwd-strength-bars">
+              <div class="pwd-bar"></div>
+              <div class="pwd-bar"></div>
+              <div class="pwd-bar"></div>
+            </div>
+            <span class="pwd-strength-text">Força da senha</span>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="passwordConfirm">Confirmar Senha</label>
+          <div class="password-wrapper">
+            <input id="passwordConfirm" name="passwordConfirm" type="password" class="admin-input" placeholder="••••••••" required />
+            <button type="button" class="btn-toggle-pwd" tabindex="-1" aria-label="Mostrar senha">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="inviteCode">Código de Convite Administrativo</label>
+          <input id="inviteCode" name="inviteCode" type="text" class="admin-input" placeholder="Insira o código de acesso" required />
+        </div>
+
+        <div class="g-recaptcha" data-sitekey="6Lcr5_osAAAAAJlNXzh1KUUjkEK2A90fhl0kNRIc" style="margin: 0 auto;"></div>
+
+        <div class="admin-actions">
+          <button id="btnRegister" class="admin-btn" type="submit">Criar Conta Admin</button>
+        </div>
+
+        <div class="admin-links" style="margin-top: 24px;">
+          <div style="color: var(--admin-text-muted);">
+            Já possui acesso? <a href="./admin-login.html">Fazer Login</a>
+          </div>
+        </div>
+
+        <div id="toast" class="admin-toast" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/admin-register.js"></script>
+  <script src="../js/vlibras.js" defer></script>
+</body>
+</html>

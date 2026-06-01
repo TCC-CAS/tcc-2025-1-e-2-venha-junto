@@ -1,0 +1,4 @@
+.env
+frontend/public/js/config.js
+backend/__pycache__/
+*.db

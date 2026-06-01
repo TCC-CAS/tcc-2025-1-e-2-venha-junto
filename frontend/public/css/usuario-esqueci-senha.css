@@ -1,0 +1,232 @@
+:root {
+  --rcv-bg: #121820; /* Deep dark blue gradient background */
+  --rcv-card-bg: rgba(255, 255, 255, 0.02); /* Very subtle card background */
+  --rcv-card-border: rgba(255, 255, 255, 0.05);
+  --rcv-text: #f8fafc;
+  --rcv-muted: #94a3b8;
+  --rcv-input-border: #475569;
+  --rcv-input-bg: transparent; /* Inputs in the mockup are transparent with stroke */
+  --rcv-action: #000000;
+  --rcv-green: #22c55e;
+  --rcv-error: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    sans-serif;
+  color: var(--rcv-text);
+  /* The mockup has a subtle dark night sky / deep gradient background */
+  background: radial-gradient(
+    circle at top left,
+    #1f2937,
+    #0f172a 70%,
+    #020617
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recover-auth {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.recover-card {
+  width: min(440px, 100%);
+  background: var(--rcv-card-bg);
+  border: 1px solid var(--rcv-card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 40px 32px 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.recover-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+
+.recover-sub {
+  text-align: center;
+  font-size: 15px;
+  color: var(--rcv-muted);
+  line-height: 1.4;
+  margin-bottom: 32px;
+  padding: 0 10px;
+}
+
+.recover-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recover-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.recover-field label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #e2e8f0;
+}
+
+.recover-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.recover-input-wrap input {
+  width: 100%;
+  height: 48px;
+  background: var(--rcv-input-bg);
+  border: 1px solid var(--rcv-input-border);
+  border-radius: 12px;
+  color: var(--rcv-text);
+  font-size: 16px;
+  padding: 0 46px 0 16px;
+  outline: none;
+  font-family: monospace;
+  transition: border-color 0.2s;
+}
+
+.recover-input-wrap input:focus {
+  border-color: #94a3b8;
+}
+
+.recover-input-wrap input::placeholder {
+  color: #475569;
+}
+
+.recover-eye {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+
+.recover-eye:hover {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.recover-eye svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Requirements List */
+.recover-reqs {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0 4px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.req-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--rcv-muted);
+}
+
+.req-item.valid {
+  color: var(--rcv-green);
+}
+
+.req-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.req-item.valid .req-icon {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--rcv-green);
+}
+
+.req-item.missing .req-icon {
+  background: rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+}
+
+/* Actions */
+.recover-actions {
+  margin-top: 18px;
+}
+
+.recover-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: var(--rcv-action);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+
+.recover-btn:hover {
+  background: #111111;
+  transform: translateY(-1px);
+}
+
+.recover-btn:active {
+  transform: translateY(1px);
+}
+
+.recover-error {
+  color: var(--rcv-error);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 6px;
+  display: block;
+}

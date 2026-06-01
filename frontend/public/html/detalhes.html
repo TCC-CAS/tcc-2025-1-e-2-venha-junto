@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><style>html,body{background:#f6f8fc!important}</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes do Local • Venha Junto</title>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <link rel="stylesheet" href="../css/mobile-fixes.css" />
+  <link rel="stylesheet" href="../css/home.css"/>
+  <link rel="stylesheet" href="../css/local-detalhes.css"/>
+<script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+</head>
+<body data-auth="required">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Topbar mobile (Design Premium) -->
+  <header class="mobile-topbar" role="banner">
+    <div class="mobile-left" style="display: flex; align-items: center; gap: 8px;">
+        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+        <div class="brand-text mobile-brand-text">
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível</span>
+        </div>
+      </div>
+
+    <div class="mobile-right">
+      <button id="btnLangHeader" class="lang-pill" style="padding: 6px 12px; height: 40px;" aria-label="Mudar idioma" onclick="vjOpenModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <a href="./usuario-login.html" class="user-circle" style="width: 36px; height: 36px; background: #94a3b8; text-decoration: none;">👤</a>
+      <button id="btnMenu" class="btn-icon" style="border:none; background:transparent; width: 32px;" aria-label="Abrir menu">
+        <svg id="menuIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="page">
+    <!-- Sidebar / Desktop Header -->
+    <header id="sidebar" class="sidebar" data-open="false" aria-label="Navegação principal">
+      <div class="brand">
+        <a href="./index.html" class="logo-vj" style="text-decoration: none;">VJ</a>
+        <div class="brand-text">
+          <strong>Venha Junto</strong>
+          <span>Turismo Acessível em São Paulo</span>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <a href="./index.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Início
+        </a>
+        <a href="./explorar.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          Explorar
+        </a>
+        <a href="./favoritos.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Favoritos
+        </a>
+        <a href="./parceiro.html">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Sou Parceiro
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <div id="vj-translate-host"></div>
+        <div class="user-info">
+          <a href="./usuario-login.html" class="user-circle">B</a>
+          <span class="user-name">Bruna Vieira</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="conteudo" class="main" role="main">
+      <section class="section">
+        <div class="container">
+          <h2 id="titulo">Detalhes do Local</h2>
+          <p class="lead" id="sub">Informações do local selecionado.</p>
+
+          <div class="card" style="padding:18px">
+            <div id="conteudoDetalhes"></div>
+
+            <hr class="sep"/>
+
+            <h3 id="acessibilidade">Acessibilidade (WCAG e boas práticas)</h3>
+            <p style="color:var(--muted); font-weight:700">
+              Esta página foi feita com HTML semântico, foco visível, contraste e suporte a navegação por teclado.
+            </p>
+            <ul>
+              <li>Campos com <code>label</code> e nomes acessíveis</li>
+              <li>Regiões com <code>main</code>, <code>nav</code>, <code>header</code>, <code>footer</code></li>
+              <li>Atalhos de “pular para conteúdo”</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; justify-content: space-between;">
+            <div style="display:flex; gap:10px;">
+              <a class="btn btn--ghost" href="./explorar.html">Voltar</a>
+              <button id="btnFav" class="btn" type="button">⭐ Favoritar</button>
+            </div>
+            <button id="btnReportar" class="btn" style="background:#fef2f2; color:#ef4444; border: 1px solid #fecaca;" type="button" onclick="reportarLocal()">⚠ Reportar Problema</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+          <span>© Venha Junto • Turismo Acessível em São Paulo</span>
+          <span style="display: flex; gap: 14px; align-items: center;">
+            <a href="./contato.html">Fale Conosco</a>
+            <a href="./termos.html">Termos de Uso</a>
+            <a href="./privacidade.html">Política de Privacidade</a>
+          </span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ✅ ESSENCIAIS PARA FORÇAR LOGIN -->
+  <script src="../js/api.js"></script>
+  <script src="../js/page-guard.js" defer></script>
+
+  <!-- Script da página -->
+  <script src="../js/detalhes.js" defer></script>
+  <script>
+    function reportarLocal() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      if (id) {
+        window.location.href = `./contato.html?local=${id}`;
+      } else {
+        window.location.href = `./contato.html`;
+      }
+    }
+  </script>
+   <script src="../js/vlibras.js" defer></script>
+    <!-- ✅ Failsafe Menu & Accessibility Force -->
+    <script>
+      (function() {
+        const btn = document.getElementById('btnMenu');
+        const sidebar = document.getElementById('sidebar');
+        const icon = document.getElementById('menuIcon');
+        
+        const toggleMenu = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (!sidebar) return;
+          const isOpen = sidebar.getAttribute('data-open') === 'true';
+          const next = !isOpen;
+          sidebar.setAttribute('data-open', String(next));
+          
+          if (icon) {
+            if (next) {
+              icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            } else {
+              icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+            }
+          }
+        };
+
+        if (btn && sidebar) {
+          btn.addEventListener('click', toggleMenu);
+          btn.addEventListener('touchend', function(e){ e.preventDefault(); toggleMenu(); });
+        }
+
+        const overlay = document.querySelector('.sidebar-overlay');
+        if (overlay && sidebar) {
+          overlay.addEventListener('click', () => {
+            sidebar.setAttribute('data-open', 'false');
+            if (icon) icon.innerHTML = '<line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>';
+          });
+        }
+
+          const vlibras = document.querySelector('[vw]');
+          if (uway) {
+            uway.style.setProperty('left', '10px', 'important');
+            uway.style.setProperty('right', 'auto', 'important');
+            uway.style.setProperty('bottom', '80px', 'important');
+          }
+          if (vlibras) {
+            vlibras.style.setProperty('left', '10px', 'important');
+            vlibras.style.setProperty('right', 'auto', 'important');
+            vlibras.style.setProperty('bottom', '100px', 'important');
+          }
+        }
+      )();
+    </script>
+  <!-- ✅ Tradução & Idiomas -->
+  <script src="../js/i18n.js" defer></script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+<script src="../js/userbox.js" defer></script>
+  
+    <!-- Navegação de rodapé (Mobile only via CSS) -->
+    <nav class="mobile-nav" role="navigation" aria-label="Navegação rápida">
+      <a href="./index.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Início
+      </a>
+      <a href="./explorar.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explorar
+      </a>
+      <a href="./favoritos.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoritos
+      </a>
+      <a href="./parceiro.html" class="mobile-nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Parceiro
+      </a>
+    </nav>
+
+  </body>
+</html>

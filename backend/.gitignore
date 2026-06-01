@@ -1,0 +1,28 @@
+# Ambientes virtuais e dependências
+__pycache__/
+*.py[cod]
+*$py.class
+vjenv/
+venv/
+env/
+
+# Arquivos de ambiente locais (onde ficam senhas e segredos)
+.env
+.env.local
+.env.*.local
+
+# Banco de dados locais
+*.sqlite3
+*.db
+
+# Arquivos e diretórios específicos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Diretório de uploads e mídias geradas localmente
+avatars/
+uploads/
+
+# Arquivos do IDE
+.vscode/
+.idea/

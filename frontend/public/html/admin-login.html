@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Venha Junto • Admin • Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../css/admin-auth.css" />
+
+  <script src="https://cdn.userway.org/widget.js" data-account="iP5lv4PlSk"></script>
+</head>
+
+<body>
+  <!-- Ambient background glow -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="admin-auth-wrap">
+    <div class="admin-card">
+      <div class="admin-header">
+        <div class="admin-icon-wrapper">🛡️</div>
+        <h1 class="admin-title">Login do Admin</h1>
+        <p class="admin-subtitle">Acesso restrito. Área administrativa.</p>
+      </div>
+
+      <form id="formAdminLogin" class="admin-form" novalidate>
+        <div class="admin-field">
+          <label for="email">E-mail *</label>
+          <input id="email" name="email" type="email" class="admin-input" placeholder="admin@venhajunto.com" required />
+        </div>
+
+        <div class="admin-field">
+          <label for="password">Senha *</label>
+          <input id="password" name="password" type="password" class="admin-input" placeholder="••••••••" required />
+        </div>
+
+        <div class="admin-actions">
+          <button id="btnLogin" class="admin-btn" type="submit">Entrar no Sistema</button>
+        </div>
+        
+        <div class="admin-links" style="margin-top: 24px;">
+          <a href="./admin-register.html">Criar nova conta admin</a>
+          <a href="./index.html" style="color: var(--admin-text-muted);">← Voltar ao site público</a>
+        </div>
+
+        <div id="toast" class="admin-toast" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/admin-login.js"></script>
+  <script src="../js/vlibras.js" defer></script>
+</body>
+</html>

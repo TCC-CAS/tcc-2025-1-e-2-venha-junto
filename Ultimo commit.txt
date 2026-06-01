@@ -1,0 +1,71 @@
+
+PROJETO VENHA JUNTO
+INFORMAÇÕES DOS REPOSITÓRIOS UTILIZADOS
+=======================================
+
+a) ÚLTIMO COMMIT DE CADA REPOSITÓRIO
+
+REPOSITÓRIO PRINCIPAL (Backend + Frontend)
+URL:
+https://github.com/TCC-CAS/tcc-2025-1-e-2-venha-junto
+
+Hash do Último Commit:
+21857b4ca6d4fd4522d75c235636ec21aab78568
+
+Autor:
+Bruna Vieira
+
+Mensagem:
+fix(pagamento): adiciona mascaras e limites aos campos de cartao
+
+REPOSITÓRIO FRONTEND (Deploy Vercel)
+URL:
+https://github.com/Brunavieiraguedes/venha-junto-frontend
+
+Hash do Último Commit:
+36c72d77630fbb7afc46e77573bf9d810c4eac01
+
+Autor:
+Bruna Vieira
+
+Mensagem:
+fix(pagamento): adiciona mascaras e limites aos campos de cartao
+
+====================================================
+b) TAGS (ETIQUETAS) DOS REPOSITÓRIOS
+====================================
+
+Repositório:
+https://github.com/TCC-CAS/tcc-2025-1-e-2-venha-junto
+
+Tags Criadas:
+
+v1.0.0
+Commit: afc5003b02d904943f03e20a7628e353db0b9858
+
+v1.1.0
+Commit: 21857b4ca6d4fd4522d75c235636ec21aab78568
+
+v2.0.0
+Commit: 21857b4ca6d4fd4522d75c235636ec21aab78568
+
+====================================================
+DEPLOY DA APLICAÇÃO
+===================
+
+Frontend:
+https://venhajunto.vercel.app
+
+Repositório Principal:
+https://github.com/TCC-CAS/tcc-2025-1-e-2-venha-junto
+
+====================================================
+VERIFICAÇÃO DAS TAGS
+====================
+
+GitHub:
+https://github.com/TCC-CAS/tcc-2025-1-e-2-venha-junto/tags
+
+Comando:
+git tag -l
+==========
